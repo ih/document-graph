@@ -1,0 +1,12 @@
+Package.describe({
+  summary: "A module for creating and editing documents"
+});
+
+Package.on_use(function (api, where) {
+  api.use(['minimongo', 'mongo-livedata', 'templating'], 'client');
+
+  api.add_files([], 'client');
+
+  if (api.export)
+    api.export('Editor');
+});
