@@ -1,0 +1,5 @@
+RecordsAPI = {
+	record: function (recordData) {
+		Records.insert(recordData);
+	}
+};

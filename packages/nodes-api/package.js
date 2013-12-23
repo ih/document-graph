@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use();
+	api.use(['nodes', 'records-api'], ['client', 'server']);
 	api.add_files(['nodes-api.js'], ['client', 'server']);
 	if (api.export) {
 		api.export('NodesAPI');
