@@ -3,9 +3,9 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['nodes', 'records-api'], ['client', 'server']);
-	api.add_files(['nodes-api.js'], ['client', 'server']);
+	api.use(['nodes', 'records-api', 'search-api'], ['client', 'server']);
+	api.add_files(['graph-api.js'], ['client', 'server']);
 	if (api.export) {
-		api.export('NodesAPI');
+		api.export('GraphAPI');
 	}
 });

@@ -1,0 +1,13 @@
+var searchHostUrl =
+		'http://site:ce2b03bb86b96565d31457f952ddbae3@api.searchbox.io';
+
+Meteor.methods({
+	index: function (collectionName, newDocument) {
+		var url = searchHostUrl + '/' + collectionName + '/' + 
+				collectionName.slice(0,- 1);
+		HTTP.post(url, {'data': newDocument}, function (error, result) {
+			console.log(error);
+			console.log(result);
+		});
+	}
+});

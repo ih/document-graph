@@ -1,22 +1,28 @@
 <template name="editor">
 	<div class="row editor">
 		<div class="col-md-6 input">
-			<div class="row">
-				<textarea class="col-md-12">{{content}}</textarea>
+			<div class="title">
+				<input type="text" class="" value="{{title}}">
 			</div>
-			<!-- TODO add space between editor input and controls-->
-			<div class="row controls">
-				<div class="col-md-12 text-center">
+			<div class="content">
+				<textarea class="">{{content}}</textarea>
+			</div>
+			<div class="text-center">
 				<button class="btn btn-primary save">Save</button>
 				<button class="btn btn-default cancel">Cancel</button>
-				</div>
 			</div>
-
 		</div>
 		<div class="col-md-6 preview">
-			{{#markdown}}{{content}}{{/markdown}}
+			<div class="">
+				<h1>{{title}}</h1>
+			</div>
+			<div class="">
+				{{#markdown}}{{content}}{{/markdown}}
+			</div>
 		</div>
 	</div>
-
 </template>
+
+
+
 

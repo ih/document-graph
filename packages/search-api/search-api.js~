@@ -1,0 +1,11 @@
+// TODO maybe inject this into the package
+var searchHostUrl = 
+		'http://site:ce2b03bb86b96565d31457f952ddbae3@api.searchbox.io';
+SearchAPI = {
+	find: function (collectionName, queryString) {
+		
+	},
+	index: function (newDocument) {
+		HTTP.call('POST', searchHostUrl, {'data': newDocument});
+	}
+};

@@ -15,12 +15,11 @@ Editor = {
 	}
 };
 
-
-
-Template.editor.preserve(['textarea']);
+Template.editor.preserve(['textarea', 'input']);
 
 Template.editor.helpers({
-	content: function () {return state.get('content');}
+	content: function () {return state.get('content');},
+	title: function () {return state.get('title');}
 });
 
 Template.editor.events({
@@ -28,11 +27,24 @@ Template.editor.events({
 		state.set('content', event.target.value);
 		// state.content = event.target.value;
 	},
+	'input input': function (event) {
+		state.set('title', event.target.value);
+		// state.content = event.target.value;
+	},
 	'click .save': function (event) {
 		console.log('clickity clicke');
 		if (state.get('mode') === 'create') {
 			// the keys property of a reactive dict is basically the plain dict
-			NodesAPI.create(_.pick(state.keys, NodesAPI.nodeProperties));
+			GraphAPI.createNode(_.pick(state.keys, GraphAPI.nodeProperties));
+			resetEditor();
 		}
 	}
 });
+
+function resetEditor() {
+	// reset the state
+	_.each(GraphAPI.nodeProperties, function (stateProperty) {
+		// TODO figure out a better way to set the default value
+		state.set(stateProperty, '');
+	});
+}

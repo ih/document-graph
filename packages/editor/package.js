@@ -3,8 +3,8 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-  api.use(['templating', 'reactive-dict', 'marked', 'less', 'nodes-api'],
-		  ['client']);
+  api.use(['templating', 'reactive-dict', 'marked', 'less', 'graph-api'],
+		  ['client', 'server']);
 
   api.add_files(['editor.html', 'editor.js', 'editor.less'], 'client');
 
