@@ -7,9 +7,11 @@ SearchAPI = {
 
 	},
 	index: function (collectionName, newDocument) {
-		Meteor.call('index', collectionName, newDocument, function (error, result) {
-			console.log(error);
-			console.log(result);
-		});
+		Meteor.call(
+			'index', collectionName, newDocument, function (error, result) {
+				console.log(error);
+				console.log(result);
+			}
+		);
 	}
 };

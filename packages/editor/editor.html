@@ -1,12 +1,15 @@
 <template name="editor">
 	<div class="row editor">
 		<div class="col-md-6 input">
-			<div class="title">
-				<input type="text" class="" value="{{title}}">
+			<div class="title-container">
+				<input type="text" class="title" value="{{title}}">
 			</div>
-			<div class="content">
-				<textarea class="">{{content}}</textarea>
+			<div class="content-container">
+				<textarea class="content">{{content}}</textarea>
 			</div>
+
+			{{> tagEditor}}
+
 			<div class="text-center">
 				<button class="btn btn-primary save">Save</button>
 				<button class="btn btn-default cancel">Cancel</button>
@@ -17,7 +20,8 @@
 				<h1>{{title}}</h1>
 			</div>
 			<div class="">
-				{{#markdown}}{{content}}{{/markdown}}
+				<!-- TODO see why markdown isn't working with meteor ui -->
+				{{content}}
 			</div>
 		</div>
 	</div>

@@ -9,7 +9,6 @@ insecure
 preserve-inputs
 less
 bootstrap3-less
-accounts-ui-bootstrap-3
 accounts-password
 editor
-marked
+jqueryui

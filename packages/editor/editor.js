@@ -6,6 +6,7 @@ var state = new ReactiveDict();
 Editor = {
 	initialize: function (mode, params) {
 		state.set('mode', mode);
+		// TagEditor.initialize();
 	},
 	/**
 	 * Allows the editor to be closed externally and clears the state
@@ -15,7 +16,7 @@ Editor = {
 	}
 };
 
-Template.editor.preserve(['textarea', 'input']);
+//Template.editor.preserve(['textarea', 'input']);
 
 Template.editor.helpers({
 	content: function () {return state.get('content');},
@@ -23,11 +24,11 @@ Template.editor.helpers({
 });
 
 Template.editor.events({
-	'input textarea': function (event) {
+	'input .content': function (event) {
 		state.set('content', event.target.value);
 		// state.content = event.target.value;
 	},
-	'input input': function (event) {
+	'input .title': function (event) {
 		state.set('title', event.target.value);
 		// state.content = event.target.value;
 	},
