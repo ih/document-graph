@@ -1,0 +1,7 @@
+TagEditor = {
+	initialize: function () {
+		console.log('yo yo yo');
+	}
+};
+
+

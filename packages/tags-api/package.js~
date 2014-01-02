@@ -1,0 +1,11 @@
+Package.describe({
+	summary: "An interface for performing operations related to tags"
+});
+
+Package.on_use(function (api, where) {
+	api.use(['tags'], ['client', 'server']);
+	api.add_files(['tags-api.js'], ['client', 'server']);
+	if (api.export) {
+		api.export('TagsAPI');
+	}
+});

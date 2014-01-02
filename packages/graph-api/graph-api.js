@@ -11,7 +11,11 @@ GraphAPI = {
 		});
 
 		// TODO remove if start using a crawler to index documents
-		SearchAPI.index('nodes', _.extend(nodeData, {'_id': nodeId}));
+		// using id instead of _id since that causes an error with elasticsearch
+		// perhaps move this into the editor package so that the access
+		// related tags can be added to search index document
+		SearchAPI.index('nodes', _.extend(nodeData, {'objectId': nodeId}));
+		return nodeId;
 	}
 };
 

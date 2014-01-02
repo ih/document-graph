@@ -7,11 +7,10 @@ SearchAPI = {
 
 	},
 	index: function (collectionName, newDocument) {
-		Meteor.call(
-			'index', collectionName, newDocument, function (error, result) {
-				console.log(error);
-				console.log(result);
-			}
-		);
+		// no callback to make this a synchronous 
+		// call (http://docs.meteor.com/#meteor_call)
+		// this is important because for nodes we want to create the search
+		// document then add access information to the document right after
+		Meteor.call('index', collectionName, newDocument);
 	}
 };
