@@ -18,4 +18,11 @@ if (Meteor.isServer) {
 	Meteor.startup(function () {
 		// code to run on server at startup
 	});
+	Accounts.onCreateUser(function (options, user) {
+		console.log('user created!!!');
+		if (options.profile) {
+			user.profile = options.profile;
+		}
+		return user;
+	});
 }

@@ -7,7 +7,8 @@ Package.on_use(function (api, where) {
 		   'tag-editor', 'tags-api'],
 		  ['client', 'server']);
 
-  api.add_files(['editor.html', 'editor.js', 'editor.less'], 'client');
+  api.add_files(
+	  ['editor.html', 'editor.js', 'editor.less', 'autogrow.js'], 'client');
 
   if (api.export) {
 	  api.export('Editor');

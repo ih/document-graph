@@ -41,6 +41,10 @@ Template.editor.events({
 	}
 });
 
+Template.editor.rendered = function () {
+	$('textarea').autogrow();
+};
+
 function resetEditor() {
 	// used for resetting the title input, would be nice if there was two-way
 	// binding... 
