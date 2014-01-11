@@ -1,0 +1,34 @@
+GroupsAPI = {
+	groupProperties: ['name'],
+	membershipProperties: ['groupId', 'memberId', 'role'],
+	// add allow rules to Nodes that call the securityAPI or
+	// each API should handle it's own security
+	createGroup: function (groupData) {
+		var groupId = Groups.insert(groupData);
+		RecordsAPI.record({
+			'objectId': groupId,
+			'type': 'create',
+			'userId': Meteor.userId()
+		});
+		var membershipData = {
+			groupId: groupId,
+			memberId: Meteor.userId(),
+			role: 'administrator'
+		};
+		// TODO should also be able to create non-creator initial members from
+		// groupData
+		var membershipId = Memberships.insert(membershipData);
+		RecordsAPI.record({
+			'objectId': membershipId,
+			'type': 'create',
+			'memberId': Meteor.userId()
+		});
+
+		// TODO remove if start using a crawler to index documents
+		// using id instead of _id since that causes an error with elasticsearch
+		// perhaps move this into the editor package so that the access
+		// related tags can be added to search index document
+		SearchAPI.index('nodes', _.extend(nodeData, {'objectId': nodeId}));
+		return nodeId;
+	}
+};
