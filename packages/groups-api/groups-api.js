@@ -4,15 +4,16 @@ GroupsAPI = {
 	// add allow rules to Nodes that call the securityAPI or
 	// each API should handle it's own security
 	createGroup: function (groupData) {
+		console.log('creating group');
 		var groupId = Groups.insert(groupData);
 		RecordsAPI.record({
 			'objectId': groupId,
 			'type': 'create',
-			'userId': Meteor.userId()
+			'userId': groupData.creatorId
 		});
 		var membershipData = {
 			groupId: groupId,
-			memberId: Meteor.userId(),
+			memberId: groupData.creatorId,
 			role: 'administrator'
 		};
 		// TODO should also be able to create non-creator initial members from
@@ -21,7 +22,14 @@ GroupsAPI = {
 		RecordsAPI.record({
 			'objectId': membershipId,
 			'type': 'create',
-			'memberId': Meteor.userId()
+			'memberId': groupData.creatorId
 		});
+	},
+	getGroups: function (memberId) {
+		return Groups.find().fetch();
 	}
 };
+
+
+
+

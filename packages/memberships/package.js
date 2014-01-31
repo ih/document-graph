@@ -5,7 +5,8 @@ Package.describe({
 
 Package.on_use(function (api, where) {
 
-	api.add_files(['memberships.js'], ['client', 'server']);
+	api.add_files(['memberships.js'], ['server']);
+	api.add_files(['memberships-client.js'], ['client']);
 
 	if (api.export) {
 		api.export('Memberships');

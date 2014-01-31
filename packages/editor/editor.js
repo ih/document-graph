@@ -5,8 +5,10 @@ var state = new ReactiveDict();
 
 Editor = {
 	initialize: function (mode, params) {
+		console.log('initializing the editor');
 		state.set('mode', mode);
 		// TagEditor.initialize();
+		PrivacyEditor.initialize();
 	},
 	/**
 	 * Allows the editor to be closed externally and clears the state
@@ -30,6 +32,7 @@ Template.editor.events({
 	},
 	'click .save': function (event) {
 		if (state.get('mode') === 'create') {
+			var privacySettings = PrivacyEditor.getPrivacySettings();
 			// the keys property of a reactive dict is basically the plain dict
 			var nodeId = GraphAPI.createNode(
 				_.pick(state.keys, GraphAPI.nodeProperties));

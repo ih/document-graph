@@ -4,7 +4,9 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.add_files(['groups.js'], ['client', 'server']);
+	api.use(['memberships'],  ['server']);
+	api.add_files(['groups-server.js'], ['server']);
+	api.add_files(['groups-client.js'], ['client']);
 
 	if (api.export) {
 		api.export('Groups');
