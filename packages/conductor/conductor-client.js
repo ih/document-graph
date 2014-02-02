@@ -1,2 +1,2 @@
-Editor.initialize();
+Editor.initialize('create');
 

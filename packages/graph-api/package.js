@@ -3,7 +3,8 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['nodes', 'records-api', 'search-api'], ['client', 'server']);
+	api.use(['nodes', 'records-api', 'search-api', 'groups-api'],
+			['client', 'server']);
 	api.add_files(['graph-api.js'], ['client', 'server']);
 	if (api.export) {
 		api.export('GraphAPI');

@@ -35,7 +35,7 @@ Template.editor.events({
 			var privacySettings = PrivacyEditor.getPrivacySettings();
 			// the keys property of a reactive dict is basically the plain dict
 			var nodeId = GraphAPI.createNode(
-				_.pick(state.keys, GraphAPI.nodeProperties));
+				_.pick(state.keys, GraphAPI.nodeProperties), privacySettings);
 			_.each(TagEditor.getTags(), function (tag) {
 				TagsAPI.createTag({'objectId': nodeId, 'tag': tag});
 			});
