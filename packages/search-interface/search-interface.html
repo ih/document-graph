@@ -10,11 +10,23 @@
 		<ol>
 
 			{{#each results}}
+			<!-- TODO make template for search result-->
 			<li>
-				<a href="/{{type}}/{{id}}">{{title}}</a>
+				{{> searchResult}}
 			</li>
 			{{/each}}
 
 		</ol>
+	</div>
+</template>
+
+<template name="searchResult">
+	<div>
+		<div class="search-result-title">
+			<a href="/{{type}}/{{id}}">{{{getTitle}}}</a>
+		</div>
+		<div class="search-result-highlight">
+			{{{highlight.content}}}
+		</div>
 	</div>
 </template>

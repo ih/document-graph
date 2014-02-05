@@ -20,3 +20,9 @@ Template.searchInterface.rendered = function () {
 Template.searchInterface.helpers({
 	results: function () {return state.get('results');}
 });
+
+Template.searchResult.helpers({
+	getTitle: function () {
+		return (this.highlight && this.highlight.title) || this.title;
+	}
+});

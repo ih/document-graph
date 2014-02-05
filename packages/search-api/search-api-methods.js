@@ -5,16 +5,29 @@ function elasticSearchParse(httpResponse) {
 	return _.map(httpResponse.data.hits.hits, function (hit) {
 		console.log(hit);
 		return {
-			'title': hit._source.title, 'id': hit._source.objectId, 'type': hit._type};
+			'title': hit._source.title,
+			'id': hit._source.objectId,
+			'type': hit._type,
+			'highlight': hit.highlight};
 	});
 }
 
 Meteor.methods({
 	find: function (collectionName, queryString, resultsHandler) {
-		var url = searchHostUrl + '/' + collectionName + '/_search?q=_all:' +
-				queryString;
+		var url = searchHostUrl + '/' + collectionName + '/_search';
+		var queryData = {
+			'query': {
+				'term': {'_all': queryString}
+			},
+			'highlight': {
+				'fields': {
+					'title': {},
+					'content': {}
+				}
+			}
+		};
 		console.log('meteor method searching... ');
-		var results = elasticSearchParse(HTTP.get(url));
+		var results = elasticSearchParse(HTTP.get(url, {'data': queryData}));
 		return results;
 	},
 	index: function (collectionName, newDocument) {
