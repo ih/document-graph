@@ -4,7 +4,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['templating', 'less', 'editor', 'accounts-base'],
+	api.use(['templating', 'less', 'editor', 'accounts-base', 'search-interface'],
 			['client']);
 	api.use(['accounts-base', 'accounts-password','groups-api', 'underscore'], ['server']);
 

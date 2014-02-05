@@ -50,7 +50,7 @@ Template.editor.rendered = function () {
 
 function resetEditor() {
 	// used for resetting the title input, would be nice if there was two-way
-	// binding... 
+	// binding...
 	$('input').val('');
 
 	_.each(GraphAPI.nodeProperties, function (stateProperty) {

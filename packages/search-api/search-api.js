@@ -3,11 +3,12 @@
 // doesn't see api key
 
 SearchAPI = {
-	find: function (collectionName, queryString) {
-
+	find: function (collectionName, queryString, resultsHandler) {
+		Meteor.call(
+			'find', collectionName, queryString, resultsHandler);
 	},
 	index: function (collectionName, newDocument) {
-		// no callback to make this a synchronous 
+		// no callback to make this a synchronous
 		// call (http://docs.meteor.com/#meteor_call)
 		// this is important because for nodes we want to create the search
 		// document then add access information to the document right after
