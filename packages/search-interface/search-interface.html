@@ -18,6 +18,9 @@
 
 		</ol>
 	</div>
+	<div class="search-pagination">
+		{{> pagination}}
+	</div>
 </template>
 
 <template name="searchResult">
@@ -30,3 +33,12 @@
 		</div>
 	</div>
 </template>
+
+<template name="pagination">
+	<ul class="pagination">
+	{{#each getPageRange}}
+	<li><a href="#" class="page">{{this}}</a></li>
+	{{/each}}
+</ul>
+</template>
+

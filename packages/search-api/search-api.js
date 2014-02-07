@@ -3,9 +3,11 @@
 // doesn't see api key
 
 SearchAPI = {
-	find: function (collectionName, queryString, resultsHandler) {
+	find: function (
+		collectionName, queryString, offset, pageSize, resultsHandler) {
 		Meteor.call(
-			'find', collectionName, queryString, resultsHandler);
+			'find', collectionName, queryString, offset, pageSize, 
+			resultsHandler);
 	},
 	index: function (collectionName, newDocument) {
 		// no callback to make this a synchronous
