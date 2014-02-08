@@ -66,6 +66,10 @@ Template.pagination.helpers({
 		catch (exception) {
 			return [];
 		}
+	},
+	activeIfCurrentPage: function (pageNumber) {
+		pageNumber = Number(pageNumber);
+		return pageNumber === state.get('currentPage') ? 'active' : '';
 	}
 });
 

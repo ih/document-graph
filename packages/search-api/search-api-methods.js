@@ -23,7 +23,7 @@ Meteor.methods({
 			'from': offset,
 			'size': pageSize,
 			'query': {
-				'term': {'_all': queryString}
+				'match': {'_all': queryString}
 			},
 			'highlight': {
 				'fields': {
