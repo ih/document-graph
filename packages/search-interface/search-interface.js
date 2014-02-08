@@ -1,6 +1,6 @@
 // results, currentPage
 var PAGE_SIZE = 1;
-var MAX_PAGES = 10;
+var MAX_PAGES = 2;
 var HALF_MAX_PAGES = Math.floor(MAX_PAGES / 2);
 var state = new ReactiveDict();
 
@@ -8,8 +8,8 @@ Template.searchInterface.rendered = function () {
 	console.log('search interface rendered');
 	state.set('results', []);
 	state.set('currentPage', null);
-	state.set('hits', null);
 	state.set('query');
+	state.set('totalHitCount', 0);
 };
 
 function numberOfPages() {
@@ -81,6 +81,7 @@ function getLowestPage(currentPage) {
 	}
 }
 
+// TODO make sure this covers all the cases as desired
 function getHighestPage(currentPage) {
 	if (!currentPage) {
 		return 0;
