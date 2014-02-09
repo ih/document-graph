@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['http'], ['server']);
+	api.use(['http', 'groups-api'], ['server']);
 	api.add_files(['search-api-methods.js'], ['server']);
 	api.add_files(['search-api.js'], ['client', 'server']);
 	if (api.export) {

@@ -3,7 +3,9 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-  api.use(['templating', 'less', 'reactive-dict','search-api'], ['client']);
+  api.use(
+	  ['templating', 'less', 'reactive-dict','search-api', 'graph-api'],
+	  ['client']);
 
   api.add_files(
 	  ['search-interface.html', 'search-interface.js'], 'client');

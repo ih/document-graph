@@ -3,7 +3,7 @@ var state = new ReactiveDict();
 PrivacyEditor = {
 	initialize: function () {
 		console.log('initializing the privacy editor');
-		var privacyOptions = _.pluck(GroupsAPI.getMyGroups(), '_id');
+		var privacyOptions = _.pluck(GroupsAPI.getMyGroups(Meteor.userId()), '_id');
 		console.log('with privacy options');
 		console.log(privacyOptions);
 		state.set('privacyOptions', privacyOptions);

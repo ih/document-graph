@@ -4,9 +4,9 @@
 
 SearchAPI = {
 	find: function (
-		collectionName, queryString, offset, pageSize, resultsHandler) {
+		collectionName, queryString, offset, pageSize, fields, resultsHandler) {
 		Meteor.call(
-			'find', collectionName, queryString, offset, pageSize, 
+			'find', collectionName, queryString, offset, pageSize, fields,
 			resultsHandler);
 	},
 	index: function (collectionName, newDocument) {

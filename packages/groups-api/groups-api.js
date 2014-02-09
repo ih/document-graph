@@ -35,7 +35,9 @@ GroupsAPI = {
 	getMyGroups: function (memberId) {
 		// this will have to change if the publication ever sends over other
 		// user's groups
-		return Groups.find().fetch();
+		console.log('in getMyGroups');
+		console.log(memberId);
+		return Groups.find({'creatorId': memberId}).fetch();
 	}
 };
 

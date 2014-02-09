@@ -1,6 +1,6 @@
 // results, currentPage
-var PAGE_SIZE = 1;
-var MAX_PAGES = 2;
+var PAGE_SIZE = 15;
+var MAX_PAGES = 10;
 var HALF_MAX_PAGES = Math.floor(MAX_PAGES / 2);
 var state = new ReactiveDict();
 
@@ -30,7 +30,8 @@ Template.searchInterface.events({
 		var query = $('#search-input').val();
 		state.set('query', query);
 		SearchAPI.find(
-			'nodes', state.get('query'), 0, PAGE_SIZE, resultsHandler);
+			'nodes', state.get('query'), 0, PAGE_SIZE, GraphAPI.nodeProperties,
+			resultsHandler);
 		state.set('currentPage', 1);
 	}
 });
@@ -50,8 +51,8 @@ Template.pagination.events({
 		event.preventDefault();
 		var pageNumber = Number($(event.target).html());
 		SearchAPI.find(
-			'nodes', state.get('query'), (pageNumber - 1)*PAGE_SIZE, PAGE_SIZE, 
-			resultsHandler);
+			'nodes', state.get('query'), (pageNumber - 1)*PAGE_SIZE, PAGE_SIZE,
+			GraphAPI.nodeProperties, resultsHandler);
 		state.set('currentPage', pageNumber);
 	}
 });
@@ -100,4 +101,3 @@ function getHighestPage(currentPage) {
 		return Math.min(currentPage + HALF_MAX_PAGES, numberOfPages());
 	}
 }
-
