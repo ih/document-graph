@@ -23,6 +23,10 @@ GraphAPI = {
 			nodeData, {'objectId': nodeId, 'privacySettings': privacySettings});
 		SearchAPI.index('nodes', searchDocument);
 		return nodeId;
+	},
+	getNode: function (nodeId) {
+		Meteor.subscribe('node', nodeId);
+		return Nodes.findOne(nodeId);
 	}
 };
 

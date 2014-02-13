@@ -5,7 +5,8 @@ Package.describe({
 
 Package.on_use(function (api, where) {
 
-	api.add_files(['nodes.js'], ['client', 'server']);
+	api.add_files(['nodes-server.js'], ['server']);
+	api.add_files(['nodes-client.js'], ['client']);
 
 	if (api.export) {
 		api.export('Nodes');
