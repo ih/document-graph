@@ -3,6 +3,8 @@ GraphAPI = {
 	// add allow rules to Nodes that call the securityAPI or 
 	// each API should handle it's own security
 	createNode: function (nodeData, privacySettings) {
+		console.log('createNode of the graphAPI');
+		console.log(nodeData);
 		var nodeId = Nodes.insert(nodeData);
 		var recordId = RecordsAPI.record({
 			'objectId': nodeId,

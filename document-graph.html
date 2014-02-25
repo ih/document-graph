@@ -17,7 +17,11 @@
 		</div>
 	</div>
 	<div class="container">
+		{{#if currentUser}}
 		{{> conductor}}
+		{{else}}
+		Please log in
+		{{/if}}
 	</div>
 </body>
 

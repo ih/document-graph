@@ -13,8 +13,7 @@ mrt --release template-engine-preview-10.1 &
 #wait for the server to get started, find a better way to do this... 
 sleep 10
 
-casperjs test --verbose --log-level=debug tests
-
+casperjs test tests --verbose --log-level=debug
 
 #stop meteor processes
 kill -9 `ps ax | grep meteor | awk '{print $1}'`

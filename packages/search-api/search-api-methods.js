@@ -78,7 +78,7 @@ Meteor.methods({
 				collectionName.slice(0, -1);
 		console.log('meteor method indexing... ');
 		console.log(newDocument);
-		HTTP.post(url, {'data': newDocument}, function (error, result) {
+		HTTP.put(url, {'data': newDocument}, function (error, result) {
 			console.log(error);
 			console.log(result);
 			return result;

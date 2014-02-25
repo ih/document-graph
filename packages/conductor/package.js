@@ -4,8 +4,9 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['templating', 'less', 'editor', 'accounts-base', 'search-interface',
-			 'viewer', 'iron-router', 'graph-api'],	['client']);
+	api.use(['templating', 'less', 'editor', 'accounts-base', 'iron-router',
+			 'accounts-password', 'search-interface', 'viewer', 'graph-api'],
+			['client']);
 	api.use(['accounts-base', 'accounts-password','groups-api', 'underscore'],
 			['server']);
 

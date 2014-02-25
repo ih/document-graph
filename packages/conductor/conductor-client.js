@@ -6,5 +6,8 @@ Router.map(function() {
 	this.route('dewer', {path: '/test'});
 });
 
-Editor.initialize('create');
+Template.conductor.rendered = function () {
+	Editor.initialize('create');
+};
+
 
