@@ -10,11 +10,13 @@ curl -XPUT 'http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3/nod
 #start meteor in the background
 mrt --release template-engine-preview-10.1 &
 
+
 #wait for the server to get started, find a better way to do this... 
 sleep 10
 
-casperjs test --verbose --log-level=debug tests
-
+#run the actual tests, doing it this way because --includes seems problematic when calling from here
+cd tests
+./run-casper.sh
 
 #stop meteor processes
 kill -9 `ps ax | grep meteor | awk '{print $1}'`
