@@ -7,10 +7,9 @@ standard-app-packages
 insecure
 preserve-inputs
 less
-bootstrap3-less
 accounts-password
 editor
 jqueryui
 accounts-ui
 conductor
-iron-router
+bootstrap3-less

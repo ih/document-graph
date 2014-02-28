@@ -2,13 +2,25 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "jqueryui": {}
+      "jqueryui": {},
+      "bootstrap-less": {},
+      "bootstrap3-less": {}
     },
     "packages": {
       "jqueryui": {
         "git": "https://github.com/mizzao/meteor-jqueryui.git",
         "tag": "v1.10.3r2",
         "commit": "d54f75cfad37ff8ce6ef9ad49de55738ba921af7"
+      },
+      "bootstrap-less": {
+        "git": "https://github.com/inhji/meteor-bootstrap-less",
+        "tag": "v0.0.2",
+        "commit": "a04086b7f86f1d3e8f58ab801b37d08c40688693"
+      },
+      "bootstrap3-less": {
+        "git": "https://github.com/eprochasson/bootstrap3-less",
+        "tag": "v0.1.9",
+        "commit": "5c812c4d7ce72917a065f0424c3cf54e5ff2d16a"
       },
       "build-fetcher": {
         "git": "https://github.com/mizzao/meteor-build-fetcher.git",

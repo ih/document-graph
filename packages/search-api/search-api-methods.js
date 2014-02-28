@@ -75,7 +75,7 @@ Meteor.methods({
 	},
 	index: function (collectionName, newDocument) {
 		var url = searchHostUrl + '/' + collectionName + '/' +
-				collectionName.slice(0, -1);
+				collectionName.slice(0, -1) + '/' + newDocument.objectId;
 		console.log('meteor method indexing... ');
 		console.log(newDocument);
 		HTTP.put(url, {'data': newDocument}, function (error, result) {

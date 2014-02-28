@@ -1,5 +1,11 @@
 {
   "packages": {
-    "jqueryui": {}
+    "jqueryui": {},
+    "bootstrap-less": {},
+    "bootstrap3-less": {},
+    "iron-router": {
+	"git": "https://github.com/EventedMind/iron-router.git",
+	"branch": "blaze-integration"
+    }
   }
 }

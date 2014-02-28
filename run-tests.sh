@@ -8,7 +8,7 @@ curl -XDELETE 'http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3/
 curl -XPUT 'http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3/nodes'
 
 #start meteor in the background
-mrt --release template-engine-preview-10.1 &
+mrt & 
 
 
 #wait for the server to get started, find a better way to do this... 
