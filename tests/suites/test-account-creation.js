@@ -12,18 +12,18 @@ casper.test.begin('Creating an account.', function suite(test) {
 		});
 	});
 
-	casper.thenEvaluate(function (EMAIL, PASSWORD) {
-		$('#login-email').val(EMAIL);
-		$('#login-password').val(PASSWORD);
+	casper.thenEvaluate(function (account) {
+		$('#login-email').val(account.email);
+		$('#login-password').val(account.password);
 
-	}, EMAIL, PASSWORD);
+	}, dummyUsers.A);
 
 	casper.thenClick('#login-buttons-password', function success() {
 	});
 
 	casper.then(function () {
 		this.waitForSelector('#login-name-link', function success() {
-			test.assertSelectorHasText('#login-name-link', EMAIL);
+			test.assertSelectorHasText('#login-name-link', dummyUsers.A.email);
 		});
 	});
 

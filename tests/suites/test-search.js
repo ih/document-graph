@@ -1,5 +1,5 @@
 casper.test.begin('Finding both public and private', function suite(test) {
-	waitForLogin(test);
+	waitForLogin(test, dummyUsers.A);
 
 	casper.thenClick('.search-submit');
 
@@ -8,7 +8,11 @@ casper.test.begin('Finding both public and private', function suite(test) {
 		// 	casper.capture('contains.png');
 		// 	assertContainsText(test, '.search-results', privateNodeTitle);
 		// });
-		this.waitForText(privateNodeTitle, function success() {
+
+		this.waitForText(dummyNodes.privateNodeA.title, function success() {
+			test.assertEval(function () {
+				return $('.search-result').length === 2;
+			});
 			this.test.pass('private node found!');
 		});
 	});

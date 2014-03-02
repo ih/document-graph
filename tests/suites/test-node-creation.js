@@ -1,15 +1,16 @@
 
 // assumes logged in from test-account-creation.js
 casper.test.begin('Creating a public node', function suite(test) {
-	waitForLogin(test);
+	waitForLogin(test, dummyUsers.A);
 
-	casper.thenEvaluate(function () {
+	casper.thenEvaluate(function (nodeData) {
 		// setting the values through jquery do not trigger the event handlers
-		$('.editor input.title').val('first public node title');
+
+		$('.editor input.title').val(nodeData.title);
 		$('.editor input.title').trigger('input');
-		$('.editor textarea.content').val('content for first public node');
+		$('.editor textarea.content').val(nodeData.content);
 		$('.editor textarea.content').trigger('input');
-	});
+	}, dummyNodes.publicNodeA);
 
 	casper.thenClick('.editor button.save', function success() {
 
@@ -22,16 +23,16 @@ casper.test.begin('Creating a public node', function suite(test) {
 
 
 casper.test.begin('Creating a private node', function suite(test) {
-	waitForLogin(test);
+	waitForLogin(test, dummyUsers.A);
 
-	casper.thenEvaluate(function () {
+	casper.thenEvaluate(function (nodeData) {
 		// setting the values through jquery do not trigger the event handlers
-		$('.editor input.title').val('first private node title');
+		$('.editor input.title').val(nodeData.title);
 		$('.editor input.title').trigger('input');
-		$('.editor textarea.content').val('content for first private node');
+		$('.editor textarea.content').val(nodeData.content);
 		$('.editor textarea.content').trigger('input');
 		$('#privacy-editor').click();
-	});
+	}, dummyNodes.privateNodeA);
 
 	casper.thenClick('.editor button.save', function success() {
 
