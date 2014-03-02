@@ -8,7 +8,6 @@ Editor = {
 		console.log('initializing the editor');
 		state.set('mode', mode);
 		// TagEditor.initialize();
-		PrivacyEditor.initialize();
 	},
 	/**
 	 * Allows the editor to be closed externally and clears the state

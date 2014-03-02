@@ -6,6 +6,7 @@
 // 	this.route('dewer', {path: '/test'});
 // });
 
+
 Template.conductor.rendered = function () {
 	Editor.initialize('create');
 };

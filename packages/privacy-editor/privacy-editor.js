@@ -1,21 +1,14 @@
-var state = new ReactiveDict();
-
 PrivacyEditor = {
-	initialize: function () {
-		console.log('initializing the privacy editor');
-		var privacyOptions = _.pluck(GroupsAPI.getMyGroups(Meteor.userId()), '_id');
-		console.log('with privacy options');
-		console.log(privacyOptions);
-		state.set('privacyOptions', privacyOptions);
-	},
 	getPrivacySettings: function () {
 		// assumes privacyOptions is a list containing the group id for
 		// the logged in user
+		var privacySettings = _.pluck(
+			GroupsAPI.getMyGroups(Meteor.userId()), '_id');
 		if ($('#privacy-editor').is(':checked')) {
-			return ['public'].concat(state.get('privacyOptions'));
+			return ['public'].concat(privacySettings);
 		}
 		else {
-			return state.get('privacyOptions');
+			return privacySettings;
 		}
 	}
 };

@@ -5,6 +5,7 @@ Package.describe({
 
 Package.on_use(function (api, where) {
 	api.use(['memberships'],  ['server']);
+	api.add_files(['groups-common.js'], ['server', 'client']);
 	api.add_files(['groups-server.js'], ['server']);
 	api.add_files(['groups-client.js'], ['client']);
 

@@ -1,11 +1,15 @@
 GroupsAPI = {
 	groupProperties: ['name'],
 	membershipProperties: ['groupId', 'memberId', 'role'],
+	// maybe this should be reactive one day...
+	// http://robertdickert.com/blog/2013/11/14/why-is-my-meteor-app-not-updating-reactively/
 	// add allow rules to Nodes that call the securityAPI or
 	// each API should handle it's own security
 	createGroup: function (groupData) {
 		console.log('creating group');
 		var groupId = Groups.insert(groupData);
+		console.log('new group created');
+		console.log(groupId);
 		RecordsAPI.record({
 			'objectId': groupId,
 			'type': 'create',
@@ -25,6 +29,8 @@ GroupsAPI = {
 		};
 
 		var membershipId = Memberships.insert(membershipData);
+		console.log('new membership created');
+		console.log(membershipId);
 		RecordsAPI.record({
 			'objectId': membershipId,
 			'type': 'create',
@@ -40,7 +46,3 @@ GroupsAPI = {
 		return Groups.find({'creatorId': memberId}).fetch();
 	}
 };
-
-
-
-

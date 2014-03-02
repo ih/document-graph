@@ -1,3 +1,2 @@
-Groups = new Meteor.Collection('groups');
-
+console.log('starting subscription to my groups');
 Meteor.subscribe('myGroups');
