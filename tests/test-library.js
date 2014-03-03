@@ -56,9 +56,7 @@ function createAccount(test, account) {
 		$('#login-password').val(account.password);
 	}, account);
 
-	casper.thenClick('#login-buttons-password', function success() {
-		this.capture('creatingAccount.png');
-	});
+	casper.thenClick('#login-buttons-password');
 
 	casper.then(function () {
 		this.waitForSelector('#login-name-link', function success() {
@@ -90,17 +88,11 @@ function logout(test) {
 
 function login(test, account) {
 	casper.echo('logging in');
-	casper.thenClick('#login-sign-in-link', function () {
-		this.capture('loggingin.png');
-	});
-
+	casper.thenClick('#login-sign-in-link');
 	casper.thenEvaluate(function (account) {
 		$('#login-email').val(account.email);
 		$('#login-password').val(account.password);
 	}, account);
-	casper.then(function () {
-		this.capture('loggingin2.png');
-	});
 
 	casper.thenClick('#login-buttons-password');
 
