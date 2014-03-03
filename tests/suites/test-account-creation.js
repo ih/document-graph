@@ -27,6 +27,14 @@ casper.test.begin('Creating an account.', function suite(test) {
 		});
 	});
 
+	logout();
+
+	createAccount(test, dummyUsers.B);
+
+	logout();
+
+	login(test, dummyUsers.A);
+
 	casper.run(function () {
 		test.done();
 	});

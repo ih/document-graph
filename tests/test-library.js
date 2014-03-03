@@ -22,6 +22,7 @@ var dummyNodes = {
 		content: 'user a public node content'
 	}
 };
+
 function waitForLogin(test, account) {
 	casper.start(SERVER, function () {
 		this.viewport(1200, 768);
@@ -35,11 +36,77 @@ function waitForLogin(test, account) {
 	});
 }
 
+function createAccount(test, account) {
+	casper.then(function () {
+		this.waitForSelector('#login-sign-in-link', function () {
+			this.click('#login-sign-in-link');
+		});
+	});
+
+	casper.then(function () {
+		this.waitForSelector('#signup-link', function success() {
+			this.click('#signup-link');
+		});
+	});
+
+	casper.echo('making accoutn... ');
+	casper.echo(account);
+	casper.thenEvaluate(function (account) {
+		$('#login-email').val(account.email);
+		$('#login-password').val(account.password);
+	}, account);
+
+	casper.thenClick('#login-buttons-password', function success() {
+		this.capture('creatingAccount.png');
+	});
+
+	casper.then(function () {
+		this.waitForSelector('#login-name-link', function success() {
+			test.assertSelectorHasText('#login-name-link', account.email);
+		});
+	});
+}
+
 function assertContainsText(test, selector,  text) {
 	test.assertEval(function () {
 		return $(selector + ':contains("' + text + '")').length > 0;
 	});
 }
-// function logout() {
-	
-// }
+
+function logout(test) {
+	casper.echo('logging out');
+	casper.thenClick('#login-name-link', function () {
+		this.capture('nameclick.png');
+	});
+	casper.thenEvaluate(function () {
+		$('#login-buttons-logout').click();
+	});
+	casper.then(function () {
+		this.waitForSelector('#login-sign-in-link', function () {
+			this.echo('successfully logged out');
+		});
+	});
+}
+
+function login(test, account) {
+	casper.echo('logging in');
+	casper.thenClick('#login-sign-in-link', function () {
+		this.capture('loggingin.png');
+	});
+
+	casper.thenEvaluate(function (account) {
+		$('#login-email').val(account.email);
+		$('#login-password').val(account.password);
+	}, account);
+	casper.then(function () {
+		this.capture('loggingin2.png');
+	});
+
+	casper.thenClick('#login-buttons-password');
+
+	casper.then(function () {
+		this.waitForSelector('#login-name-link', function success() {
+			test.assertSelectorHasText('#login-name-link', account.email);
+		});
+	});
+}
