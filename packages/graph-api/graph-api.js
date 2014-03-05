@@ -1,5 +1,5 @@
 GraphAPI = {
-	nodeProperties: ['content', 'title'],
+	nodeProperties: ['nodeContent', 'title'],
 	// add allow rules to Nodes that call the securityAPI or 
 	// each API should handle it's own security
 	createNode: function (nodeData, privacySettings) {

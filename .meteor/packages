@@ -13,3 +13,5 @@ jqueryui
 accounts-ui
 conductor
 bootstrap3-less
+iron-router
+blaze-layout

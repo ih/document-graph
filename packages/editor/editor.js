@@ -18,13 +18,13 @@ Editor = {
 };
 
 Template.editor.helpers({
-	content: function () {return state.get('content');},
+	nodeContent: function () {return state.get('nodeContent');},
 	title: function () {return state.get('title');}
 });
 
 Template.editor.events({
 	'input .content': function (event) {
-		state.set('content', event.target.value);
+		state.set('nodeContent', event.target.value);
 	},
 	'input .title': function (event) {
 		state.set('title', event.target.value);
