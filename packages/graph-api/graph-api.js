@@ -13,7 +13,7 @@ GraphAPI = {
 		});
 
 		// add the node to any non-public groups
-		_.each(_.without(privacySettings, 'public'), function (groupId) {
+		_.each(privacySettings, function (groupId) {
 			GroupsAPI.joinGroup(groupId, nodeId);
 		});
 

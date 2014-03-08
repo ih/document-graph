@@ -1,5 +1,5 @@
 GroupsAPI = {
-	groupProperties: ['name'],
+	groupProperties: ['name', 'creatorId'],
 	membershipProperties: ['groupId', 'memberId', 'role'],
 	// maybe this should be reactive one day...
 	// http://robertdickert.com/blog/2013/11/14/why-is-my-meteor-app-not-updating-reactively/
@@ -44,5 +44,17 @@ GroupsAPI = {
 		console.log('in getMyGroups');
 		console.log(memberId);
 		return Groups.find({'creatorId': memberId}).fetch();
+	},
+	getGroups: function (memberId, idsOnly) {
+		// only works properly on the server
+		console.log('getting groups for ' + memberId);
+		var memberships = Memberships.find({memberId: memberId}).fetch();
+		var groupIds =  _.pluck(memberships, 'groupId');
+		if (idsOnly) {
+			return groupIds;
+		}
+		else {
+			return Groups.find({_id: {$in: groupIds}}).fetch();
+		}
 	}
 };

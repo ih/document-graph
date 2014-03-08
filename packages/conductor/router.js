@@ -10,6 +10,6 @@ Router.map(function() {
 		path: '/node/:_id',
 		data: function () {
 			console.log('setting data for router');
-			console.log(GraphAPI.getNode(this.params._id));
-			return GraphAPI.getNode(this.params._id);}});
+				return GraphAPI.getNode(this.params._id);
+		}});
 });
