@@ -13,13 +13,14 @@ Template.ratingsInterface.rendered = function () {
 
 Template.ratingsInterface.events({
 	'click .rating-good': function (event, template) {
-		RatingsAPI.assignRating(template.data, 1);
+		RatingsAPI.incrementRating(template.data.objectId, 1);
 	},
 	'click .rating-bad': function (event, template) {
-		RatingsAPI.assignRating(template.data, -1);
+		RatingsAPI.incrementRating(template.data.objectId, -1);
 	}
 });
 
 Template.ratingsInterface.getCommunityRating = function () {
-	return RatingsAPI.getCommunityRating(this.data);
+	console.log('getting community rating for interface');
+	return RatingsAPI.getCommunityRating(this.objectId);
 };

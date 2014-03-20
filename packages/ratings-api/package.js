@@ -3,9 +3,8 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['permissions-api'], ['server']);
-	api.add_files(['ratings-api.js', 'ratings-collections.js'],
-				  ['client', 'server']);
+	api.use(['ratings'], ['client', 'server']);
+	api.add_files(['ratings-api.js'], ['client', 'server']);
 	if (api.export) {
 		api.export('RatingsAPI');
 	}

@@ -3,8 +3,9 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['ratings-interface', 'templating', 'reactive-dict', 'graph-api'],
+	api.use(['templating', 'reactive-dict', 'graph-api'],
 			['client']);
+	api.use(['ratings-interface'], ['client', 'server']);
 
 	api.add_files(['viewer.html', 'viewer.js'], 'client');
 

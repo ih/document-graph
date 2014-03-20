@@ -1,3 +1,4 @@
+// console.log('node server!!!!!!');
 Nodes = new Meteor.Collection('nodes');
 
 Meteor.publish('node', function (nodeId) {

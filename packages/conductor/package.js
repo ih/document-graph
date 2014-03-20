@@ -8,7 +8,7 @@ Package.on_use(function (api, where) {
 			 'accounts-password', 'search-interface',
 			 'viewer', 'graph-api', 'iron-router'],
 			['client']);
-	api.use(['accounts-base', 'accounts-password','groups-api', 'underscore'],
+	api.use(['viewer', 'accounts-base', 'accounts-password','groups-api', 'underscore'],
 			['server']);
 
 	api.add_files(['conductor-server.js'], ['server']);
