@@ -1,4 +1,5 @@
 GroupsAPI = {
+	ADMIN: 'administrator',
 	groupProperties: ['name', 'creatorId'],
 	membershipProperties: ['groupId', 'memberId', 'role'],
 	// maybe this should be reactive one day...
@@ -17,7 +18,7 @@ GroupsAPI = {
 		});
 		// TODO should also be able to create non-creator initial members from
 		// groupData
-		GroupsAPI.joinGroup(groupId, groupData.creatorId, 'administrator');
+		GroupsAPI.joinGroup(groupId, groupData.creatorId, GroupsAPI.ADMIN);
 	},
 	joinGroup: function (groupId, memberId, role) {
 		// TODO add a check that the caller has permission to add members to the
@@ -56,5 +57,21 @@ GroupsAPI = {
 		else {
 			return Groups.find({_id: {$in: groupIds}}).fetch();
 		}
+	},
+	isInSameGroup: function (id1, id2) {
+		var id1GroupIds = GroupsAPI.getGroups(id1, true);
+		var id2GroupIds =  GroupsAPI.getGroups(id2, true);
+		console.log('groups for object');
+		console.log(id1GroupIds);
+		console.log('groups for user');
+		console.log(id2GroupIds);
+		return _.intersection(id1GroupIds, id2GroupIds).length > 0;
+	},
+	isAdminOf: function (objectId, userId) {
+		var objectGroupIds = GroupsAPI.getGroups(objectId, true);
+		var userAdminMemberships = Memberships.find(
+			{memberId: userId, role: GroupsAPI.ADMIN}).fetch();
+		return _.intersection(
+			objectGroupIds, _.pluck(userAdminMemberships, 'groupId')).length > 0;
 	}
 };
