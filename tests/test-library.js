@@ -102,3 +102,22 @@ function login(test, account) {
 		});
 	});
 }
+
+function clickAndView(node) {
+	casper.thenClick('.search-submit');
+	casper.then(function () {
+		this.waitForText(node.title, function () {
+			var url = this.evaluate(function (title) {
+				return $(
+					'.search-result a:contains("'+ title +'")').attr(
+						'href').slice(1);
+			}, node.title);
+			this.echo('url:'+ url);
+			this.open(SERVER + url);
+			casper.nodeUrls[node.title] = SERVER + url;
+		});
+		this.waitForText(node.content, function () {
+			this.test.pass('displaying node ' + node.title);
+		});
+	});
+}
