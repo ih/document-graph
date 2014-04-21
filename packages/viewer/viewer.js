@@ -1,3 +1,5 @@
+state = new ReactiveDict();
+
 Viewer = {
 	initialize: function () {
 		console.log('initialize the viewer');

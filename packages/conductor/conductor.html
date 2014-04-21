@@ -1,7 +1,7 @@
 <template name="layout">
 	<!-- TODO make the navbar a component -->
 	<div class="navbar navbar-default">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#">Dendwrite</a>
 			</div>
@@ -12,8 +12,19 @@
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div class="container-fluid">
 		{{#if currentUser}}
+		<div class="row">
+			<div class="col-md-1">
+				left list node pane
+			</div>
+			<div id="main-view" class="col-md-10">
+				{{> mondrian}}
+			</div>
+			<div class="col-md-1">
+				right list node pane
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-12 active-module">
 				{{> editor}}

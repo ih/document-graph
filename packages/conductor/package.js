@@ -6,13 +6,14 @@ Package.describe({
 Package.on_use(function (api, where) {
 	api.use(['templating', 'less', 'editor', 'accounts-base', 'groups-api',
 			 'accounts-password', 'search-interface',
-			 'viewer', 'graph-api', 'iron-router'],
+			 'viewer', 'graph-api', 'iron-router', 'mondrian'],
 			['client']);
 	api.use(['viewer', 'accounts-base', 'accounts-password','groups-api', 'underscore'],
 			['server']);
 
 	api.add_files(['conductor-server.js'], ['server']);
-	api.add_files(['router.js', 'conductor.html', 'conductor-client.js'], ['client']);
+	api.add_files(
+		['router.js', 'conductor.html', 'conductor-client.js', 'conductor.less'], ['client']);
 
 	if (api.export) {
 		api.export('Conductor');
