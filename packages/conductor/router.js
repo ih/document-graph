@@ -11,7 +11,7 @@ Router.map(function() {
 		data: function () {
 			console.log('setting data for router');
 			var targetNode = GraphAPI.getNode(this.params._id);
-			Mondrian.setFocusedCellContent(Template.viewer, targetNode);
+			// Mondrian.setFocusedCellContent(Template.viewer, targetNode);
 			return targetNode;
 		}});
 });
