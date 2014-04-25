@@ -104,9 +104,12 @@ function login(test, account) {
 }
 
 function clickAndView(node) {
+	casper.echo('click and view test');
 	casper.thenClick('.search-submit');
+	casper.echo('submitted search');
 	casper.then(function () {
 		this.waitForText(node.title, function () {
+			this.echo('looking for title...');
 			var url = this.evaluate(function (title) {
 				return $(
 					'.search-result a:contains("'+ title +'")').attr(
