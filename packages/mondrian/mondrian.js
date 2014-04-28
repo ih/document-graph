@@ -102,33 +102,34 @@ Mondrian = {
 			parentId: state.get(targetCellId).parentId
 		});
 		// update the focused cell
-		state.changeFocus(cell2Id);
+		Mondrian.changeFocus(cell2Id);
 	},
 	collapseFocusedCell: function () {
 
 	}
 };
 
+/** Initialize and insert the first cell.
+ */
 Template.mondrian.rendered = function () {
+	var $mondrian = $(this.find('#mondrian'));
+	var cellId = _.uniqueId(cellIdPrefix);
+	state.set('focusedCellId', cellId);
+
+	state.set(cellId, {
+		parentId: null,
+		content: {templateName: 'text', context: {text: 'howdy'}}
+	});
+
+	renderAndInsert(
+		{templateName: 'cell', context: {cellId: cellId}}, $mondrian);
 };
 
 Template.cell.rendered = function () {
 	// initialization code for keeping track of different cells
 	console.log('rendering a cell');
-	var cellId = _.uniqueId(cellIdPrefix);
 	var $cell =  $(this.find('.cell'));
-	$cell.attr('id', cellId);
-
-	if(!state.get('focusedCellId')) {
-		state.set('focusedCellId', cellId);
-		// special case since this is the first cell
-		// otherwise don't change state in render code
-		// TODO change to better default content
-		state.set(cellId, {
-			parentId: null,
-			content: {templateName: 'text', context: {text: 'howdy'}}
-		});
-	}
+	var cellId = $cell.attr('id');
 
 	Deps.autorun(function renderCell() {
 		console.log(
@@ -137,20 +138,20 @@ Template.cell.rendered = function () {
 		if (cellState === null) {
 			console.log('collapsing the cell');
 		}
-		else if (isInitialCell(cellState)) {
-			console.log('first cell rendered before content set');
-		}
 		else if (isLeafCell(cellState)) {
 			console.log('change in the cell content for cell ' + cellId);
+			$cell.empty();
 			renderAndInsert(cellState.content, $cell);
 		}
 		else {
 			console.log('dividing the cell');
 			$cell.empty();
-			var child1State = state.get(cellState.childIds.cell1);
-			var child2State = state.get(cellState.childIds.cell2);
-			renderAndInsert(child1State.content, $cell);
-			renderAndInsert(child2State.content, $cell);
+			var cell1Id = cellState.childIds.cell1;
+			var cell2Id = cellState.childIds.cell2;
+			renderAndInsert(
+				{templateName: 'cell', context: {cellId: cell1Id}}, $cell);
+			renderAndInsert(
+				{templateName: 'cell', context: {cellId: cell2Id}}, $cell);
 		}
 	});
 	console.log(cellId);
