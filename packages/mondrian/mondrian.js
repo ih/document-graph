@@ -4,13 +4,15 @@ been divided.  For leaf cells the cell state has the following format
 {
  content: {templateName: 'someTemplateName', context: {templateVar: varValue}},
  parentId: 'cellId'
+ siblingId: 'siblingId'
 }
 
 For cells that contain a division the format is
 {
  childIds: {cell1: 'cell1Id', cell2: 'cell2Id'},
  direction: 'horizontal/vertical',
- parentId: 'parentCellId'
+ parentId: 'parentCellId',
+ siblingId: 'siblingId'
 }
 
 Other keys in the state include
@@ -24,8 +26,8 @@ function isLeafCell(cellState) {
 	return !_.has(cellState, 'childIds');
 }
 
-function isInitialCell(cellState) {
-	return _.keys(cellState).length === 1;
+function isRootCell(cellState) {
+	return cellState.parentId === null;
 }
 
 Mondrian = {
@@ -89,23 +91,52 @@ Mondrian = {
 		// add new cells to the state
 		state.set(cell1Id, {
 			content: cell1Content,
-			parentId: targetCellId
+			parentId: targetCellId,
+			siblingId: cell2Id
 		});
 		state.set(cell2Id, {
 			content: cell2Content,
-			parentId: targetCellId
+			parentId: targetCellId,
+			siblingId: cell1Id
 		});
 		// change the contents for the target cell
 		state.set(targetCellId, {
 			childIds: {cell1: cell1Id, cell2: cell2Id},
 			direction: direction,
-			parentId: state.get(targetCellId).parentId
+			parentId: state.get(targetCellId).parentId,
+			siblingId: state.get(targetCellId).siblingId
 		});
 		// update the focused cell
 		Mondrian.changeFocus(cell2Id);
 	},
-	collapseFocusedCell: function () {
+	/**
+	 @param {string} targetCellId - the cell that should be removed and have its
+	 parent replaced with its sibling TARGET CELL MUST BE A NONROOT LEAF
+	 */
+	collapseCell: function (targetCellId) {
+		if (targetCellId === undefined) {
+			targetCellId = state.get('focusedCellId');
+		}
+		var cellState = state.get(targetCellId);
+		if (isRootCell(cellState)) {
+			console.log('cannot collapse the root cell');
+			return false;
+		}
 
+		var parentState = state.get(cellState.parentId);
+		var siblingState = state.get(cellState.siblingId);
+
+		state.set(targetCellId, null);
+		// prepare siblingState to replace the parent cell
+		siblingState.parentId = parentState.parentId;
+		siblingState.siblingId = parentState.siblingId;
+		state.set(cellState.siblingId, null);
+
+		state.set(cellState.parentId, siblingState);
+
+		Mondrian.changeFocus(cellState.parentId);
+		// TODO how to remove cell ids from state?
+		return true;
 	}
 };
 
@@ -118,7 +149,8 @@ Template.mondrian.rendered = function () {
 
 	state.set(cellId, {
 		parentId: null,
-		content: {templateName: 'text', context: {text: 'howdy'}}
+		content: {templateName: 'text', context: {text: 'howdy'}},
+		siblingId: null
 	});
 
 	renderAndInsert(
@@ -137,6 +169,7 @@ Template.cell.rendered = function () {
 		var cellState = state.get(cellId);
 		if (cellState === null) {
 			console.log('collapsing the cell');
+			$cell.empty();
 		}
 		else if (isLeafCell(cellState)) {
 			console.log('change in the cell content for cell ' + cellId);
