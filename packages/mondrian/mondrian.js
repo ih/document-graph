@@ -30,6 +30,31 @@ function isRootCell(cellState) {
 	return cellState.parentId === null;
 }
 
+Template.cell.helpers({
+	focus: function () {
+		if (this.cellId === state.get('focusedCellId')) {
+			return 'focused';
+		}
+		else {
+			return '';
+		}
+	},
+	direction: function () {
+		var cellState = state.get(this.cellId);
+		if (cellState.parentId !== null) {
+			if (state.get(cellState.parentId).direction === 'vertical') {
+				return 'column-cell';
+			}
+			else {
+				return 'row-cell';
+			}
+		}
+		else {
+			return 'root-cell';
+		}
+	}
+});
+
 Mondrian = {
 	/** Creates data for the first cell
 	 */
@@ -199,7 +224,7 @@ function renderAndInsert(content, $domElement) {
 
 Template.cell.events({
 	'click .divide-horizontal': function (event,  template) {
-		console.log('horizontal splitsaa');
+		console.log('horizontal splits');
 		var cell = template.find('.cell');
 		$(cell).empty();
 		var newCell1 = UI.render(Template.mondrian);
@@ -213,3 +238,5 @@ Template.cell.events({
 		$(cell).remove();
 	}
 });
+
+
