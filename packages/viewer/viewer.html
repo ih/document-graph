@@ -1,19 +1,22 @@
 <template name="default">
 	howdy
 </template>
+
 <template name="viewer">
-	<div class="col-md-12">
-		<div>
-			{{title}}
-		</div>
-		<textarea class="content-viewer">
-			{{nodeContent}}
-		</textarea>
-		<div>
-			{{_id}}
-		</div>
-		<div>
-			{{> ratingsInterface objectId=_id}}
+	<div class="row viewer">
+		<div class="col-md-12">
+			<div class="title">
+				{{title}}
+			</div>
+			<span class="content-viewer" contenteditable="true">
+				<pre>{{nodeContent}}</pre>
+			</span>
+			<div>
+				{{_id}}
+			</div>
+			<div>
+				{{> ratingsInterface objectId=_id}}
+			</div>
 		</div>
 	</div>
 </template>

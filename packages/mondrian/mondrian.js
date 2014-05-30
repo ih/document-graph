@@ -17,6 +17,7 @@ For cells that contain a division the format is
 
 Other keys in the state include
 'focusedCellId'
+where the value is the cell id that corresponds to the currently active cell.
 */
 var state = new ReactiveDict();
 
@@ -51,6 +52,14 @@ Template.cell.helpers({
 		}
 		else {
 			return 'root-cell';
+		}
+	},
+	leaf:  function () {
+		if (!_.has(state.get(this.cellId), 'childIds')) {
+			return 'leaf-cell';
+		}
+		else {
+			return '';
 		}
 	}
 });

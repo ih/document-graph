@@ -1,9 +1,13 @@
 var searchHostUrl =
-		'http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3';
+		'http://localhost:9200';
+// 'http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3';
 
 Meteor.startup(function () {
 	// set the mapping for elasticsearch
 	console.log('setting up the elasticsearch mapping');
+	// create index
+	HTTP.put(searchHostUrl+'/nodes/node/0', {'data': {'node': 'start'}});
+	// add mapping
 	var mapping = {
 		'node': {
 			'properties': {
