@@ -19,10 +19,9 @@ Template.viewer.events({
 	// TODO support keyboard highlighting
 	'mouseup .content-viewer': function (event, template) {
         var selection = window.getSelection();
-		// TODO find a more robust way of getting contentHtml
-		var contentHtmlString = $(template.find('pre')).html();
+
 		var selectionData = getBorderAndSelectedContent(
-			selection, contentHtmlString);
+			selection);
 	}
 });
 
@@ -37,7 +36,25 @@ Template.viewer.events({
  the original content with the special markers around the selected content.
 **/
 function getBorderAndSelectedContent(selection) {
+	// selection markers get inserted into the DOM through the range/selection
+	// object. that's why we need to pass template instead of an html string
+	// since getting the html has to happen after inserting the selection 
+	// markers
 	var selectionMarkers = insertSelectionMarkers(selection);
+	var contentHtmlString = $('.content-viewer pre').html();
+	var nonAnnotatedMarkedContent = removeAnnotations(contentHtmlString);
+	var border = {
+		'open': nonAnnotatedMarkedContent.indexOf(selectionMarkers.open),
+		'close': nonAnnotatedMarkedContent.indexOf(selectionMarkers.close) -
+			selectionMarkers.open.length
+	};
+	var selectedContent = nonAnnotatedMarkedContent.slice(
+		border.open+selectionMarkers.open.length,
+		border.close+selectionMarkers.open.length);
+	console.log(border);
+	console.log(selectedContent);
+	removeSelectionMarkers();
+	return {border: border, selectedContent: selectedContent};
 }
 
 /** Markers (special html tags) get inserted into the node content to
@@ -67,3 +84,33 @@ function insertSelectionMarkers(selection) {
 	}
 }
 
+function removeSelectionMarkers() {
+	$('.selectionMarker').remove();
+}
+
+/** Remove everything, but the original content and the selection markers in
+ order to get an accurate snippet of content and its borders.
+*/
+function removeAnnotations(htmlString) {
+	// TODO improve how annotations are specified instead of hardcoding classes
+	htmlString = removeFromHtmlString(htmlString, '.fragment-indicator');
+	htmlString = removeFromHtmlString(htmlString,  '.fragment-border');
+	return htmlString;
+
+	// from http://stackoverflow.com/a/12110097
+	function removeFromHtmlString(htmlString, selector) {
+		var $wrapped = $('<div>'+htmlString+'</div>');
+		$wrapped = moveUpSelectionMarkers($wrapped, selector);
+		$wrapped.find(selector).remove();
+		return $wrapped.html();
+	}
+
+	/** Don't want to remove selection markers that may end up inside the
+	 annotation tags **/
+	function moveUpSelectionMarkers($html, selector) {
+		$html.find(selector + ' .selectionMarker').each(function() {
+			$(this).insertBefore($(this).parent());
+		});
+		return $html;
+	}
+}
