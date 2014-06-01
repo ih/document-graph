@@ -6,7 +6,7 @@ Package.describe({
 Package.on_use(function (api, where) {
 	api.use(['templating', 'less', 'editor', 'accounts-base', 'groups-api',
 			 'accounts-password', 'search-interface',
-			 'viewer', 'graph-api', 'iron-router', 'mondrian'],
+			 'viewer', 'graph-api', 'iron-router', 'mondrian', 'node-list-panel'],
 			['client']);
 	api.use(['viewer', 'accounts-base', 'accounts-password','groups-api', 'underscore'],
 			['server']);
