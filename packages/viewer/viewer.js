@@ -1,9 +1,12 @@
-state = new ReactiveDict();
+var state = new ReactiveDict();
 
 Viewer = {
 	initialize: function () {
 		console.log('initialize the viewer');
-	}
+	},
+	// Consider making state read-only by having a function
+	// readOnly(propertyName) = return state.get(propertyName)
+	state: state
 };
 
 Template.viewer.rendered = function () {
@@ -22,6 +25,7 @@ Template.viewer.events({
 
 		var selectionData = getBorderAndSelectedContent(
 			selection);
+		state.set('selection', selectionData);
 	}
 });
 

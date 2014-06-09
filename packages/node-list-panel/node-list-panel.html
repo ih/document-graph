@@ -1,5 +1,10 @@
-<template name="nodeListPane">
-	<div>
-		This is a node list
+<template name="nodeListPanel">
+	<div class="node-list-panel">
+		<div class="all-linked-display">all linked nodes</div>
+		{{#if isSelectionMade}}
+		<div class="create-linked-node">
+			<button class="btn btn-primary">Create Node</button>
+		</div>
+		{{/if}}
 	</div>
 </template>

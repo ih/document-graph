@@ -104,7 +104,7 @@ Mondrian = {
 	/**
 	 @param {string} direction - either 'vertical' or 'horizontal' indicates
 	 whether the dividing line between the new cells runs vertically or
-	 horizontally
+	 horizontally TODO if not passed make this the direction that is larger
 	 @param {string} targetCellId- - the cell whose content should be two new
 	 cells CURRENTLY MUST BE A "LEAF" CELL
 	 */
@@ -177,6 +177,7 @@ Mondrian = {
 /** Initialize and insert the first cell.
  */
 Template.mondrian.rendered = function () {
+	console.log('rendering mondrian');
 	var $mondrian = $(this.find('#mondrian'));
 	var cellId = _.uniqueId(cellIdPrefix);
 	state.set('focusedCellId', cellId);
@@ -247,5 +248,6 @@ Template.cell.events({
 		$(cell).remove();
 	}
 });
+
 
 

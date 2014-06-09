@@ -6,7 +6,8 @@ Package.on_use(function (api, where) {
 	api.use(['templating', 'reactive-dict', 'less'],
 			['client']);
 
-	api.add_files(['mondrian.html', 'mondrian.js', 'mondrian.less'], 'client');
+	api.add_files([
+		'mondrian.html', 'mondrian.js', 'mondrian.less'], 'client');
 
 	if (api.export) {
 		api.export('Mondrian');
