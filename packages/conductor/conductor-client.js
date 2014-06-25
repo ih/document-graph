@@ -1,5 +1,5 @@
 Template.layout.rendered = function () {
-	Editor.initialize('create');
+	// Editor.initialize('create');
 };
 
 console.log('in the conductor client ' + window.location.pathname);
