@@ -1,12 +1,15 @@
 /**
  * Editor gets exported and acts as the interface to the editor component
  */
-var state = new ReactiveDict();
+Template.editor.created = function () {
+	this.state = new ReactiveDict();
+	this.state.set('mode', 'create');
+};
 
 var Editor = {
 	initialize: function (mode, params) {
 		console.log('initializing the editor');
-		state.set('mode', mode);
+		// templateInstance.state.set('mode', mode);
 		// TagEditor.initialize();
 	},
 	/**
@@ -21,33 +24,35 @@ var Editor = {
 // 	return UI._templateInstance();
 // });
 
+
+
 Template.editor.helpers({
 	nodeContent: function () {
-		return UI._templateInstance().get('nodeContent');
+		return UI._templateInstance().state.get('nodeContent');
 	},
 	title: function () {
-		return UI._templateInstance().get('title');
+		return UI._templateInstance().state.get('title');
 	}
 });
 
 Template.editor.events({
-	'input .content': function (event) {
-		this.set('nodeContent', event.target.value);
+	'input .content': function (event, templateInstance) {
+		templateInstance.state.set('nodeContent', event.target.value);
 	},
-	'input .title': function (event) {
-		this.set('title', event.target.value);
+	'input .title': function (event, templateInstance) {
+		templateInstance.state.set('title', event.target.value);
 	},
-	'click .save': function (event) {
-		if (this.get('mode') === 'create') {
+	'click .save': function (event, templateInstance) {
+		if (templateInstance.state.get('mode') === 'create') {
 			var privacySettings = PrivacyEditor.getPrivacySettings();
 			// the keys property of a reactive dict is basically the plain dict
 			var nodeId = GraphAPI.createNode(
 				// TODO this.keys probably isn't right
-				_.pick(this.keys, GraphAPI.nodeProperties), privacySettings);
+				_.pick(templateInstance.state.keys, GraphAPI.nodeProperties), privacySettings);
 			_.each(TagEditor.getTags(), function (tag) {
 				TagsAPI.createTag({'objectId': nodeId, 'tag': tag});
 			});
-			resetEditor(this);
+			resetEditor(templateInstance.state);
 		}
 	}
 });
@@ -56,16 +61,16 @@ Template.editor.rendered = function () {
 	$('textarea').autogrow();
 };
 
-function resetEditor(templateInstance) {
+function resetEditor(state) {
 	// used for resetting the title input, would be nice if there was two-way
 	// binding...
 	$('input').val('');
 
 	_.each(GraphAPI.nodeProperties, function (stateProperty) {
 		// TODO figure out a better way to set the default value
-		templateInstance.set(stateProperty, '');
+		state.set(stateProperty, '');
 	});
 	TagEditor.clearTags();
 	console.log('cleared state');
-	console.log(templateInstance.keys);
+	console.log(state.keys);
 }
