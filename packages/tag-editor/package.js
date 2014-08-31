@@ -3,7 +3,8 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['templating', 'less', 'jqueryui'],
+	api.use(['mrt:jquery-ui'], 'client');
+	api.use(['templating', 'less'],
 			['client', 'server']);
 	// refactor tag-it to be in its own package and have tag-editor depend on it
 	api.add_files(['tag-editor.html', 'tag-editor.js', 'tag-editor.less',

@@ -4,12 +4,11 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-insecure
-less
 accounts-password
-editor
-jqueryui
 accounts-ui
 conductor
-bootstrap3-less
-iron-router
+mrt:jquery-ui
+iron:router
+less
+simison:bootstrap3-less
+
