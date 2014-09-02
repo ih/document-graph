@@ -61,9 +61,9 @@ GroupsAPI = {
 	isInSameGroup: function (id1, id2) {
 		var id1GroupIds = GroupsAPI.getGroups(id1, true);
 		var id2GroupIds =  GroupsAPI.getGroups(id2, true);
-		console.log('groups for object');
+		console.log('groups for ' + id1);
 		console.log(id1GroupIds);
-		console.log('groups for user');
+		console.log('groups for ' + id2);
 		console.log(id2GroupIds);
 		return _.intersection(id1GroupIds, id2GroupIds).length > 0;
 	},

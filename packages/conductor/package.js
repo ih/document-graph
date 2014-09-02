@@ -9,7 +9,7 @@ Package.on_use(function (api, where) {
 			 'viewer', 'graph-api', 'mondrian', 'node-list-panel'],
 			['client']);
 	api.use(['viewer', 'accounts-base', 'accounts-password','groups-api',
-			 'underscore', 'search-api'],
+			 'underscore', 'graph-api', 'search-api'],
 			['server']);
 
 	api.add_files(['conductor-server.js'], ['server']);

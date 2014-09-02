@@ -4,11 +4,11 @@
 meteor reset
 
 #clear the search index
-curl -XDELETE 'http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3/nodes'
-curl -XPUT 'http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3/nodes'
+curl -XDELETE 'http://localhost:9200/nodes'
+curl -XPUT 'http://localhost:9200/nodes'
 
 #start meteor in the background
-mrt & 
+meteor &
 
 
 #wait for the server to get started, find a better way to do this... 
