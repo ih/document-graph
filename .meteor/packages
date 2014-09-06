@@ -8,7 +8,7 @@ accounts-password
 accounts-ui
 conductor
 mrt:jquery-ui
-iron:router
 less
 simison:bootstrap3-less
+iron:router
 
