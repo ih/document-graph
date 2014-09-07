@@ -20,18 +20,12 @@ var Editor = {
 	}
 };
 
-// UI.registerHelper('nodeContent', function () {
-// 	return UI._templateInstance();
-// });
-
-
-
 Template.editor.helpers({
 	nodeContent: function () {
-		return UI._templateInstance().state.get('nodeContent');
+		return Template.instance().state.get('nodeContent');
 	},
 	title: function () {
-		return UI._templateInstance().state.get('title');
+		return Template.instance().state.get('title');
 	}
 });
 

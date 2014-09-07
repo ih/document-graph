@@ -227,9 +227,7 @@ Template.cell.rendered = function () {
 
 function renderAndInsert(content, $domElement) {
 	var template = Template[content.templateName];
-	var componentInstance = UI.renderWithData(
-		template, content.context);
-	UI.insert(componentInstance, $domElement[0]);
+	Blaze.renderWithData(template, content.context, $domElement[0]);
 }
 
 Template.cell.events({
@@ -237,10 +235,8 @@ Template.cell.events({
 		console.log('horizontal splits');
 		var cell = template.find('.cell');
 		$(cell).empty();
-		var newCell1 = UI.render(Template.mondrian);
-		var newCell2 = UI.render(Template.mondrian);
-		UI.insert(newCell1, cell);
-		UI.insert(newCell2, cell);
+		Blaze.render(Template.mondrian, cell);
+		Blaze.render(Template.mondrian, cell);
 	},
 	'click .kill': function (event,  template) {
 		console.log('collapse');
