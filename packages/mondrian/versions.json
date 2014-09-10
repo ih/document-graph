@@ -54,7 +54,7 @@
     ],
     [
       "reactive-dict",
-      "1.0.1"
+      "1.0.2"
     ],
     [
       "reactive-var",
@@ -74,6 +74,6 @@
     ]
   ],
   "pluginDependencies": [],
-  "toolVersion": "meteor-tool@1.0.27",
+  "toolVersion": "meteor-tool@1.0.28",
   "format": "1.0"
 }

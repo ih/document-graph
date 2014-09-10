@@ -234,16 +234,15 @@ Template.cell.events({
 	'click .divide-horizontal': function (event,  template) {
 		console.log('horizontal splits');
 		var cell = template.find('.cell');
-		$(cell).empty();
-		Blaze.render(Template.mondrian, cell);
-		Blaze.render(Template.mondrian, cell);
+		Mondrian.divideCell('horizontal', $(cell).attr('id'));
 	},
-	'click .kill': function (event,  template) {
+	'click .close': function (event,  template) {
 		console.log('collapse');
 		var cell = template.find('.cell');
-		$(cell).remove();
+		Mondrian.collapseCell($(cell).attr('id'));
 	}
 });
+
 
 
 

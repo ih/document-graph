@@ -14,7 +14,7 @@ conductor@0.0.0
 ctl-helper@1.0.3
 ctl@1.0.1
 ddp@1.0.8
-deps@1.0.2
+deps@1.0.3
 editor@0.0.0
 ejson@1.0.1
 email@1.0.2
@@ -34,10 +34,11 @@ iron:router@0.9.3
 jquery@1.0.0
 json@1.0.0
 less@1.0.7
+livedata@1.0.9
 localstorage@1.0.0
 logging@1.0.2
 memberships@0.0.0
-meteor-platform@1.0.1
+meteor-platform@1.0.2
 meteor@1.0.3
 minifiers@1.0.2
 minimongo@1.0.2
@@ -55,7 +56,7 @@ random@1.0.0
 ratings-api@0.0.0
 ratings-interface@0.0.0
 ratings@0.0.0
-reactive-dict@1.0.1
+reactive-dict@1.0.2
 reactive-var@1.0.1
 records-api@0.0.0
 records@0.0.0
@@ -78,7 +79,7 @@ tags-api@0.0.0
 tags@0.0.0
 templating@1.0.5
 tracker@1.0.2
-ui@1.0.1
+ui@1.0.2
 underscore@1.0.0
 viewer@0.0.0
 webapp@1.0.3
