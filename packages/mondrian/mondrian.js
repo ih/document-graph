@@ -195,7 +195,7 @@ Template.mondrian.rendered = function () {
 Template.cell.rendered = function () {
 	// initialization code for keeping track of different cells
 	console.log('rendering a cell');
-	var $cell =  $(this.find('.cell'));
+	var $cell =  $(this.find('.cell-content'));
 	var cellId = $cell.attr('id');
 
 	Deps.autorun(function renderCell() {
@@ -236,13 +236,22 @@ Template.cell.events({
 		var cell = template.find('.cell');
 		Mondrian.divideCell('horizontal', $(cell).attr('id'));
 	},
-	'click .close': function (event,  template) {
+	'click .divide-vertical': function (event,  template) {
+		console.log('vertical splits');
+		var cell = template.find('.cell');
+		Mondrian.divideCell('vertical', $(cell).attr('id'));
+	},
+	'click .collapse-cell': function (event,  template) {
 		console.log('collapse');
 		var cell = template.find('.cell');
 		Mondrian.collapseCell($(cell).attr('id'));
 	}
 });
 
-
+Template.cell.isLeaf = function () {
+	var cellId = Template.instance().data.cellId;
+	var cellState = state.get(cellId);
+	return isLeafCell(cellState);
+};
 
 

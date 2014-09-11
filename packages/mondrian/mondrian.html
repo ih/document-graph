@@ -4,12 +4,16 @@
 </template>
 
 <template name="cell">
-	<div class="cell-controls">
-		<button class="divide-horizontal">Split</button>
-		<button class="close">Close</button>
-	</div>
-	<div class="cell {{focus}} {{direction}} {{leaf}}" id="{{cellId}}">
-
+	<div class="cell">
+		{{#if isLeaf}}
+		<div class="cell-controls">
+			<button class="divide-horizontal">H{{cellId}}</button>
+			<button class="divide-vertical">V</button>
+			<button class="collapse-cell">C</button>
+		</div>
+		{{/if}}
+		<div class="cell-content {{focus}} {{direction}} {{leaf}}" id="{{cellId}}">
+		</div>
 	</div>
 </template>
 
