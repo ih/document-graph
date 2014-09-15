@@ -41,7 +41,12 @@ Template.cell.helpers({
 		}
 	},
 	direction: function () {
-		var cellState = state.get(this.cellId);
+		var cellId = Template.instance().data.cellId;
+		var cellState = state.get(cellId);
+		if (!cellState) {
+			console.warn(cellId + ' does not have a cell state. Cannot determine direction');
+			return '';
+		}
 		if (cellState.parentId !== null) {
 			if (state.get(cellState.parentId).direction === 'vertical') {
 				return 'column-cell';
@@ -55,7 +60,13 @@ Template.cell.helpers({
 		}
 	},
 	leaf:  function () {
-		if (!_.has(state.get(this.cellId), 'childIds')) {
+		var cellId = Template.instance().data.cellId;
+		var cellState = state.get(cellId);
+		if (!cellState) {
+			console.warn(cellId + ' does not have a cell state. Cannot determine leaf');
+			return '';
+		}
+		if (!_.has(state.get(cellId), 'childIds')) {
 			return 'leaf-cell';
 		}
 		else {
@@ -156,6 +167,10 @@ Mondrian = {
 			console.log('cannot collapse the root cell');
 			return false;
 		}
+		if (!isLeafCell(cellState)) {
+			console.error('trying to collapse non-leaf cell');
+			return false;
+		}
 
 		var parentState = state.get(cellState.parentId);
 		var siblingState = state.get(cellState.siblingId);
@@ -195,7 +210,8 @@ Template.mondrian.rendered = function () {
 Template.cell.rendered = function () {
 	// initialization code for keeping track of different cells
 	console.log('rendering a cell');
-	var $cell =  $(this.find('.cell-content'));
+	var $cell =  $(this.find('.cell'));
+	var $cellContent = $(this.find('.cell-content'));
 	var cellId = $cell.attr('id');
 
 	Deps.autorun(function renderCell() {
@@ -208,8 +224,8 @@ Template.cell.rendered = function () {
 		}
 		else if (isLeafCell(cellState)) {
 			console.log('change in the cell content for cell ' + cellId);
-			$cell.empty();
-			renderAndInsert(cellState.content, $cell);
+			$cellContent.empty();
+			renderAndInsert(cellState.content, $cellContent);
 		}
 		else {
 			console.log('dividing the cell');
@@ -233,24 +249,28 @@ function renderAndInsert(content, $domElement) {
 Template.cell.events({
 	'click .divide-horizontal': function (event,  template) {
 		console.log('horizontal splits');
-		var cell = template.find('.cell');
-		Mondrian.divideCell('horizontal', $(cell).attr('id'));
+		event.stopPropagation();
+		Mondrian.divideCell('horizontal', template.data.cellId);
 	},
 	'click .divide-vertical': function (event,  template) {
 		console.log('vertical splits');
-		var cell = template.find('.cell');
-		Mondrian.divideCell('vertical', $(cell).attr('id'));
+		event.stopPropagation();
+		Mondrian.divideCell('vertical', template.data.cellId);
 	},
 	'click .collapse-cell': function (event,  template) {
 		console.log('collapse');
-		var cell = template.find('.cell');
-		Mondrian.collapseCell($(cell).attr('id'));
+		event.stopPropagation();
+		Mondrian.collapseCell(template.data.cellId);
 	}
 });
 
 Template.cell.isLeaf = function () {
 	var cellId = Template.instance().data.cellId;
 	var cellState = state.get(cellId);
+	if (!cellState) {
+		console.warn(cellId + ' does not have a state.  Cannot call isLeaf');
+		return null;
+	}
 	return isLeafCell(cellState);
 };
 

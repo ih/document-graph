@@ -4,7 +4,7 @@
 </template>
 
 <template name="cell">
-	<div class="cell">
+	<div class="cell {{direction}} {{leaf}} {{focus}}" id="{{cellId}}">
 		{{#if isLeaf}}
 		<div class="cell-controls">
 			<button class="divide-horizontal">H{{cellId}}</button>
@@ -12,7 +12,7 @@
 			<button class="collapse-cell">C</button>
 		</div>
 		{{/if}}
-		<div class="cell-content {{focus}} {{direction}} {{leaf}}" id="{{cellId}}">
+		<div class="cell-content">
 		</div>
 	</div>
 </template>
