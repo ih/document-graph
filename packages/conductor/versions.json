@@ -2,7 +2,7 @@
   "dependencies": [
     [
       "accounts-base",
-      "1.0.1"
+      "1.1.0"
     ],
     [
       "accounts-password",
@@ -10,7 +10,11 @@
     ],
     [
       "application-configuration",
-      "1.0.1"
+      "1.0.2"
+    ],
+    [
+      "base64",
+      "1.0.0"
     ],
     [
       "binary-heap",
@@ -22,6 +26,10 @@
     ],
     [
       "blaze-tools",
+      "1.0.0"
+    ],
+    [
+      "boilerplate-generator",
       "1.0.0"
     ],
     [
@@ -50,7 +58,7 @@
     ],
     [
       "ejson",
-      "1.0.1"
+      "1.0.2"
     ],
     [
       "email",
@@ -82,11 +90,11 @@
     ],
     [
       "htmljs",
-      "1.0.0"
+      "1.0.1"
     ],
     [
       "http",
-      "1.0.4"
+      "1.0.5"
     ],
     [
       "id-map",
@@ -118,7 +126,7 @@
     ],
     [
       "less",
-      "1.0.7"
+      "1.0.8"
     ],
     [
       "localstorage",
@@ -126,7 +134,7 @@
     ],
     [
       "logging",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "memberships",
@@ -134,15 +142,15 @@
     ],
     [
       "meteor",
-      "1.0.3"
+      "1.1.0"
     ],
     [
       "minifiers",
-      "1.0.2"
+      "1.1.0"
     ],
     [
       "minimongo",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "mondrian",
@@ -150,7 +158,7 @@
     ],
     [
       "mongo",
-      "1.0.4"
+      "1.0.5"
     ],
     [
       "mrt:jquery-ui",
@@ -222,7 +230,7 @@
     ],
     [
       "routepolicy",
-      "1.0.0"
+      "1.0.1"
     ],
     [
       "search-api",
@@ -270,7 +278,7 @@
     ],
     [
       "templating",
-      "1.0.5"
+      "1.0.6"
     ],
     [
       "tracker",
@@ -285,15 +293,23 @@
       "1.0.0"
     ],
     [
+      "url",
+      "1.0.0"
+    ],
+    [
       "viewer",
       "0.0.0"
     ],
     [
       "webapp",
-      "1.0.3"
+      "1.1.1"
+    ],
+    [
+      "webapp-hashing",
+      "1.0.0"
     ]
   ],
   "pluginDependencies": [],
-  "toolVersion": "meteor-tool@1.0.28",
+  "toolVersion": "meteor-tool@1.0.31",
   "format": "1.0"
 }

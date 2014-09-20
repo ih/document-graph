@@ -2,11 +2,15 @@
   "dependencies": [
     [
       "accounts-base",
-      "1.0.1"
+      "1.1.0"
     ],
     [
       "application-configuration",
-      "1.0.1"
+      "1.0.2"
+    ],
+    [
+      "base64",
+      "1.0.0"
     ],
     [
       "binary-heap",
@@ -34,7 +38,7 @@
     ],
     [
       "ejson",
-      "1.0.1"
+      "1.0.2"
     ],
     [
       "follower-livedata",
@@ -58,11 +62,11 @@
     ],
     [
       "htmljs",
-      "1.0.0"
+      "1.0.1"
     ],
     [
       "http",
-      "1.0.4"
+      "1.0.5"
     ],
     [
       "id-map",
@@ -78,7 +82,7 @@
     ],
     [
       "less",
-      "1.0.7"
+      "1.0.8"
     ],
     [
       "localstorage",
@@ -86,7 +90,7 @@
     ],
     [
       "logging",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "memberships",
@@ -94,15 +98,15 @@
     ],
     [
       "meteor",
-      "1.0.3"
+      "1.1.0"
     ],
     [
       "minimongo",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "mongo",
-      "1.0.4"
+      "1.0.5"
     ],
     [
       "nodes",
@@ -154,7 +158,7 @@
     ],
     [
       "templating",
-      "1.0.5"
+      "1.0.6"
     ],
     [
       "tracker",
@@ -163,9 +167,13 @@
     [
       "underscore",
       "1.0.0"
+    ],
+    [
+      "url",
+      "1.0.0"
     ]
   ],
   "pluginDependencies": [],
-  "toolVersion": "meteor-tool@1.0.28",
+  "toolVersion": "meteor-tool@1.0.31",
   "format": "1.0"
 }
