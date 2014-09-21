@@ -44,7 +44,7 @@ Template.cell.helpers({
 		var cellId = Template.instance().data.cellId;
 		var cellState = state.get(cellId);
 		if (!cellState) {
-			console.warn(cellId + ' does not have a cell state. Cannot determine direction');
+			console.log(cellId + ' does not have a cell state. Cannot determine direction');
 			return '';
 		}
 		if (cellState.parentId !== null) {
@@ -175,15 +175,26 @@ Mondrian = {
 		var parentState = state.get(cellState.parentId);
 		var siblingState = state.get(cellState.siblingId);
 
-		state.set(targetCellId, null);
 		// prepare siblingState to replace the parent cell
+		if (siblingState.childIds) {
+			_.each(_.keys(siblingState.childIds), function (childIndex) {
+				var childId = siblingState.childIds[childIndex];
+				var childState = state.get(childId);
+				childState.parentId = cellState.parentId;
+				state.set(childId, childState);
+			});
+		}
+
 		siblingState.parentId = parentState.parentId;
 		siblingState.siblingId = parentState.siblingId;
 		state.set(cellState.siblingId, null);
-
 		state.set(cellState.parentId, siblingState);
+		state.set(targetCellId, null);
 
-		Mondrian.changeFocus(cellState.parentId);
+
+		if (state.get('focusedCellId') === targetCellId || isLeafCell(siblingState)) {
+			Mondrian.changeFocus(cellState.parentId);
+		}
 		// TODO how to remove cell ids from state?
 		return true;
 	}
