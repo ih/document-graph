@@ -68,7 +68,9 @@ casper.test.begin('Rating by an admin', function suite(test) {
 	clickAndView(dummyNodes.publicNodeA);
 
 	casper.then(function () {
-		test.assertSelectorHasText('.rating-community', '-1');
+		this.wait(1000, function () {
+			test.assertSelectorHasText('.rating-community', '-1');
+		});
 	});
 
 	casper.thenClick('.ratings-interface .rating-bad');
