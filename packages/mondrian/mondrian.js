@@ -44,7 +44,8 @@ Template.cell.helpers({
 		var cellId = Template.instance().data.cellId;
 		var cellState = state.get(cellId);
 		if (!cellState) {
-			console.log(cellId + ' does not have a cell state. Cannot determine direction');
+			console.log(
+				cellId + ' has no cell state. Cannot determine direction');
 			return '';
 		}
 		if (cellState.parentId !== null) {
@@ -63,7 +64,7 @@ Template.cell.helpers({
 		var cellId = Template.instance().data.cellId;
 		var cellState = state.get(cellId);
 		if (!cellState) {
-			console.warn(cellId + ' does not have a cell state. Cannot determine leaf');
+			console.warn(cellId + ' has no cell state. Cannot determine leaf');
 			return '';
 		}
 		if (!_.has(state.get(cellId), 'childIds')) {
@@ -188,9 +189,8 @@ Mondrian = {
 		siblingState.parentId = parentState.parentId;
 		siblingState.siblingId = parentState.siblingId;
 		state.set(cellState.siblingId, null);
-		state.set(cellState.parentId, siblingState);
 		state.set(targetCellId, null);
-
+		state.set(cellState.parentId, siblingState);
 
 		if (state.get('focusedCellId') === targetCellId || isLeafCell(siblingState)) {
 			Mondrian.changeFocus(cellState.parentId);
@@ -231,7 +231,7 @@ Template.cell.rendered = function () {
 		var cellState = state.get(cellId);
 		if (cellState === null) {
 			console.log('collapsing the cell');
-			$cell.empty();
+			$cell.remove();
 		}
 		else if (isLeafCell(cellState)) {
 			console.log('change in the cell content for cell ' + cellId);
@@ -240,13 +240,13 @@ Template.cell.rendered = function () {
 		}
 		else {
 			console.log('dividing the cell');
-			$cell.empty();
+			$cellContent.empty();
 			var cell1Id = cellState.childIds.cell1;
 			var cell2Id = cellState.childIds.cell2;
-			renderAndInsert(
-				{templateName: 'cell', context: {cellId: cell1Id}}, $cell);
-			renderAndInsert(
-				{templateName: 'cell', context: {cellId: cell2Id}}, $cell);
+			renderAndInsert({
+				templateName: 'cell', context: {cellId: cell1Id}}, $cellContent);
+			renderAndInsert({
+				templateName: 'cell', context: {cellId: cell2Id}}, $cellContent);
 		}
 	});
 	console.log(cellId);
