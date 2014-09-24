@@ -258,6 +258,10 @@ function renderAndInsert(content, $domElement) {
 }
 
 Template.cell.events({
+	'click': function (event, template) {
+		event.stopPropagation();
+		Mondrian.changeFocus(template.data.cellId);
+	},
 	'click .divide-horizontal': function (event,  template) {
 		console.log('horizontal splits');
 		event.stopPropagation();
