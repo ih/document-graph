@@ -11,8 +11,8 @@ casper.test.begin('Cell division', function suite(test) {
 	});
 
 	// check that vertical division works
-	casper.then(function () {
-		this.click('.divide-vertical');
+	casper.thenClick('.divide-vertical', function () {
+		this.wait(1000);
 	});
 	casper.then(function () {
 		test.assertElementCount('.cell', 3);
@@ -24,6 +24,7 @@ casper.test.begin('Cell division', function suite(test) {
 	casper.then(function () {
 		var leafCellIds = this.getElementsAttribute('.leaf-cell', 'id');
 		this.click('#'+leafCellIds[0]+' .divide-horizontal');
+		this.wait(1000);
 	});
 	casper.then(function () {
 		test.assertElementCount('.cell', 5);
@@ -48,33 +49,57 @@ casper.test.begin('Cell Selection', function suite(test) {
 	casper.then(function () {
 		test.assertElementCount('.focused', 1);
 	});
-	casper.then(function () {
-		this.click('.divide-vertical');
+	casper.thenClick('.divide-vertical', function () {
+		this.wait(1000);
 	});
-	casper.then(function () {
-		this.click('.divide-horizontal');
+	casper.thenClick('.divide-horizontal', function () {
+		this.wait(1000);
 	});
+
 	// check that clicking each cell puts the focus on that cell
 	casper.then(function () {
+		this.capture('beforeclick.png');
 		leafCellIds = this.getElementsAttribute('.leaf-cell', 'id');
+		test.assertEquals(leafCellIds.length, 3);
 		this.click('#'+leafCellIds[0]);
-	});
-	casper.then(function () {
-		test.assertElementCount('.focused', 1);
-		test.assertEquals(
-			this.getElementAttribute('.focused', 'id'), leafCellIds[0]);
+		this.wait(1000, function () {
+			test.assertElementCount('.focused', 1);
+			this.capture('afterclick.png');
+			test.assertEquals(
+				this.getElementAttribute('.focused', 'id'), leafCellIds[0]);
+		});
 	});
 
 	casper.then(function () {
-		this.click('#'+leafCellIds[1]);
+		this.click('#'+leafCellIds[2]);
+		this.wait(1000);
 	});
 	casper.then(function () {
 		test.assertElementCount('.focused', 1);
 		test.assertEquals(
-			this.getElementAttribute('.focused', 'id'), leafCellIds[1]);
+			this.getElementAttribute('.focused', 'id'), leafCellIds[2]);
 	});
 
 	casper.run(function () {
 		test.done();
 	});
 });
+
+// casper.test.begin('Load content', function suite(test) {
+// 	casper.start(SERVER, function () {
+// 		this.viewport(1200, 768);
+// 	});
+// 	logout(test);
+// 	login(test, dummyUsers.A);
+
+// 	casper.then(function () {
+// 		this.click('.divide-vertical');
+// 	});
+
+// 	clickAndView(dummyNodes.publicNodeA);
+
+// 	casper.then(function () {
+// 		test.assertSelectorHasText('.cell', 'public');
+// 		this.capture('load.png');
+// 	});
+// });
