@@ -124,3 +124,18 @@ function clickAndView(node) {
 		});
 	});
 }
+
+
+function clickSearchResult(result) {
+	casper.thenClick('.search-submit');
+	casper.echo('submitted search');
+	casper.then(function () {
+		casper.wait(2000, function () {
+			casper.capture('searchresults.png');
+			casper.click('.search-results li:nth-child('+result+') a');
+			casper.wait(1000, function () {
+				casper.capture('clik'+result+'.png');
+			});
+		});
+	});
+}

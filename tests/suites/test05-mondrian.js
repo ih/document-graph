@@ -58,13 +58,11 @@ casper.test.begin('Cell Selection', function suite(test) {
 
 	// check that clicking each cell puts the focus on that cell
 	casper.then(function () {
-		this.capture('beforeclick.png');
 		leafCellIds = this.getElementsAttribute('.leaf-cell', 'id');
 		test.assertEquals(leafCellIds.length, 3);
 		this.click('#'+leafCellIds[0]);
 		this.wait(1000, function () {
 			test.assertElementCount('.focused', 1);
-			this.capture('afterclick.png');
 			test.assertEquals(
 				this.getElementAttribute('.focused', 'id'), leafCellIds[0]);
 		});
@@ -85,21 +83,36 @@ casper.test.begin('Cell Selection', function suite(test) {
 	});
 });
 
-// casper.test.begin('Load content', function suite(test) {
-// 	casper.start(SERVER, function () {
-// 		this.viewport(1200, 768);
-// 	});
-// 	logout(test);
-// 	login(test, dummyUsers.A);
+casper.test.begin('Load content', function suite(test) {
+	casper.start(SERVER, function () {
+		this.viewport(1200, 1000);
+	});
+	logout(test);
+	login(test, dummyUsers.A);
 
-// 	casper.then(function () {
-// 		this.click('.divide-vertical');
-// 	});
+	casper.thenClick('.divide-horizontal', function () {
+		this.wait(1000, function () {
+			this.capture('split.png');
+		});
+	});
 
-// 	clickAndView(dummyNodes.publicNodeA);
+	clickSearchResult(1);
 
-// 	casper.then(function () {
-// 		test.assertSelectorHasText('.cell', 'public');
-// 		this.capture('load.png');
-// 	});
-// });
+	casper.then(function () {
+		test.assertSelectorHasText('.cell', 'public');
+	});
+
+	casper.thenClick('.leaf-cell:not(.focused)');
+
+	clickSearchResult(2);
+
+	casper.then(function () {
+		test.assertSelectorHasText('.focused', 'private');
+		test.assertSelectorHasText('.leaf-cell:not(.focused)', 'public');
+		this.capture('private.png');
+	});
+
+	casper.run(function () {
+		test.done();
+	});
+});
