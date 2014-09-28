@@ -92,7 +92,6 @@ casper.test.begin('Load content', function suite(test) {
 
 	casper.thenClick('.divide-horizontal', function () {
 		this.wait(1000, function () {
-			this.capture('split.png');
 		});
 	});
 
@@ -109,7 +108,58 @@ casper.test.begin('Load content', function suite(test) {
 	casper.then(function () {
 		test.assertSelectorHasText('.focused', 'private');
 		test.assertSelectorHasText('.leaf-cell:not(.focused)', 'public');
-		this.capture('private.png');
+	});
+
+	casper.run(function () {
+		test.done();
+	});
+});
+
+casper.test.begin('Collapsing cells', function suite(test) {
+	casper.start(SERVER, function () {
+		this.viewport(1200, 1000);
+	});
+	logout(test);
+	login(test, dummyUsers.A);
+
+	casper.capture('loggedin.png');
+
+	casper.thenClick('.collapse-cell', function () {
+		test.assertElementCount('.cell', 1);
+	});
+
+	casper.thenClick('.divide-horizontal', function () {
+		this.wait(1000, function () {
+			test.assertElementCount('.cell', 3);
+		});
+	});
+
+	casper.thenClick('.focused .collapse-cell', function () {
+		test.assertElementCount('.cell', 1);
+	});
+
+	casper.thenClick('.divide-horizontal', function () {
+		this.wait(1000, function () {
+			test.assertElementCount('.cell', 3);
+		});
+	});
+
+	casper.thenClick('.divide-horizontal', function () {
+		this.wait(1000, function () {
+			test.assertElementCount('.cell', 5);
+		});
+	});
+
+	casper.thenClick('.leaf-cell:not(.focused) .collapse-cell', function () {
+		this.wait(1000, function () {
+			test.assertElementCount('.cell', 3);
+		});
+	});
+
+	casper.thenClick('.leaf-cell:not(.focused) .collapse-cell', function () {
+		this.wait(1000, function () {
+			test.assertElementCount('.cell', 1);
+		});
 	});
 
 	casper.run(function () {
