@@ -2,11 +2,11 @@
   "dependencies": [
     [
       "accounts-base",
-      "1.1.0"
+      "1.1.1"
     ],
     [
       "accounts-password",
-      "1.0.1"
+      "1.0.2"
     ],
     [
       "application-configuration",
@@ -22,7 +22,7 @@
     ],
     [
       "blaze",
-      "2.0.0"
+      "2.0.1"
     ],
     [
       "blaze-tools",
@@ -42,15 +42,15 @@
     ],
     [
       "check",
-      "1.0.0"
+      "1.0.1"
     ],
     [
       "ddp",
-      "1.0.8"
+      "1.0.9"
     ],
     [
       "deps",
-      "1.0.3"
+      "1.0.4"
     ],
     [
       "editor",
@@ -58,11 +58,11 @@
     ],
     [
       "ejson",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "email",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "follower-livedata",
@@ -86,7 +86,7 @@
     ],
     [
       "html-tools",
-      "1.0.0"
+      "1.0.1"
     ],
     [
       "htmljs",
@@ -94,7 +94,7 @@
     ],
     [
       "http",
-      "1.0.5"
+      "1.0.6"
     ],
     [
       "id-map",
@@ -126,7 +126,7 @@
     ],
     [
       "less",
-      "1.0.8"
+      "1.0.9"
     ],
     [
       "localstorage",
@@ -142,7 +142,7 @@
     ],
     [
       "meteor",
-      "1.1.0"
+      "1.1.1"
     ],
     [
       "minifiers",
@@ -158,7 +158,7 @@
     ],
     [
       "mongo",
-      "1.0.5"
+      "1.0.6"
     ],
     [
       "mrt:jquery-ui",
@@ -210,11 +210,11 @@
     ],
     [
       "reactive-dict",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "reactive-var",
-      "1.0.1"
+      "1.0.2"
     ],
     [
       "records",
@@ -254,7 +254,7 @@
     ],
     [
       "spacebars",
-      "1.0.1"
+      "1.0.2"
     ],
     [
       "spacebars-compiler",
@@ -278,7 +278,7 @@
     ],
     [
       "templating",
-      "1.0.6"
+      "1.0.7"
     ],
     [
       "tracker",
@@ -286,7 +286,7 @@
     ],
     [
       "ui",
-      "1.0.2"
+      "1.0.3"
     ],
     [
       "underscore",
@@ -302,7 +302,7 @@
     ],
     [
       "webapp",
-      "1.1.1"
+      "1.1.2"
     ],
     [
       "webapp-hashing",
@@ -310,6 +310,6 @@
     ]
   ],
   "pluginDependencies": [],
-  "toolVersion": "meteor-tool@1.0.31",
+  "toolVersion": "meteor-tool@1.0.32",
   "format": "1.0"
 }
