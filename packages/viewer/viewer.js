@@ -26,6 +26,9 @@ Template.viewer.events({
 		var selectionData = getBorderAndSelectedContent(
 			selection);
 		state.set('selection', selectionData);
+	},
+	'mousedown .content-viewer': function(event, template) {
+		removeSelectionMarkers();
 	}
 });
 
@@ -42,7 +45,7 @@ Template.viewer.events({
 function getBorderAndSelectedContent(selection) {
 	// selection markers get inserted into the DOM through the range/selection
 	// object. that's why we need to pass template instead of an html string
-	// since getting the html has to happen after inserting the selection 
+	// since getting the html has to happen after inserting the selection
 	// markers
 	var selectionMarkers = insertSelectionMarkers(selection);
 	var contentHtmlString = $('.content-viewer pre').html();
@@ -56,8 +59,9 @@ function getBorderAndSelectedContent(selection) {
 		border.open+selectionMarkers.open.length,
 		border.close+selectionMarkers.open.length);
 	console.log(border);
-	console.log(selectedContent);
-	removeSelectionMarkers();
+	console.log('selected content:'+selectedContent);
+
+	// removeSelectionMarkers();
 	return {border: border, selectedContent: selectedContent};
 }
 
@@ -66,12 +70,18 @@ function getBorderAndSelectedContent(selection) {
 **/
 function insertSelectionMarkers(selection) {
 	var markers = createMarkers();
-	// insert the opening marker at the beginning of the selection
+	// http://stackoverflow.com/a/9829634 to move the cursor to the end
 	var range = selection.getRangeAt(0);
-	range.insertNode($(markers.open)[0]);
-	// insert the closing marker at the end of the selection
-	range.collapse(false);
-	range.insertNode($(markers.close)[0]);
+	var selectedContent = range.toString();
+	range.deleteContents();
+	var selectionNode = $(markers.open + selectedContent + markers.close + '</span>')[0];
+	range.insertNode(selectionNode);
+
+	range.setStartAfter(selectionNode);
+	range.setEndAfter(selectionNode);
+	selection.removeAllRanges();
+	selection.addRange(range);
+
 	return markers;
 
 	function createMarkers() {
@@ -79,17 +89,18 @@ function insertSelectionMarkers(selection) {
 		// so that we can use indexOf to find it
 		var uniqueString = new Date().getTime();
 		var openMarker =
-			'<span class="selectionMarker" id="open'+uniqueString+'"></span>';
+			'<span class="selection-marker" id="open'+uniqueString+'">';
 		var closeMarker =
-			'<span class="selectionMarker" id="close'+uniqueString+'"></span>';
-		// [0] since they are jquery created and you need to extract the dom
-		// node for insertNode
+			'<span class="close-selection-marker" id="close'+uniqueString+'"></span>';
+
 		return {open: openMarker, close: closeMarker};
 	}
 }
 
 function removeSelectionMarkers() {
-	$('.selectionMarker').remove();
+	// http://stackoverflow.com/a/4232971
+	$('.selection-marker').contents().unwrap();
+	$('.close-selection-marker').remove();
 }
 
 /** Remove everything, but the original content and the selection markers in
@@ -112,7 +123,7 @@ function removeAnnotations(htmlString) {
 	/** Don't want to remove selection markers that may end up inside the
 	 annotation tags **/
 	function moveUpSelectionMarkers($html, selector) {
-		$html.find(selector + ' .selectionMarker').each(function() {
+		$html.find(selector + ' .selection-marker').each(function() {
 			$(this).insertBefore($(this).parent());
 		});
 		return $html;
