@@ -74,7 +74,8 @@ function insertSelectionMarkers(selection) {
 	var range = selection.getRangeAt(0);
 	var selectedContent = range.toString();
 	range.deleteContents();
-	var selectionNode = $(markers.open + selectedContent + markers.close + '</span>')[0];
+	var selectionNode = $(
+		markers.open + selectedContent + markers.close + '</span>')[0];
 	range.insertNode(selectionNode);
 
 	range.setStartAfter(selectionNode);
@@ -88,10 +89,11 @@ function insertSelectionMarkers(selection) {
 		// need a string that probably does not appear in the content
 		// so that we can use indexOf to find it
 		var uniqueString = new Date().getTime();
+		// this tag is closed when the dom node is created
 		var openMarker =
 			'<span class="selection-marker" id="open'+uniqueString+'">';
-		var closeMarker =
-			'<span class="close-selection-marker" id="close'+uniqueString+'"></span>';
+		var closeMarker = '<span class="close-selection-marker" id="close' + 
+				uniqueString + '"></span>';
 
 		return {open: openMarker, close: closeMarker};
 	}

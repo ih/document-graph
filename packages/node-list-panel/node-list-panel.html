@@ -1,9 +1,12 @@
 <template name="nodeListPanel">
 	<div class="node-list-panel">
 		<div class="all-linked-display">all linked nodes</div>
+		<div class="create-node">
+			<button class="btn btn-primary">Create Node</button>
+		</div>
 		{{#if isSelectionMade}}
 		<div class="create-linked-node">
-			<button class="btn btn-primary">Create Node</button>
+			<button class="btn btn-primary">Create Linked Node</button>
 		</div>
 		{{/if}}
 	</div>
