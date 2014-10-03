@@ -2,7 +2,8 @@
  * Editor gets exported and acts as the interface to the editor component
  *
  * TODO: move tag and privacy editor out into their own packages when it's
- * easy to access data from sub templates
+ * easy to access data from sub templates or even better create a
+ * tags/privacy-ui package that has both editor and display
  */
 
 // maybe this isn't needed...
