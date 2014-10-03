@@ -8,7 +8,9 @@
 				<textarea class="content">{{nodeContent}}</textarea>
 			</div>
 
-			{{> tagEditor}}
+			<div class="tag-editor-container">
+				<input type="text" id="myTags">
+			</div>
 			<!-- TODO: turn this back into its own template -->
 			<div class="privacy-editor-container">
 				<input id="privacy-editor" type="checkbox" checked data-on-label="Public" data-off-label="Private" class="switch-large">

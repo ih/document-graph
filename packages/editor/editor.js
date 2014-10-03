@@ -25,7 +25,7 @@ Template.editor.events({
 		var nodeData = _.pick(
 			templateInstance, GraphAPI.nodeProperties);
 		var nodeId = GraphAPI.createNode(nodeData, privacySettings);
-		_.each(TagEditor.getTags(), function (tag) {
+		_.each(getTags(), function (tag) {
 			TagsAPI.createTag({'objectId': nodeId, 'tag': tag});
 		});
 		resetEditor(templateInstance);
@@ -35,6 +35,7 @@ Template.editor.events({
 Template.editor.rendered = function () {
 	$('textarea').autogrow();
 	$('#privacy-editor').bootstrapSwitch();
+	$('#myTags').tagit();
 };
 
 function resetEditor(templateInstance) {
@@ -46,11 +47,11 @@ function resetEditor(templateInstance) {
 		// TODO figure out a better way to set the default value
 		templateInstance[nodeProperty] = '';
 	});
-	TagEditor.clearTags();
+	clearTags();
 	console.log('cleared state');
 }
 
-// TODO move this code back into a privacy-editor package eventually
+// TODO move this code back into a privacy-editor package
 function getPrivacySettings() {
 	// assumes privacyOptions is a list containing the group id for
 	// the logged in user
@@ -62,4 +63,13 @@ function getPrivacySettings() {
 	else {
 		return privacySettings;
 	}
+}
+
+// TODO move this code back into a tag-editor package
+function clearTags() {
+	return $("#myTags").tagit("removeAll");
+}
+
+function getTags() {
+	return $('#myTags').tagit("assignedTags");
 }
