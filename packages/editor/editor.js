@@ -1,5 +1,8 @@
 /**
  * Editor gets exported and acts as the interface to the editor component
+ *
+ * TODO: move tag and privacy editor out into their own packages when it's
+ * easy to access data from sub templates
  */
 
 // maybe this isn't needed...
@@ -17,7 +20,7 @@ Template.editor.events({
 		templateInstance.title = event.target.value;
 	},
 	'click .save': function (event, templateInstance) {
-		var privacySettings = PrivacyEditor.getPrivacySettings();
+		var privacySettings = getPrivacySettings();
 		// the keys property of a reactive dict is basically the plain dict
 		var nodeData = _.pick(
 			templateInstance, GraphAPI.nodeProperties);
@@ -31,6 +34,7 @@ Template.editor.events({
 
 Template.editor.rendered = function () {
 	$('textarea').autogrow();
+	$('#privacy-editor').bootstrapSwitch();
 };
 
 function resetEditor(templateInstance) {
@@ -44,4 +48,18 @@ function resetEditor(templateInstance) {
 	});
 	TagEditor.clearTags();
 	console.log('cleared state');
+}
+
+// TODO move this code back into a privacy-editor package eventually
+function getPrivacySettings() {
+	// assumes privacyOptions is a list containing the group id for
+	// the logged in user
+	var privacySettings = _.pluck(
+		GroupsAPI.getMyGroups(Meteor.userId()), '_id');
+	if ($('#privacy-editor').is(':checked')) {
+		return ['public'].concat(privacySettings);
+	}
+	else {
+		return privacySettings;
+	}
 }

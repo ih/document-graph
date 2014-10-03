@@ -3,8 +3,8 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-  api.use(['templating', 'reactive-dict', 'showdown', 'less', 'graph-api', 
-		   'tag-editor', 'tags-api', 'privacy-editor'],
+  api.use(['templating', 'reactive-dict', 'showdown', 'less', 'graph-api',
+		   'tag-editor', 'tags-api', 'bootstrap-switch', 'groups-api'],
 		  ['client', 'server']);
 
   api.add_files(
