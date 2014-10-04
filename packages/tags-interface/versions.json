@@ -1,12 +1,36 @@
 {
   "dependencies": [
     [
+      "accounts-base",
+      "1.1.1"
+    ],
+    [
+      "application-configuration",
+      "1.0.2"
+    ],
+    [
       "base64",
+      "1.0.0"
+    ],
+    [
+      "binary-heap",
       "1.0.0"
     ],
     [
       "blaze",
       "2.0.1"
+    ],
+    [
+      "callback-hook",
+      "1.0.0"
+    ],
+    [
+      "check",
+      "1.0.1"
+    ],
+    [
+      "ddp",
+      "1.0.9"
     ],
     [
       "deps",
@@ -17,8 +41,20 @@
       "1.0.3"
     ],
     [
+      "follower-livedata",
+      "1.0.1"
+    ],
+    [
       "geojson-utils",
       "1.0.0"
+    ],
+    [
+      "groups",
+      "0.0.0"
+    ],
+    [
+      "groups-api",
+      "0.0.0"
     ],
     [
       "htmljs",
@@ -41,6 +77,14 @@
       "1.0.9"
     ],
     [
+      "logging",
+      "1.0.3"
+    ],
+    [
+      "memberships",
+      "0.0.0"
+    ],
+    [
       "meteor",
       "1.1.1"
     ],
@@ -49,12 +93,20 @@
       "1.0.3"
     ],
     [
+      "mongo",
+      "1.0.6"
+    ],
+    [
       "observe-sequence",
       "1.0.2"
     ],
     [
       "ordered-dict",
       "1.0.0"
+    ],
+    [
+      "permissions-api",
+      "0.0.0"
     ],
     [
       "random",
@@ -71,6 +123,14 @@
     [
       "records-api",
       "0.0.0"
+    ],
+    [
+      "retry",
+      "1.0.0"
+    ],
+    [
+      "service-configuration",
+      "1.0.1"
     ],
     [
       "tags",

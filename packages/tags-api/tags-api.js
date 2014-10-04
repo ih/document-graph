@@ -18,5 +18,9 @@ TagsAPI = {
 		// can rank tags created by the user higher
 		// SearchAPI.index('nodes', _.extend(nodeData, {'_id': nodeId}));
 		return tagId;
+	},
+	getTags: function (objectId) {
+		Meteor.subscribe('tags', objectId);
+		return Tags.find({'objectId': objectId});
 	}
 };

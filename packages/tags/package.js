@@ -4,7 +4,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-
+	api.use(['permissions-api'], 'server');
 	api.add_files(['tags-client.js'], 'client');
 	api.add_files(['tags-server.js'], 'server');
 

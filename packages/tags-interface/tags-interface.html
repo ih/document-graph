@@ -1,9 +1,13 @@
 <template name="tagsDisplay">
 	<div class="tags-display">
-		tags go here
+		{{#each getTags}}
+		{{> tag}}
+		{{/each}}
 	</div>
 </template>
 
 <template name="tag">
-
+	<div class="tag">
+		{{tag}}
+	</div>
 </template>
