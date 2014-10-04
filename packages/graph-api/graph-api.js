@@ -5,6 +5,7 @@ GraphAPI = {
 	createNode: function (nodeData, privacySettings) {
 		console.log('createNode of the graphAPI');
 		console.log(nodeData);
+		// TOOD make node creation, group creation, and indexing transactional
 		var nodeId = Nodes.insert(nodeData);
 		var recordId = RecordsAPI.record({
 			'objectId': nodeId,

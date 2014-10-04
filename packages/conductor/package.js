@@ -8,7 +8,7 @@ Package.on_use(function (api, where) {
 			 'accounts-password', 'search-interface', 'iron:router',
 			 'viewer', 'graph-api', 'mondrian', 'node-list-panel'],
 			['client']);
-	api.use(['viewer', 'accounts-base', 'accounts-password','groups-api',
+	api.use(['viewer', 'editor','accounts-base', 'accounts-password','groups-api',
 			 'underscore', 'graph-api', 'search-api'],
 			['server']);
 

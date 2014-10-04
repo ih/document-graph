@@ -5,7 +5,8 @@ Package.describe({
 
 Package.on_use(function (api, where) {
 
-	api.add_files(['tags.js'], ['client', 'server']);
+	api.add_files(['tags-client.js'], 'client');
+	api.add_files(['tags-server.js'], 'server');
 
 	if (api.export) {
 		api.export('Tags');
