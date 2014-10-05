@@ -7,9 +7,9 @@
 	<div class="cell {{direction}} {{leaf}} {{focus}}" id="{{cellId}}">
 		{{#if isLeaf}}
 		<div class="cell-controls">
-			<button class="divide-horizontal">H{{cellId}}</button>
-			<button class="divide-vertical">V</button>
-			<button class="collapse-cell">C</button>
+			<button class="divide-horizontal btn btn-default">H</button>
+			<button class="divide-vertical btn btn-default">V</button>
+			<button class="collapse-cell btn btn-danger">X {{cellId}}</button>
 		</div>
 		{{/if}}
 		<div class="cell-content">
