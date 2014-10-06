@@ -20,6 +20,10 @@ var dummyNodes = {
 	'publicNodeA': {
 		title: 'user a public node title',
 		content: 'user a public node content'
+	},
+	'publicTaggedNodeA': {
+		title: 'user a public tagged node', 
+		content: 'this node has two tags'
 	}
 };
 
@@ -125,17 +129,29 @@ function clickAndView(node) {
 	});
 }
 
-
-function clickSearchResult(result) {
+var x = require('casper').selectXPath;
+function clickSearchResult(resultText) {
 	casper.thenClick('.search-submit');
 	casper.echo('submitted search');
 	casper.then(function () {
-		casper.wait(2000, function () {
-			casper.capture('searchresults.png');
-			casper.click('.search-results li:nth-child('+result+') a');
-			casper.wait(1000, function () {
-				casper.capture('clik'+result+'.png');
-			});
+		casper.waitUntilVisible('.search-result', function () {
+			casper.capture('mondrianresults.png');
+			// return the index; for some reason jquery click isn't working for
+			// search result links, but casper does
+			casper.echo('looking for ' + resultText);
+			var resultIndex = this.evaluate(function (resultText) {
+				var searchResults = $('.search-result');
+				for (var i = 0; i < searchResults.length; i++) {
+					if ($(searchResults[i]).text().indexOf(resultText) >= 0) {
+						return i + 1;
+					}
+				}
+				return -1;
+			}, resultText);
+			casper.echo('the result is number '+resultIndex);
+			casper.click('.search-results li:nth-child('+resultIndex+') a');
+			casper.capture('searchresults'+resultIndex+'.png');
 		});
 	});
 }
+

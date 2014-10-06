@@ -95,19 +95,23 @@ casper.test.begin('Load content', function suite(test) {
 		});
 	});
 
-	clickSearchResult(1);
+	clickSearchResult('public');
 
 	casper.then(function () {
-		test.assertSelectorHasText('.cell', 'public');
+		this.wait(1000, function () {
+			test.assertSelectorHasText('.cell', 'public');
+		});
 	});
 
 	casper.thenClick('.leaf-cell:not(.focused)');
 
-	clickSearchResult(2);
+	clickSearchResult('private');
 
 	casper.then(function () {
-		test.assertSelectorHasText('.focused', 'private');
-		test.assertSelectorHasText('.leaf-cell:not(.focused)', 'public');
+		this.wait(1000, function () {
+			test.assertSelectorHasText('.focused', 'private');
+			test.assertSelectorHasText('.leaf-cell:not(.focused)', 'public');
+		});
 	});
 
 	casper.run(function () {
