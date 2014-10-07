@@ -30,22 +30,24 @@ casper.test.begin('Creating tagged node', function suite(test) {
 });
 
 function createNode(nodeData, isPrivate, tags) {
-	casper.thenEvaluate(function (nodeData, isPrivate, tags) {
-		// setting the values through jquery do not trigger the event handlers
-		$('.editor input.title').val(nodeData.title);
-		$('.editor input.title').trigger('input');
-		$('.editor textarea.content').val(nodeData.content);
-		$('.editor textarea.content').trigger('input');
-		if (isPrivate) {
-			$('#privacy-editor').click();
-		}
-		if (tags) {
-			$('#myTags').val(tags.join());
-		}
-	}, nodeData, isPrivate, tags);
+	casper.thenClick('.create-node button');
+	casper.waitForSelector('.editor', function () {
+		casper.thenEvaluate(function (nodeData, isPrivate, tags) {
+			// setting the values through jquery do not trigger the event handlers
+			$('.editor input.title').val(nodeData.title);
+			$('.editor input.title').trigger('input');
+			$('.editor textarea.content').val(nodeData.content);
+			$('.editor textarea.content').trigger('input');
+			if (isPrivate) {
+				$('#privacy-editor').click();
+			}
+			if (tags) {
+				$('#myTags').val(tags.join());
+			}
+		}, nodeData, isPrivate, tags);
+	});
 
 	casper.thenClick('.editor button.save', function success() {
-
 		this.test.pass('created node!');
 	});
 }
