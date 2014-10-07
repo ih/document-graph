@@ -38,3 +38,24 @@ casper.test.begin('View public only public nodes', function suite(test) {
 	});
 });
 
+casper.test.begin('View tags of node', function suite(test) {
+	casper.start(SERVER, function () {
+		this.viewport(1200, 768);
+	});
+	logout(test);
+	login(test, dummyUsers.A);
+
+	clickAndView(dummyNodes.publicTaggedNodeA);
+
+	casper.then(function () {
+		this.waitForSelector('.tag', function () {
+			this.capture('viewing-tags.png');
+			// change this when conductor is cleaned up
+			test.assertElementCount('.tag', 4);
+		});
+	});
+
+	casper.run(function () {
+		test.done();
+	});
+});
