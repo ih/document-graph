@@ -50,8 +50,7 @@ casper.test.begin('View tags of node', function suite(test) {
 	casper.then(function () {
 		this.waitForSelector('.tag', function () {
 			this.capture('viewing-tags.png');
-			// change this when conductor is cleaned up
-			test.assertElementCount('.tag', 4);
+			test.assertElementCount('.tag', 2);
 		});
 	});
 

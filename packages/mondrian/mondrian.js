@@ -202,6 +202,10 @@ Mondrian = {
 
 /** Initialize and insert the first cell.
  */
+Template.mondrian.created = function () {
+	console.log('creating mondrian');
+};
+
 Template.mondrian.rendered = function () {
 	console.log('rendering mondrian');
 	var $mondrian = $(this.find('#mondrian'));

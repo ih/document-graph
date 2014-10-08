@@ -129,7 +129,6 @@ function clickAndView(node) {
 	});
 }
 
-var x = require('casper').selectXPath;
 function clickSearchResult(resultText) {
 	casper.thenClick('.search-submit');
 	casper.echo('submitted search');
