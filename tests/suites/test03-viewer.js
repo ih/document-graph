@@ -6,8 +6,8 @@ casper.test.begin('View public and private nodes', function suite(test) {
 	});
 	logout(test);
 	login(test, dummyUsers.A);
-	clickAndView(dummyNodes.privateNodeA);
-	clickAndView(dummyNodes.publicNodeA);
+	clickSearchResult(dummyNodes.privateNodeA.title);
+	clickSearchResult(dummyNodes.publicNodeA.title);
 
 	casper.run(function () {
 		test.done();
@@ -21,9 +21,10 @@ casper.test.begin('View public only public nodes', function suite(test) {
 	});
 	logout(test);
 	login(test, dummyUsers.B);
-	// clickAndView(dummyNodes.privateNodeA);
-	clickAndView(dummyNodes.publicNodeA);
-	casper.thenOpen(casper.nodeUrls[dummyNodes.privateNodeA.title]);
+
+	clickSearchResult(dummyNodes.publicNodeA.title);
+	casper.echo('going to ' + SERVER + dummyNodes.privateNodeA.url);
+	casper.thenOpen(SERVER + dummyNodes.privateNodeA.url);
 	casper.then(function () {
 		this.waitForText(dummyNodes.privateNodeA.content, function success() {
 			this.test.fail('private node displaying when it should not');
@@ -45,7 +46,7 @@ casper.test.begin('View tags of node', function suite(test) {
 	logout(test);
 	login(test, dummyUsers.A);
 
-	clickAndView(dummyNodes.publicTaggedNodeA);
+	clickSearchResult(dummyNodes.publicTaggedNodeA.title);
 
 	casper.then(function () {
 		this.waitForSelector('.tag', function () {

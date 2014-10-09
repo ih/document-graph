@@ -107,7 +107,7 @@ function login(test, account) {
 	});
 }
 
-function clickAndView(node) {
+function clickAndOpen(node) {
 	casper.echo('click and view test');
 	casper.thenClick('.search-submit');
 	casper.echo('submitted search');
@@ -121,7 +121,7 @@ function clickAndView(node) {
 			}, node.title);
 			this.echo('url:'+ url);
 			this.open(SERVER + url);
-			casper.nodeUrls[node.title] = SERVER + url;
+			// casper.nodeUrls[node.title] = SERVER + url;
 		});
 		this.waitForText(node.content, function () {
 			this.test.pass('displaying node ' + node.title);
@@ -152,5 +152,6 @@ function clickSearchResult(resultText) {
 			casper.capture('searchresults'+resultIndex+'.png');
 		});
 	});
+	casper.wait(1000);
 }
 

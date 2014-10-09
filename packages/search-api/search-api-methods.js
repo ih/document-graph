@@ -20,10 +20,8 @@ Meteor.startup(function () {
 
 function elasticSearchParse(httpResponse) {
 	console.log('parsing response');
-	console.log(httpResponse);
 	return {
 		hits: _.map(httpResponse.data.hits.hits, function (hit) {
-			console.log(hit);
 			return {
 				'title': hit._source.title,
 				'id': hit._source.objectId,
@@ -73,7 +71,6 @@ Meteor.methods({
 			}
 		};
 		console.log('meteor method searching... ');
-		console.log(queryData);
 		var results = elasticSearchParse(HTTP.get(url, {'data': queryData}));
 		return results;
 	},

@@ -5,7 +5,7 @@ casper.test.begin('Rating by a non-admin', function suite(test) {
 	logout(test);
 	login(test, dummyUsers.B);
 
-	clickAndView(dummyNodes.publicNodeA);
+	clickSearchResult(dummyNodes.publicNodeA.title);
 
 	casper.then(function () {
 		test.assertSelectorHasText('.rating-community', '0');
@@ -65,7 +65,7 @@ casper.test.begin('Rating by an admin', function suite(test) {
 	});
 	logout(test);
 	login(test, dummyUsers.A);
-	clickAndView(dummyNodes.publicNodeA);
+	clickSearchResult(dummyNodes.publicNodeA.title);
 
 	casper.then(function () {
 		this.wait(1000, function () {
