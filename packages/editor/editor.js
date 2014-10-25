@@ -21,14 +21,14 @@ Template.editor.events({
 		templateInstance.title = event.target.value;
 	},
 	'click .save': function (event, templateInstance) {
-		var privacySettings = getPrivacySettings();
 		// the keys property of a reactive dict is basically the plain dict
 		var nodeData = _.pick(
 			templateInstance, GraphAPI.nodeProperties);
-		var nodeId = GraphAPI.createNode(nodeData, privacySettings);
-		_.each(getTags(), function (tag) {
-			TagsAPI.createTag({'objectId': nodeId, 'tag': tag});
-		});
+		nodeData.permissions = getPermissions();
+		nodeData.tags = getTags();
+
+		var nodeId = GraphAPI.createNode(nodeData);
+
 		resetEditor(templateInstance);
 	}
 });
@@ -52,21 +52,36 @@ function resetEditor(templateInstance) {
 	console.log('cleared state');
 }
 
-// TODO move this code back into a privacy-editor package
-function getPrivacySettings() {
-	// assumes privacyOptions is a list containing the group id for
-	// the logged in user
-	var privacySettings = _.pluck(
-		GroupsAPI.getMyGroups(Meteor.userId()), '_id');
+// TODO move this code back into a privacy-editor package when UI is
+// modularized
+/** Return a list of objects with user access info
+ {
+ 	id: [user or group id],
+ 	type: [group or user],
+ 	permissions: [read, edit, delete, expand/link, etc]
+ }
+ */
+function getPermissions() {
+	// currently assumes nodes are private/public, eventually will add
+	// non-public shareable
+	var entitiesWithAccess = [{
+		id: Meteor.userId(),
+		type: 'user',
+		permissions: 'all'
+	}];
+
 	if ($('#privacy-editor').is(':checked')) {
-		return ['public'].concat(privacySettings);
+		entitiesWithAccess = entitiesWithAccess.concat({
+			id: 'public',
+			type: 'group',
+			'permissions': 'all'
+		});
 	}
-	else {
-		return privacySettings;
-	}
+	return entitiesWithAccess;
 }
 
-// TODO move this code back into a tag-editor package
+// TODO move this code back into a tag-editor package, also make the selector
+// for #myTags limit to the scope of this template
 function clearTags() {
 	return $("#myTags").tagit("removeAll");
 }

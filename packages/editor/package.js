@@ -4,7 +4,7 @@ Package.describe({
 
 Package.on_use(function (api, where) {
   api.use(['templating', 'reactive-dict', 'showdown', 'less', 'graph-api',
-		   'tags-api', 'bootstrap-switch', 'groups-api', 'mrt:jquery-ui',
+		   'bootstrap-switch', 'groups-api', 'mrt:jquery-ui',
 		   'mrt:jquery-ui-bootstrap'], ['client', 'server']);
 
   api.add_files(
