@@ -1,5 +1,6 @@
 GroupsAPI = {
 	ADMIN: 'administrator',
+	MEMBER: 'member',
 	groupProperties: ['name', 'creatorId'],
 	membershipProperties: ['groupId', 'memberId', 'role'],
 	// maybe this should be reactive one day...
@@ -23,6 +24,9 @@ GroupsAPI = {
 	joinGroup: function (groupId, memberId, role) {
 		// TODO add a check that the caller has permission to add members to the
 		// group (may need to make these meteor methods)
+		if (!role) {
+			role = GroupsAPI.MEMBER;
+		}
 		var membershipData = {
 			groupId: groupId,
 			memberId: memberId,
