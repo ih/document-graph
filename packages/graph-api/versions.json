@@ -97,6 +97,10 @@
       "1.0.0"
     ],
     [
+      "permissions",
+      "0.0.0"
+    ],
+    [
       "permissions-api",
       "0.0.0"
     ],

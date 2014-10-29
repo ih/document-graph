@@ -46,6 +46,18 @@ GroupsAPI = {
 		console.log(memberId);
 		return Groups.find({'creatorId': memberId}).fetch();
 	},
+	getUserGroupRoles: function (userId) {
+		var groupRoles;
+		var memberships = Memberships.find({memberId: userId});
+		memberships.forEach(function (membership) {
+			groupRoles = groupRoles.concat(
+				GroupsAPI.combineGroupRole(membership.groupId, membership.role));
+		});
+		return groupRoles;
+	},
+	combineGroupRole: function (groupId, role) {
+		return groupId + '-' + role;
+	},
 	getGroups: function (memberId, idsOnly) {
 		// only works properly on the server
 		console.log('getting groups for ' + memberId);

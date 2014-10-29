@@ -1,4 +1,26 @@
 PermissionsAPI = {
+	permissionsProperties: ['actorId', 'action', 'resource'],
+	addPermission: function (actorId, action, resource) {
+		Permissions.insert({
+			actorId: actorId, action: action, resource: resource});
+	},
+	hasPermission: function (userId, action, resource) {
+		var permission = Permissions.findOne({
+			actorId: userId, action: action, resource: resource});
+		if (!permission) {
+			var userGroupRoles = GroupsAPI.getMyGroupRoles(userId);
+			// TODO maybe there's a better way to do this if it turns out
+			// to be a bottleneck/slow
+			_.each(userGroupRoles, function (groupRole) {
+				var groupRolePermission = Permissions.findOne({
+					actorId: groupRole, action: action, resource: resource});
+				if (groupRolePermission) {
+					permission = groupRolePermission;
+				}
+			});
+		}
+		return !!permission;
+	},
 	canRead: function (objectId, userId) {
 		console.log('checking whether ' + userId + ' can read ' + objectId);
 		if (!userId) {

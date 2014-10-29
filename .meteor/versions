@@ -56,6 +56,7 @@ npm-bcrypt@0.7.7
 observe-sequence@1.0.2
 ordered-dict@1.0.0
 permissions-api@0.0.0
+permissions@0.0.0
 random@1.0.0
 ratings-api@0.0.0
 ratings-interface@0.0.0
