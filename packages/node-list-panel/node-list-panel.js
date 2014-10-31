@@ -8,8 +8,17 @@ Template.nodeListPanel.isSelectionMade = function () {
 
 Template.nodeListPanel.events({
 	'click .create-node': function (event) {
+		var newNodeId = GraphAPI.createNode({
+			nodeContent: '',
+			title: '',
+			permissions: {
+				actorId: Meteor.userId(),
+				actions: PermissionsAPI.ALL
+			},
+			tags: ['draft']
+		});
 		Mondrian.setCellContent(
-			{templateName: 'editor', context: {'mode': 'create'}});
+			{templateName: 'editor', context: {'nodeId': newNodeId}});
 	},
 	'click .create-linked-node': function (event) {
 		console.log('clicked');
