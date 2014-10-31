@@ -1,12 +1,9 @@
 PermissionsAPI = {
-	READ: ['read', 'rate'],
 	ALL: ['read', 'rate', 'multiple-rate', 'update'],
+	READ: ['read', 'rate'],
 	permissionsProperties: ['actorId', 'actions', 'resource'],
 	addPermission: function (actorId, actions, resource) {
 		return Meteor.call('addPermission', actorId, actions, resource);
-	},
-	hasPermission: function (userId, action, resource) {
-		return Meteor.call('hasPermission', userId, action, resource);
 	},
 	getPermissions: function (userId) {
 		var permissions = Permissions.find({actorId: userId}).fetch() || [];
@@ -17,19 +14,8 @@ PermissionsAPI = {
 		});
 		return permissions;
 	},
-	canRead: function (objectId, userId) {
-		console.log('checking whether ' + userId + ' can read ' + objectId);
-		if (!userId) {
-			userId = Meteor.userId();
-		}
-		return GroupsAPI.isInSameGroup(userId, objectId);
-	},
-	canRate: function (objectId, userId) {
-		console.log('checking whether ' + userId + ' can rate ' + objectId);
-		return PermissionsAPI.canRead(objectId, userId);
-	},
-	isAdminOf: function (objectId, userId) {
-		return GroupsAPI.isAdminOf(objectId, userId);
+	hasPermission: function (userId, action, resource) {
+		return Meteor.call('hasPermission', userId, action, resource);
 	},
 	initialize: function () {
 		try {
