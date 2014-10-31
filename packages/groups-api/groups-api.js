@@ -51,7 +51,7 @@ GroupsAPI = {
 		return Groups.find({'creatorId': memberId}).fetch();
 	},
 	getUserGroupRoles: function (userId) {
-		var groupRoles;
+		var groupRoles = [];
 		var memberships = Memberships.find({memberId: userId});
 		memberships.forEach(function (membership) {
 			groupRoles = groupRoles.concat(

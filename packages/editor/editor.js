@@ -64,20 +64,18 @@ function resetEditor(templateInstance) {
 function getPermissions() {
 	// currently assumes nodes are private/public, eventually will add
 	// non-public shareable
-	var entitiesWithAccess = [{
-		id: Meteor.userId(),
-		type: 'user',
-		permissions: 'all'
+	var permissions = [{
+		actorId: Meteor.userId(),
+		actions: PermissionsAPI.ALL
 	}];
 
 	if ($('#privacy-editor').is(':checked')) {
-		entitiesWithAccess = entitiesWithAccess.concat({
-			id: 'public',
-			type: 'group',
-			'permissions': 'all'
+		permissions = permissions.concat({
+			actorId: GroupsAPI.combineGroupRole('public', GroupsAPI.MEMBER),
+			actions: PermissionsAPI.READ
 		});
 	}
-	return entitiesWithAccess;
+	return permissions;
 }
 
 // TODO move this code back into a tag-editor package, also make the selector

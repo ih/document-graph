@@ -38,11 +38,15 @@ Meteor.methods({
 		var url = searchHostUrl + '/' + collectionName + '/_search';
 		console.log('in find method');
 		console.log(this.userId);
-		var groupKeys = _.pluck(
-			GroupsAPI.getMyGroups(this.userId), '_id');
-		groupKeys.push('public');
+		var userReadPermissions = _.filter(
+			PermissionsAPI.getPermissions(this.userId), function (permission) {
+				return _.contains(permission.actions, 'read');
+			});
+		// could be optimized by using GroupsAPI.getMyGroupRoles, but leaks
+		// permissions abstraction
+		var userActorIds = _.pluck(userReadPermissions, 'actorId');
 		console.log('searching');
-		console.log(groupKeys);
+		console.log(userActorIds);
 		var queryData = {
 			'from': offset,
 			'size': pageSize,
@@ -56,7 +60,7 @@ Meteor.methods({
 					},
 					'must': {
 						'terms': {
-							'privacySettings': groupKeys,
+							'privacySettings': userActorIds,
 							'minimum_should_match': 1
 						}
 					}

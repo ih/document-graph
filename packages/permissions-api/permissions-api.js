@@ -1,25 +1,21 @@
 PermissionsAPI = {
-	permissionsProperties: ['actorId', 'action', 'resource'],
-	addPermission: function (actorId, action, resource) {
-		Permissions.insert({
-			actorId: actorId, action: action, resource: resource});
+	READ: ['read', 'rate'],
+	ALL: ['read', 'rate', 'multiple-rate', 'update'],
+	permissionsProperties: ['actorId', 'actions', 'resource'],
+	addPermission: function (actorId, actions, resource) {
+		return Meteor.call('addPermission', actorId, actions, resource);
 	},
 	hasPermission: function (userId, action, resource) {
-		var permission = Permissions.findOne({
-			actorId: userId, action: action, resource: resource});
-		if (!permission) {
-			var userGroupRoles = GroupsAPI.getMyGroupRoles(userId);
-			// TODO maybe there's a better way to do this if it turns out
-			// to be a bottleneck/slow
-			_.each(userGroupRoles, function (groupRole) {
-				var groupRolePermission = Permissions.findOne({
-					actorId: groupRole, action: action, resource: resource});
-				if (groupRolePermission) {
-					permission = groupRolePermission;
-				}
-			});
-		}
-		return !!permission;
+		return Meteor.call('hasPermission', userId, action, resource);
+	},
+	getPermissions: function (userId) {
+		var permissions = Permissions.find({actorId: userId}).fetch() || [];
+		var userGroupRoles = GroupsAPI.getUserGroupRoles(userId);
+		_.each(userGroupRoles, function (groupRole) {
+			permissions = permissions.concat(
+				Permissions.find({actorId: groupRole}).fetch());
+		});
+		return permissions;
 	},
 	canRead: function (objectId, userId) {
 		console.log('checking whether ' + userId + ' can read ' + objectId);
@@ -50,6 +46,8 @@ PermissionsAPI = {
 				console.log(user);
 				GroupsAPI.createGroup(
 					{'creatorId': user._id, 'name': user.email +  ' group'});
+				// Maybe this doesn't scale nicely so could special case public
+				// group when interacting with groups
 				GroupsAPI.joinGroup('public', user._id);
 				console.log('test');
 			}

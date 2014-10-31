@@ -11,7 +11,7 @@ Tags.allow({
 });
 
 Meteor.publish('tags', function (objectId) {
-	if (PermissionsAPI.canRead(objectId, this.userId)) {
+	if (PermissionsAPI.hasPermission(this.userId, 'read', objectId)) {
 		console.log('permission to publish tags for object'+objectId+' granted');
 		return Tags.find({'objectId': objectId});
 	}

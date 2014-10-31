@@ -13,7 +13,7 @@ Nodes.allow({
 Meteor.publish('node', function (nodeId) {
 	console.log('publishing a node ' + nodeId );
 	console.log(Nodes.findOne(nodeId));
-	if (PermissionsAPI.canRead(nodeId, this.userId)) {
+	if (PermissionsAPI.hasPermission(this.userId, 'read', nodeId)) {
 		console.log('permission to publish node granted');
 		return Nodes.find({'_id': nodeId});
 	}

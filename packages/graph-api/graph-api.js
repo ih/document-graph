@@ -20,23 +20,23 @@ GraphAPI = {
 			TagsAPI.createTag({'objectId': nodeId, 'tag': tag});
 		});
 
-		// add the node to any non-public groups
-		var permittedGroupIds = _.map(nodeData.permissions, function (permission) {
-			var groupId = permission.id;
-			if (permission.type === 'user') {
-				// assumes one group for any user
-				groupId = GroupsAPI.getMyGroups(permission.id)[0]['_id'];
-			}
-			GroupsAPI.joinGroup(groupId, nodeId);
-			return groupId;
+
+		_.each(nodeData.permissions, function (permission) {
+			PermissionsAPI.addPermission(
+				permission.actorId, permission.actions, nodeId);
 		});
 
 		// TODO remove if start using a crawler to index documents
 		// using id instead of _id since that causes an error with elasticsearch
 		// perhaps move this into the editor package so that the access
 		// related tags can be added to search index document
+		var readPermissions = _.filter(
+			nodeData.permissions, function (permission) {
+				return _.contains(permission.actions, 'read');
+			});
+		var validActors = _.pluck(readPermissions, 'actorId');
 		var searchDocument = _.extend(
-			nodeData, {'objectId': nodeId, 'privacySettings': permittedGroupIds});
+			nodeData, {'objectId': nodeId, 'privacySettings': validActors});
 		SearchAPI.index('nodes', searchDocument);
 		return nodeId;
 	},
