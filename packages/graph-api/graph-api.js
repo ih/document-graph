@@ -17,6 +17,9 @@ GraphAPI = {
 
 		return nodeId;
 	},
+	connect: function (fromNodeId, toNodeId, selectionData) {
+		Links.insert({from: fromNodeId, to: toNodeId, selection: selectionData});
+	},
 	getNode: function (nodeId) {
 		Meteor.subscribe('node', nodeId);
 		return Nodes.findOne(nodeId);

@@ -8,33 +8,35 @@ Template.nodeListPanel.isSelectionMade = function () {
 
 Template.nodeListPanel.events({
 	'click .create-node': function (event) {
-		var newNodeData = {
-			content: '',
-			title: ''
-		};
-		newNodeData._id = GraphAPI.createNode(newNodeData);
-		PermissionsAPI.createPermission({
-			actorId: Meteor.userId(),
-			actions: PermissionsAPI.ALL,
-			resourceId: newNodeData._id
-		});
+		var newNodeData = makeNode();
 
-		// is there a race condition where cell content is loaded before 
-		// permission is created?
 		Mondrian.setCellContent(
 			{templateName: 'editor', context: {node: newNodeData}});
 	},
 	'click .create-linked-node': function (event) {
-		console.log('clicked');
-
-		Mondrian.divideCell(
-			'vertical', undefined, undefined,
-			{
-				templateName: 'editor',
-				context: {
-					'mode': 'create',
-					'title': Viewer.state.get('selection')
-				}
-			});
+		var selection = Viewer.state.get('selection');
+		var newNodeData = makeNode('', selection.selectedContent);
+		GraphAPI.connect(selection.nodeId, newNodeData._id, selection);
 	}
 });
+
+function makeNode(content, title) {
+	if (content === undefined) {
+		content = '';
+	}
+	if (title === undefined) {
+		content = '';
+	}
+	var newNodeData = {
+		content: content,
+		title: title
+	};
+	newNodeData._id = GraphAPI.createNode(newNodeData);
+	PermissionsAPI.createPermission({
+		actorId: Meteor.userId(),
+		actions: PermissionsAPI.ALL,
+		resourceId: newNodeData._id
+	});
+
+	return newNodeData;
+}

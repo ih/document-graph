@@ -1,3 +1,15 @@
+/**
+The state of the viewer contains a selection object for when the user 
+highlights some of the content of the viewed node.
+
+Selection Object
+{
+ border: {close: [index for selection end], open: [index of selection start]},
+ nodeId: [viewed node id],
+ selectedContent: [part of content that was selected]
+}
+*/
+
 var state = new ReactiveDict();
 
 Viewer = {
@@ -25,6 +37,7 @@ Template.viewer.events({
 
 		var selectionData = getBorderAndSelectedContent(
 			selection);
+		selectionData.nodeId = this._id;
 		state.set('selection', selectionData);
 	},
 	'mousedown .content-viewer': function(event, template) {
