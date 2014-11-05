@@ -7,6 +7,13 @@ Nodes.allow({
 		console.log('checking permissions for insertion');
 		console.log(userId);
 		return true;
+	},
+	update: function (userId, doc, fieldNames, modifier) {
+		console.log('checking permissions for udpating node ');
+		console.log(doc);
+		console.log('with modifier:');
+		console.log(modifier);
+		return PermissionsAPI.hasPermission(userId, 'update', doc._id);
 	}
 });
 

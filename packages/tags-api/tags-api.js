@@ -19,8 +19,13 @@ TagsAPI = {
 		// SearchAPI.index('nodes', _.extend(nodeData, {'_id': nodeId}));
 		return tagId;
 	},
+	deleteTag: function (tagData) {
+		// probably a better way to do this, maybe make deleteTag take tag _id
+		var targetTag = Tags.findOne(tagData);
+		return Tags.remove(targetTag._id);
+	},
 	getTags: function (objectId) {
 		Meteor.subscribe('tags', objectId);
-		return Tags.find({'objectId': objectId});
+		return Tags.find({objectId: objectId}).fetch();
 	}
 };

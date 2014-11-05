@@ -8,17 +8,21 @@ Template.nodeListPanel.isSelectionMade = function () {
 
 Template.nodeListPanel.events({
 	'click .create-node': function (event) {
-		var newNodeId = GraphAPI.createNode({
-			nodeContent: '',
-			title: '',
-			permissions: {
-				actorId: Meteor.userId(),
-				actions: PermissionsAPI.ALL
-			},
-			tags: ['draft']
+		var newNodeData = {
+			content: '',
+			title: ''
+		};
+		newNodeData._id = GraphAPI.createNode(newNodeData);
+		PermissionsAPI.createPermission({
+			actorId: Meteor.userId(),
+			actions: PermissionsAPI.ALL,
+			resourceId: newNodeData._id
 		});
+
+		// is there a race condition where cell content is loaded before 
+		// permission is created?
 		Mondrian.setCellContent(
-			{templateName: 'editor', context: {'nodeId': newNodeId}});
+			{templateName: 'editor', context: {node: newNodeData}});
 	},
 	'click .create-linked-node': function (event) {
 		console.log('clicked');

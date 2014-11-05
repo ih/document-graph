@@ -14,30 +14,111 @@ var Editor = {
 };
 
 Template.editor.events({
-	'input .content': function (event, templateInstance) {
-		templateInstance.nodeContent = event.target.value;
-	},
-	'input .title': function (event, templateInstance) {
-		templateInstance.title = event.target.value;
-	},
+	// make nodeData reactive for preview functionality
+	// 'input .content': function (event, templateInstance) {
+	// 	templateInstance.data.node.nodeContent = event.target.value;
+	// },
+	// 'input .title': function (event, templateInstance) {
+	// 	templateInstance.data.node.title = event.target.value;
+	// },
 	'click .save': function (event, templateInstance) {
 		// the keys property of a reactive dict is basically the plain dict
-		var nodeData = _.pick(
-			templateInstance, GraphAPI.nodeProperties);
-		nodeData.permissions = getPermissions();
-		nodeData.tags = getTags();
+		var nodeData = templateInstance.data.node;
+		var updatedNodeData = {
+			_id: nodeData._id,
+			content: templateInstance.$('textarea.content').val(),
+			title: templateInstance.$('input.title').val()
+		};
+		GraphAPI.updateNode(updatedNodeData);
 
-		var nodeId = GraphAPI.createNode(nodeData);
+		updateReferencedObjects(
+			nodeData._id, getTags(), TagsAPI.getTags, TagsAPI.createTag,
+			GraphAPI.deleteTag);
+
+		updateReferencedObjects(
+			nodeData._id, getPermissions(),
+			PermissionsAPI.getResourcePermissions,
+			PermissionsAPI.createPermission,
+			PermissionsAPI.deletePermission
+		);
+
+		SearchAPI.index('nodes', updatedNodeData);
 
 		resetEditor(templateInstance);
+
+		// TODO move these functions into their own packages when
+		// privacy and tags become separate ui components
+		function getPermissions() {
+			// currently assumes nodes are private/public, eventually will add
+			// non-public shareable
+			var permissions = [{
+				actorId: Meteor.userId(),
+				actions: PermissionsAPI.ALL,
+				resourceId: nodeData._id
+			}];
+
+			if ($('#privacy-editor').is(':checked')) {
+				permissions = permissions.concat({
+					actorId: GroupsAPI.combineGroupRole(
+						'public', GroupsAPI.MEMBER),
+					actions: PermissionsAPI.READ,
+					resourceId: nodeData._id
+				});
+			}
+			return permissions;
+		}
+
+		function getTags() {
+			return _.map($('#myTags').tagit("assignedTags"), function (tag) {
+				return {objectId: nodeData._id, tag: tag};
+			});
+		}
+
+		function updateReferencedObjects(
+			nodeId, updatedObjects, getObjects, createObject, deleteObject) {
+			var existingObjects = getObjects(nodeId);
+			var objectsToCreate = _.difference(updatedObjects, existingObjects);
+			_.each(objectsToCreate, function (newObject) {
+				createObject(newObject);
+			});
+
+			var objectsToDelete = _.difference(existingObjects, updatedObjects);
+			_.each(objectsToDelete, function (oldObject) {
+				deleteObject(oldObject);
+			});
+		}
 	}
 });
 
-Template.editor.rendered = function () {
-	$('textarea').autogrow();
-	$('#privacy-editor').bootstrapSwitch();
-	$('#myTags').tagit();
+Template.editor.created = function () {
+	console.log('creating the editor with node ' + this.data.node._id);
+	// TODO check for tags/node properties in data.node
+	// if they are not present fetch them from mongo
+	// this.node = this.data.node;
+	if (!this.data.node.permissions) {
+		this.data.node.permissions = PermissionsAPI.getResourcePermissions(
+			this.data.node.nodeId);
+	}
 };
+
+Template.editor.rendered = function () {
+	this.$('textarea').autogrow();
+	this.$('#privacy-editor').bootstrapSwitch();
+
+	this.$('#myTags').tagit();
+	if (!isPublic(this.data.node.permissions)) {
+		this.$('#privacy-editor').bootstrapSwitch('setState', false);
+	}
+};
+
+function isPublic(permissions) {
+	return _.find(permissions, function (permission) {
+		var publicGroupMember = GroupsAPI.combineGroupRole(
+			'public', GroupsAPI.MEMBER);
+		return permission.actorId ===  publicGroupMember &&
+			_.contains(permission.actions, 'read');
+	});
+}
 
 function resetEditor(templateInstance) {
 	// used for resetting the title input, would be nice if there was two-way
@@ -46,44 +127,12 @@ function resetEditor(templateInstance) {
 
 	_.each(GraphAPI.nodeProperties, function (nodeProperty) {
 		// TODO figure out a better way to set the default value
-		templateInstance[nodeProperty] = '';
+		templateInstance.data.node[nodeProperty] = '';
 	});
 	clearTags();
 	console.log('cleared state');
 }
 
-// TODO move this code back into a privacy-editor package when UI is
-// modularized
-/** Return a list of objects with user access info
- {
- 	id: [user or group id],
- 	type: [group or user],
- 	permissions: [read, edit, delete, expand/link, etc]
- }
- */
-function getPermissions() {
-	// currently assumes nodes are private/public, eventually will add
-	// non-public shareable
-	var permissions = [{
-		actorId: Meteor.userId(),
-		actions: PermissionsAPI.ALL
-	}];
-
-	if ($('#privacy-editor').is(':checked')) {
-		permissions = permissions.concat({
-			actorId: GroupsAPI.combineGroupRole('public', GroupsAPI.MEMBER),
-			actions: PermissionsAPI.READ
-		});
-	}
-	return permissions;
-}
-
-// TODO move this code back into a tag-editor package, also make the selector
-// for #myTags limit to the scope of this template
 function clearTags() {
 	return $("#myTags").tagit("removeAll");
-}
-
-function getTags() {
-	return $('#myTags').tagit("assignedTags");
 }

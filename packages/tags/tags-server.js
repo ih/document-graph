@@ -7,6 +7,9 @@ Tags.allow({
 		// canWrite to  permissions api
 		console.log('allowing an insert into the tags collection');
 		return true;
+	},
+	remove: function (userId, doc) {
+		return PermissionsAPI.hasPermission(userId, 'delete', doc.objectId);
 	}
 });
 
@@ -17,6 +20,6 @@ Meteor.publish('tags', function (objectId) {
 	}
 	else {
 		console.log('permission to publish tags denied');
-		return Nodes.find({'_id': null});
+		return Tags.find({'_id': null});
 	}
 });

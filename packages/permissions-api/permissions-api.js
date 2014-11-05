@@ -1,21 +1,23 @@
 PermissionsAPI = {
-	ALL: ['read', 'rate', 'multiple-rate', 'update'],
+	ALL: ['read', 'rate', 'multiple-rate', 'update', 'delete'],
 	READ: ['read', 'rate'],
-	permissionsProperties: ['actorId', 'actions', 'resource'],
-	addPermission: function (actorId, actions, resource) {
-		return Meteor.call('addPermission', actorId, actions, resource);
+	permissionsProperties: ['actorId', 'actions', 'resourceId'],
+	createPermission: function (permissionData) {
+		return Meteor.call(
+			'createPermission', _.pick(
+				permissionData, PermissionsAPI.permissionsProperties));
 	},
-	getPermissions: function (userId) {
-		var permissions = Permissions.find({actorId: userId}).fetch() || [];
-		var userGroupRoles = GroupsAPI.getUserGroupRoles(userId);
-		_.each(userGroupRoles, function (groupRole) {
-			permissions = permissions.concat(
-				Permissions.find({actorId: groupRole}).fetch());
-		});
-		return permissions;
+	deletePermission: function (permissionData) {
+		return Meteor.call('deletePermission', permissionData);
 	},
-	hasPermission: function (userId, action, resource) {
-		return Meteor.call('hasPermission', userId, action, resource);
+	getResourcePermissions: function (resourceId) {
+		return Meteor.call('getResourcePermissions', resourceId);
+	},
+	getUserPermissions: function (userId) {
+		return Meteor.call('getUserPermissions', userId);
+	},
+	hasPermission: function (userId, action, resourceId) {
+		return Meteor.call('hasPermission', userId, action, resourceId);
 	},
 	initialize: function () {
 		try {

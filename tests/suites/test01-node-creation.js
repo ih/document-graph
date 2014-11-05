@@ -38,11 +38,13 @@ function createNode(nodeData, isPrivate, tags) {
 			$('.editor input.title').trigger('input');
 			$('.editor textarea.content').val(nodeData.content);
 			$('.editor textarea.content').trigger('input');
-			if (isPrivate) {
+			if (!isPrivate) {
 				$('#privacy-editor').click();
 			}
 			if (tags) {
-				$('#myTags').val(tags.join());
+				_.each(tags, function (tag) {
+					$('#myTags').tagit('createTag', tag);
+				});
 			}
 		}, nodeData, isPrivate, tags);
 	});

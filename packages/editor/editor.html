@@ -2,14 +2,18 @@
 	<div class="row editor">
 		<div class="col-md-6 input">
 			<div class="title-container">
-				<input type="text" class="title" value="{{title}}">
+				<input type="text" class="title" value="{{node.title}}">
 			</div>
 			<div class="content-container">
-				<textarea class="content">{{nodeContent}}</textarea>
+				<textarea class="content">{{node.content}}</textarea>
 			</div>
 
 			<div class="tag-editor-container">
-				<input type="text" id="myTags">
+				<ul id="myTags">
+					{{#each node.tags}}
+					<li>{{this}}</li>
+					{{/each}}
+				</ul>
 			</div>
 			<!-- TODO: turn this back into its own template -->
 			<div class="privacy-editor-container">
@@ -24,11 +28,11 @@
 		</div>
 		<div class="col-md-6 preview">
 			<div class="">
-				<h1>{{title}}</h1>
+				<h1>{{node.title}}</h1>
 			</div>
 			<div class="">
 				<!-- TODO see why markdown isn't working with meteor ui -->
-				{{content}}
+				{{node.content}}
 			</div>
 		</div>
 	</div>
