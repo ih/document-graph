@@ -17,6 +17,10 @@ Template.nodeListPanel.events({
 		var selection = Viewer.state.get('selection');
 		var newNodeData = makeNode('', selection.selectedContent);
 		GraphAPI.connect(selection.nodeId, newNodeData._id, selection);
+
+		Mondrian.divideCell(
+			'auto', undefined, undefined, 
+			{templateName: 'editor', context: {node: newNodeData}});
 	}
 });
 

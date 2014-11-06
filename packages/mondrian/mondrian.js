@@ -10,7 +10,7 @@ been divided.  For leaf cells the cell state has the following format
 For cells that contain a division the format is
 {
  childIds: {cell1: 'cell1Id', cell2: 'cell2Id'},
- direction: 'horizontal/vertical',
+ direction: 'horizontal/vertical/auto(undefined)',
  parentId: 'parentCellId',
  siblingId: 'siblingId'
 }
@@ -123,8 +123,14 @@ Mondrian = {
 	divideCell: function (
 		direction, targetCellId, cell1Content, cell2Content) {
 		console.log('diving the cell');
+		// TODO assert targetCellId is a leaf
 		if (targetCellId === undefined) {
 			targetCellId = state.get('focusedCellId');
+		}
+		if (direction === 'auto' || direction === undefined) {
+			var cellHeight = $('#' + targetCellId).height();
+			var cellWidth = $('#' + targetCellId).width();
+			direction =  cellHeight > cellWidth ?  'horizontal': 'vertical';
 		}
 		if (cell1Content === undefined) {
 			cell1Content = state.get(targetCellId).content;
