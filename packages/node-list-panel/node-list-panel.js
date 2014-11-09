@@ -2,6 +2,21 @@ NodeListPanel = {
 
 };
 
+Template.nodeListPanel.helpers({
+	getLinkedNodes: function (direction) {
+		var cellContent = Mondrian.getFocusedCellContent();
+		console.log('cell content ' + JSON.stringify(cellContent));
+		if (cellContent && _.has(cellContent.context, '_id')) {
+			var nodeId = Mondrian.getFocusedCellContent().context._id;
+			return GraphAPI.getNeighbors(nodeId, direction);
+		}
+		else {
+			return [];
+		}
+	}
+});
+
+
 Template.nodeListPanel.isSelectionMade = function () {
 	return Viewer.state.get('selection');
 };

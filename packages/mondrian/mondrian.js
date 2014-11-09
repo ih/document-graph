@@ -77,40 +77,50 @@ Template.cell.helpers({
 });
 
 Mondrian = {
-	/** Creates data for the first cell
-	 */
-	initialize: function() {
-		console.log('starting mondrian');
-	},
 	changeFocus: function (cellId) {
 		state.set('focusedCellId', cellId);
 	},
 	/**
-	 @param {object} newContent - consists of a template name and the
-	 context data for that template
-	 e.g. {templateName: 'foobar', context: {foo: 'bar'}}
-	 @params {string} targetCellId - the cell whose content should be changed
-	 CURRENTLY MUST BE A "LEAF" CELL
+	 @param {string} targetCellId - the cell that should be removed and have its
+	 parent replaced with its sibling TARGET CELL MUST BE A NONROOT LEAF
 	 */
-	setCellContent: function (newContent, targetCellId) {
-		// it'd be nice to store the component instance, but reactive dicts
-		// only hold EJON, which only allows data to be stored and not
-		// functions
-		console.log('setting the currently focused cell\'s content');
+	collapseCell: function (targetCellId) {
 		if (targetCellId === undefined) {
 			targetCellId = state.get('focusedCellId');
 		}
-		// TODO assert targetCell is a leaf cell
-		if (targetCellId === undefined) {
-			console.error('no focused cell!');
+		var cellState = state.get(targetCellId);
+		if (isRootCell(cellState)) {
+			console.log('cannot collapse the root cell');
 			return false;
 		}
-		console.log('target cell is ' + targetCellId);
-		// TODO add a method to ReactiveDict for setting a property directly
-		var cellState = state.get(targetCellId);
-		cellState['content'] = newContent;
-		state.set(targetCellId, cellState);
+		if (!isLeafCell(cellState)) {
+			console.error('trying to collapse non-leaf cell');
+			return false;
+		}
 
+		var parentState = state.get(cellState.parentId);
+		var siblingState = state.get(cellState.siblingId);
+
+		// prepare siblingState to replace the parent cell
+		if (siblingState.childIds) {
+			_.each(_.keys(siblingState.childIds), function (childIndex) {
+				var childId = siblingState.childIds[childIndex];
+				var childState = state.get(childId);
+				childState.parentId = cellState.parentId;
+				state.set(childId, childState);
+			});
+		}
+
+		siblingState.parentId = parentState.parentId;
+		siblingState.siblingId = parentState.siblingId;
+		state.set(cellState.siblingId, null);
+		state.set(targetCellId, null);
+		state.set(cellState.parentId, siblingState);
+
+		if (state.get('focusedCellId') === targetCellId || isLeafCell(siblingState)) {
+			Mondrian.changeFocus(cellState.parentId);
+		}
+		// TODO how to remove cell ids from state?
 		return true;
 	},
 	/**
@@ -161,47 +171,36 @@ Mondrian = {
 		// update the focused cell
 		Mondrian.changeFocus(cell2Id);
 	},
+	getFocusedCellContent: function () {
+		console.log('focused cell is ' + state.get('focusedCellId'));
+		return state.get(state.get('focusedCellId')).content;
+	},
 	/**
-	 @param {string} targetCellId - the cell that should be removed and have its
-	 parent replaced with its sibling TARGET CELL MUST BE A NONROOT LEAF
+	 @param {object} newContent - consists of a template name and the
+	 context data for that template
+	 e.g. {templateName: 'foobar', context: {foo: 'bar'}}
+	 @params {string} targetCellId - the cell whose content should be changed
+	 CURRENTLY MUST BE A "LEAF" CELL
 	 */
-	collapseCell: function (targetCellId) {
+	setCellContent: function (newContent, targetCellId) {
+		// it'd be nice to store the component instance, but reactive dicts
+		// only hold EJON, which only allows data to be stored and not
+		// functions
+		console.log('setting the currently focused cell\'s content');
 		if (targetCellId === undefined) {
 			targetCellId = state.get('focusedCellId');
 		}
+		// TODO assert targetCell is a leaf cell
+		if (targetCellId === undefined) {
+			console.error('no focused cell!');
+			return false;
+		}
+		console.log('target cell is ' + targetCellId);
+		// TODO add a method to ReactiveDict for setting a property directly
 		var cellState = state.get(targetCellId);
-		if (isRootCell(cellState)) {
-			console.log('cannot collapse the root cell');
-			return false;
-		}
-		if (!isLeafCell(cellState)) {
-			console.error('trying to collapse non-leaf cell');
-			return false;
-		}
+		cellState['content'] = newContent;
+		state.set(targetCellId, cellState);
 
-		var parentState = state.get(cellState.parentId);
-		var siblingState = state.get(cellState.siblingId);
-
-		// prepare siblingState to replace the parent cell
-		if (siblingState.childIds) {
-			_.each(_.keys(siblingState.childIds), function (childIndex) {
-				var childId = siblingState.childIds[childIndex];
-				var childState = state.get(childId);
-				childState.parentId = cellState.parentId;
-				state.set(childId, childState);
-			});
-		}
-
-		siblingState.parentId = parentState.parentId;
-		siblingState.siblingId = parentState.siblingId;
-		state.set(cellState.siblingId, null);
-		state.set(targetCellId, null);
-		state.set(cellState.parentId, siblingState);
-
-		if (state.get('focusedCellId') === targetCellId || isLeafCell(siblingState)) {
-			Mondrian.changeFocus(cellState.parentId);
-		}
-		// TODO how to remove cell ids from state?
 		return true;
 	}
 };

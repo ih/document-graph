@@ -1,4 +1,5 @@
 GraphAPI = {
+	linkProperties: ['from', 'to', 'selection'],
 	nodeProperties: ['content', 'title'],
 	// add allow rules to Nodes that call the securityAPI or
 	// each API should handle it's own security
@@ -19,6 +20,18 @@ GraphAPI = {
 	},
 	connect: function (fromNodeId, toNodeId, selectionData) {
 		Links.insert({from: fromNodeId, to: toNodeId, selection: selectionData});
+	},
+	getNeighbors: function (nodeId, direction) {
+		var otherDirection = direction === 'to' ? 'from' : 'to' ;
+		var selector = {};
+		selector[direction] = nodeId;
+		Meteor.subscribe('nodeLinks', nodeId, direction);
+		var neighborIds = Links.find(selector).map(function (link) {
+			return link[otherDirection];
+		});
+		return _.compact(_.map(neighborIds, function (neighborId) {
+			return GraphAPI.getNode(neighborId);
+		}));
 	},
 	getNode: function (nodeId) {
 		Meteor.subscribe('node', nodeId);

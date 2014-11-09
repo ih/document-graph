@@ -9,9 +9,17 @@
 			<button class="btn btn-primary">Create Linked Node</button>
 		</div>
 		{{/if}}
-
+		<div>
+			{{#each getLinkedNodes direction}}
+			{{> nodePreview this}}
+			{{/each}}
+		</div>
 		<div>
 			{{> searchInterface}}
 		</div>
 	</div>
+</template>
+
+<template name="nodePreview">
+	<a href="/node/{{_id}}">{{title}}</a>
 </template>

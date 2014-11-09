@@ -1,8 +1,8 @@
 console.log('links server side');
 
-Nodes = new Meteor.Collection('links');
+Links = new Meteor.Collection('links');
 
-Nodes.allow({
+Links.allow({
 	insert: function (userId, doc) {
 		console.log('checking permissions for link insertion');
 		console.log(userId);
@@ -29,6 +29,19 @@ Meteor.publish('link', function (linkId) {
 	}
 	else {
 		console.log('permission to publish node denied');
+		return Links.find(null);
+	}
+});
+
+Meteor.publish('nodeLinks', function (nodeId, direction) {
+	if (PermissionsAPI.hasPermission(this.userId, 'read', nodeId)) {
+		var selector = {};
+		selector[direction] = nodeId;
+		console.log('Publishing links with selector:');
+		console.log(selector);
+		return Links.find(selector);
+	}
+	else {
 		return Links.find(null);
 	}
 });
