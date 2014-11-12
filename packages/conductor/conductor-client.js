@@ -1,3 +1,7 @@
+Template.registerHelper('count', function (countable) {
+	return countable.length;
+});
+
 Template.layout.rendered = function () {
 	// Editor.initialize('create');
 };

@@ -1,6 +1,13 @@
 <template name="nodeListPanel">
 	<div class="node-list-panel">
-		<div class="all-linked-display">all linked nodes</div>
+		{{#if showCount}}
+		<div class="node-count">
+			{{count getLinkedNodes}}
+		</div>
+		{{else}}
+		<div class="hide-selections">
+			X
+		</div>
 		<div class="create-node">
 			<button class="btn btn-primary">Create Node</button>
 		</div>
@@ -10,13 +17,14 @@
 		</div>
 		{{/if}}
 		<div>
-			{{#each getLinkedNodes direction}}
+			{{#each getLinkedNodes}}
 			{{> nodePreview this}}
 			{{/each}}
 		</div>
 		<div>
 			{{> searchInterface}}
 		</div>
+		{{/if}}
 	</div>
 </template>
 

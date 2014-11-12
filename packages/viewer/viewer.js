@@ -1,5 +1,5 @@
 /**
-The state of the viewer contains a selection object for when the user 
+The state of the viewer contains a selection object for when the user
 highlights some of the content of the viewed node.
 
 Selection Object
@@ -8,6 +8,10 @@ Selection Object
  nodeId: [viewed node id],
  selectedContent: [part of content that was selected]
 }
+
+it also determines whether selections are being shown via the
+
+showingSelections boolean variable
 */
 
 var state = new ReactiveDict();
@@ -18,7 +22,20 @@ Viewer = {
 	},
 	// Consider making state read-only by having a function
 	// readOnly(propertyName) = return state.get(propertyName)
-	state: state
+	state: state,
+	isShowingSelections: function () {
+		return state.get('showingSelections');
+	},
+	showSelections: function () {
+		state.set('showingSelections', true);
+	},
+	hideSelections: function () {
+		state.set('showingSelections', false);
+	}
+};
+
+Template.viewer.created = function () {
+	state.set('showingSelections', false);
 };
 
 Template.viewer.rendered = function () {

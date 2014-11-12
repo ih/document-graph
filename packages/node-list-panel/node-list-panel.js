@@ -3,23 +3,26 @@ NodeListPanel = {
 };
 
 Template.nodeListPanel.helpers({
-	getLinkedNodes: function (direction) {
+	getLinkedNodes: function () {
 		var cellContent = Mondrian.getFocusedCellContent();
 		console.log('cell content ' + JSON.stringify(cellContent));
 		if (cellContent && _.has(cellContent.context, '_id')) {
 			var nodeId = Mondrian.getFocusedCellContent().context._id;
-			return GraphAPI.getNeighbors(nodeId, direction);
+			return GraphAPI.getNeighbors(
+				nodeId, Template.instance().data.direction);
 		}
 		else {
 			return [];
 		}
+	},
+	isSelectionMade: function () {
+		return Viewer.state.get('selection');
+	},
+	showCount: function () {
+		return !Viewer.isShowingSelections();
 	}
 });
 
-
-Template.nodeListPanel.isSelectionMade = function () {
-	return Viewer.state.get('selection');
-};
 
 Template.nodeListPanel.events({
 	'click .create-node': function (event) {
@@ -36,6 +39,12 @@ Template.nodeListPanel.events({
 		Mondrian.divideCell(
 			'auto', undefined, undefined, 
 			{templateName: 'editor', context: {node: newNodeData}});
+	},
+	'click .node-count': function (event) {
+		Viewer.showSelections();
+	},
+	'click .hide-selections': function (event) {
+		Viewer.hideSelections();
 	}
 });
 
