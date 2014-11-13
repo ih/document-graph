@@ -4,16 +4,12 @@ NodeListPanel = {
 
 Template.nodeListPanel.helpers({
 	getLinkedNodes: function () {
-		var cellContent = Mondrian.getFocusedCellContent();
-		console.log('cell content ' + JSON.stringify(cellContent));
-		if (cellContent && _.has(cellContent.context, '_id')) {
-			var nodeId = Mondrian.getFocusedCellContent().context._id;
-			return GraphAPI.getNeighbors(
-				nodeId, Template.instance().data.direction);
-		}
-		else {
-			return [];
-		}
+		var direction = Template.instance().data.direction;
+		var links = Viewer.filterLinks(direction);
+		var otherDirection = GraphAPI.otherDirection(direction);
+		return _.map(links, function (link) {
+			return GraphAPI.getNode(link[otherDirection]);
+		});
 	},
 	isSelectionMade: function () {
 		return Viewer.state.get('selection');

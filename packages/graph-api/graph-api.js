@@ -21,21 +21,35 @@ GraphAPI = {
 	connect: function (fromNodeId, toNodeId, selectionData) {
 		Links.insert({from: fromNodeId, to: toNodeId, selection: selectionData});
 	},
-	getNeighbors: function (nodeId, direction) {
-		var otherDirection = direction === 'to' ? 'from' : 'to' ;
+	getNodeLinks: function (nodeId, direction) {
 		var selector = {};
 		selector[direction] = nodeId;
 		Meteor.subscribe('nodeLinks', nodeId, direction);
-		var neighborIds = Links.find(selector).map(function (link) {
-			return link[otherDirection];
+		return Links.find(selector).fetch();
+	},
+	getNeighbors: function (nodeId, direction, justNodes) {
+		var otherDirection = GraphAPI.otherDirection(direction);
+		var links = GraphAPI.getNodeLinks(nodeId, direction);
+
+		var neighborData = {};
+		_.each(links, function (link) {
+			var neighborId = link[otherDirection];
+			neighborData[neighborId] = {
+				link: link,
+				node: GraphAPI.getNode(neighborId)
+			};
 		});
-		return _.compact(_.map(neighborIds, function (neighborId) {
-			return GraphAPI.getNode(neighborId);
-		}));
+		if (justNodes) {
+			return _.pluck(_.values(neighborData), 'node');
+		}
+		return neighborData;
 	},
 	getNode: function (nodeId) {
 		Meteor.subscribe('node', nodeId);
 		return Nodes.findOne(nodeId);
+	},
+	otherDirection: function (direction) {
+		return direction === 'to' ? 'from' : 'to';
 	},
 	updateNode: function (nodeData) {
 		// do this as a method for now since udpating whole document is not 

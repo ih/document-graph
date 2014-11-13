@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['templating', 'reactive-dict', 'graph-api', 'less'],
+	api.use(['templating', 'reactive-dict', 'graph-api', 'less', 'mondrian'],
 			['client']);
 	api.use(['ratings-interface', 'tags-interface'], ['client', 'server']);
 

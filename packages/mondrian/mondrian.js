@@ -173,7 +173,22 @@ Mondrian = {
 	},
 	getFocusedCellContent: function () {
 		console.log('focused cell is ' + state.get('focusedCellId'));
-		return state.get(state.get('focusedCellId')).content;
+		if (state.get('focusedCellId')) {
+			return state.get(state.get('focusedCellId')).content;
+		}
+		else {
+			return null;
+		}
+	},
+	getFocusedCellNodeId: function () {
+		var cellContent = Mondrian.getFocusedCellContent();
+		console.log('cell content ' + JSON.stringify(cellContent));
+		if (cellContent && _.has(cellContent.context, '_id')) {
+			return cellContent.context._id;
+		}
+		else {
+			return null;
+		}
 	},
 	/**
 	 @param {object} newContent - consists of a template name and the

@@ -1,5 +1,7 @@
 /**
-The state of the viewer contains a selection object for when the user
+The state of the viewer refers to the currently focused mondrian cell. 
+
+It contains a selection object for when the user
 highlights some of the content of the viewed node.
 
 Selection Object
@@ -31,6 +33,15 @@ Viewer = {
 	},
 	hideSelections: function () {
 		state.set('showingSelections', false);
+	},
+	filterLinks: function (direction) {
+		var nodeId = Mondrian.getFocusedCellNodeId();
+		if (nodeId) {
+			return GraphAPI.getNodeLinks(nodeId, direction);
+		}
+		else {
+			return [];
+		}
 	}
 };
 
@@ -43,9 +54,14 @@ Template.viewer.rendered = function () {
 	console.log(this);
 };
 
-Template.viewer.getId = function () {
-	return this._id;
-};
+Template.viewer.helpers({
+	isShowingSelections: function () {
+		return Viewer.isShowingSelections();// state.get('showingSelections');
+	},
+	renderContent: function () {
+		return 'hola';
+	}
+});
 
 Template.viewer.events({
 	// TODO support keyboard highlighting
