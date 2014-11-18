@@ -1,5 +1,5 @@
 /**
-The state of the viewer refers to the currently focused mondrian cell. 
+The state of the viewer refers to the currently focused mondrian cell.
 
 It contains a selection object for when the user
 highlights some of the content of the viewed node.
@@ -59,9 +59,94 @@ Template.viewer.helpers({
 		return Viewer.isShowingSelections();// state.get('showingSelections');
 	},
 	renderContent: function () {
-		return 'hola';
+		var links = Viewer.filterLinks('from');
+
+		var borderDictionary = createBorderDictionary(links);
+        var renderedContent = insertSelectionBorders(
+			Template.instance().data.content, borderDictionary);
+        return renderedContent;
 	}
 });
+
+function createBorderDictionary(links) {
+    var borderDictionary = {};
+    _.each(links, function (link) {
+        if (borderDictionary[link.selection.border.open] === undefined) {
+            borderDictionary[link.selection.border.open] = {open : [],
+															close : []};
+        }
+        if (borderDictionary[link.selection.border.close] === undefined) {
+            borderDictionary[link.selection.border.close] = {open : [],
+															 close : []};
+        }
+        borderDictionary[link.selection.border.open]['open'].push(link.to);
+        borderDictionary[link.selection.border.close]['close'].push(link.to);
+    });
+    return borderDictionary;
+}
+
+function insertSelectionBorders (content, borderDictionary) {
+    var newContent = '';
+	var openSelections = [];
+	var openSpanCount = 0;
+    /*
+     Insert selection borders by iterating over content instead of selections
+     since adding borders will change the length of the new content and
+     make the selection border information incorrect
+     */
+	for (var index = 0; index <= content.length; index++ ) {
+		var character = content[index];
+		// selectionList => {open: [id,... ],close: [id,... ]}
+		var selectionList = borderDictionary[index];
+        if (selectionList) {
+			// TODO refactor the create of the border tag lists
+			// create the html tags that represent borders of a selection
+			var borders = _.map(_.range(openSpanCount), function () {
+				return '</span>';
+			});
+			_.map(selectionList['close'], function(selectionId) {
+				openSelections = _.without(openSelections, selectionId);
+			});
+
+			if (selectionList['open'].length > 0 ||
+				(borders.length > 0 && openSelections.length > 0)) {
+				var selectionIds = borders.length > 0 ?
+						selectionList['open'].concat(openSelections) :
+						selectionList['open'];
+				var openBorderElement = '<span class="selection-border ' +
+						selectionIds.join(' ') + '">';
+				borders.push(openBorderElement);
+				openSelections = openSelections.concat(selectionList['open']);
+				openSpanCount += 1;
+			}
+
+			// insert the closing border html elements before the open ones for
+			// asthetics
+            _.each(borders, function(span) {
+                newContent += span;
+            });
+        }
+		// don't try to add any characters after content is over
+		if (index < content.length) {
+			newContent += character;
+		}
+	}
+    return newContent;
+}
+
+function createBorderElement(selectionId, type) {
+    var colorMap = Session.get('colorMap');
+    var highlightStates = Session.get('highlightStates');
+    if (colorMap[selectionId] === undefined) {
+        var newColor = randomColor();
+        colorMap[selectionId] = newColor;
+    }
+    Session.set('colorMap', colorMap);
+    var border = type === 'open' ? '<span class=' + selectionId + '>' : '</span>';
+    var hidden = highlightStates[selectionId] ? '' : 'hide';
+    return '<span class="'+hidden+' selection-border '+ type + ' ' +
+		selectionId + '">'+ border +'</span>';
+}
 
 Template.viewer.events({
 	// TODO support keyboard highlighting
@@ -138,7 +223,7 @@ function insertSelectionMarkers(selection) {
 		// this tag is closed when the dom node is created
 		var openMarker =
 			'<span class="selection-marker" id="open'+uniqueString+'">';
-		var closeMarker = '<span class="close-selection-marker" id="close' + 
+		var closeMarker = '<span class="close-selection-marker" id="close' +
 				uniqueString + '"></span>';
 
 		return {open: openMarker, close: closeMarker};
@@ -156,15 +241,13 @@ function removeSelectionMarkers() {
 */
 function removeAnnotations(htmlString) {
 	// TODO improve how annotations are specified instead of hardcoding classes
-	htmlString = removeFromHtmlString(htmlString, '.fragment-indicator');
-	htmlString = removeFromHtmlString(htmlString,  '.fragment-border');
+	htmlString = removeFromHtmlString(htmlString,  '.selection-border');
 	return htmlString;
 
 	// from http://stackoverflow.com/a/12110097
 	function removeFromHtmlString(htmlString, selector) {
 		var $wrapped = $('<div>'+htmlString+'</div>');
-		$wrapped = moveUpSelectionMarkers($wrapped, selector);
-		$wrapped.find(selector).remove();
+		$wrapped.find(selector).contents().unwrap();
 		return $wrapped.html();
 	}
 
