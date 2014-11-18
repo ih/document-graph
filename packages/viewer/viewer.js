@@ -17,6 +17,7 @@ showingSelections boolean variable
 */
 
 var state = new ReactiveDict();
+state.set('colorMap', {});
 
 Viewer = {
 	initialize: function () {
@@ -47,12 +48,23 @@ Viewer = {
 
 Template.viewer.created = function () {
 	state.set('showingSelections', false);
+	this.autorun(function () {
+		console.log('coloring the selections');
+		var colorMap = state.get('colorMap');
+		console.log('the color map:' + JSON.stringify(colorMap));
+		_.each(_.keys(colorMap), function(nodeId) {
+			$('span.'+nodeId).css('background-color', colorMap[nodeId]);
+		});
+	});
 };
 
 Template.viewer.rendered = function () {
 	console.log('viewer rendered');
 	console.log(this);
+
 };
+
+
 
 Template.viewer.helpers({
 	isShowingSelections: function () {
@@ -64,10 +76,19 @@ Template.viewer.helpers({
 		var borderDictionary = createBorderDictionary(links);
         var renderedContent = insertSelectionBorders(
 			Template.instance().data.content, borderDictionary);
+		var nodeIds = _.pluck(links, 'to');
+		addColors(nodeIds);
         return renderedContent;
 	}
 });
 
+/**
+Border Dictionary structure:
+{
+ index in content: {open: [node id,... ], close: [node id,... ]},
+...
+}
+*/
 function createBorderDictionary(links) {
     var borderDictionary = {};
     _.each(links, function (link) {
@@ -134,18 +155,16 @@ function insertSelectionBorders (content, borderDictionary) {
     return newContent;
 }
 
-function createBorderElement(selectionId, type) {
-    var colorMap = Session.get('colorMap');
-    var highlightStates = Session.get('highlightStates');
-    if (colorMap[selectionId] === undefined) {
-        var newColor = randomColor();
-        colorMap[selectionId] = newColor;
-    }
-    Session.set('colorMap', colorMap);
-    var border = type === 'open' ? '<span class=' + selectionId + '>' : '</span>';
-    var hidden = highlightStates[selectionId] ? '' : 'hide';
-    return '<span class="'+hidden+' selection-border '+ type + ' ' +
-		selectionId + '">'+ border +'</span>';
+function addColors(nodeIds) {
+    var colorMap = state.get('colorMap');
+	_.each(nodeIds, function (nodeId) {
+		if (colorMap[nodeId] === undefined) {
+			var newColor = Utility.randomColor();
+			colorMap[nodeId] = newColor;
+		}
+	});
+	state.set('colorMap', colorMap);
+	console.log('the color map:' + JSON.stringify(colorMap));
 }
 
 Template.viewer.events({
