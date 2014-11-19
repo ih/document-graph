@@ -3,9 +3,15 @@
 	<div class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Dendwrite</a>
+				<a class="navbar-brand" href="#">Document Graph</a>
 			</div>
 			<div class="collapse navbar-collapse">
+				{{> navbarSearchForm}}
+				<button class="btn btn-default navbar-btn create-node">Create Node</button>
+				{{#if isSelectionMade}}
+				<button class="btn btn-primary navbar-btn create-linked-node">Create Linked Node</button>
+				{{/if}}
+
 				<ul class="nav navbar-nav navbar-right">
 					{{> loginButtons align="right"}}
 				</ul>

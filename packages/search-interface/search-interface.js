@@ -4,7 +4,7 @@ var MAX_PAGES = 10;
 var HALF_MAX_PAGES = Math.floor(MAX_PAGES / 2);
 var state = new ReactiveDict();
 
-Template.searchInterface.rendered = function () {
+Template.navbarSearchForm.rendered = function () {
 	console.log('search interface rendered');
 	state.set('results', []);
 	state.set('currentPage', null);
@@ -24,7 +24,7 @@ function resultsHandler(error, results) {
 	state.set('totalHitCount', results.totalHitCount);
 }
 
-Template.searchInterface.events({
+Template.navbarSearchForm.events({
 	'click .search-submit': function (event) {
 		event.preventDefault();
 		var query = $('#search-input').val();
@@ -33,10 +33,11 @@ Template.searchInterface.events({
 			'nodes', state.get('query'), 0, PAGE_SIZE, GraphAPI.nodeProperties,
 			resultsHandler);
 		state.set('currentPage', 1);
+		Mondrian.setCellContent({templateName: 'searchResults', context: {}});
 	}
 });
 
-Template.searchInterface.helpers({
+Template.searchResults.helpers({
 	results: function () {return state.get('results');}
 });
 

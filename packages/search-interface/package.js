@@ -4,7 +4,7 @@ Package.describe({
 
 Package.on_use(function (api, where) {
   api.use(
-	  ['templating', 'less', 'reactive-dict','search-api', 'graph-api'],
+	  ['templating', 'less', 'reactive-dict','search-api', 'graph-api', 'mondrian'],
 	  ['client']);
 
   api.add_files(

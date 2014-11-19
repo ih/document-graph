@@ -8,21 +8,11 @@
 		<div class="hide-selections">
 			X
 		</div>
-		<div class="create-node">
-			<button class="btn btn-primary">Create Node</button>
-		</div>
-		{{#if isSelectionMade}}
-		<div class="create-linked-node">
-			<button class="btn btn-primary">Create Linked Node</button>
-		</div>
-		{{/if}}
+
 		<div>
 			{{#each getLinkedNodes}}
 			{{> nodePreview this}}
 			{{/each}}
-		</div>
-		<div>
-			{{> searchInterface}}
 		</div>
 		{{/if}}
 	</div>
@@ -31,3 +21,4 @@
 <template name="nodePreview">
 	<a href="/node/{{_id}}">{{title}}</a>
 </template>
+

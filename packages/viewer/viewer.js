@@ -48,14 +48,6 @@ Viewer = {
 
 Template.viewer.created = function () {
 	state.set('showingSelections', false);
-	this.autorun(function () {
-		console.log('coloring the selections');
-		var colorMap = state.get('colorMap');
-		console.log('the color map:' + JSON.stringify(colorMap));
-		_.each(_.keys(colorMap), function(nodeId) {
-			$('span.'+nodeId).css('background-color', colorMap[nodeId]);
-		});
-	});
 };
 
 Template.viewer.rendered = function () {
@@ -77,7 +69,7 @@ Template.viewer.helpers({
         var renderedContent = insertSelectionBorders(
 			Template.instance().data.content, borderDictionary);
 		var nodeIds = _.pluck(links, 'to');
-		addColors(nodeIds);
+		renderedContent = addColors(nodeIds, renderedContent);
         return renderedContent;
 	}
 });
@@ -155,16 +147,19 @@ function insertSelectionBorders (content, borderDictionary) {
     return newContent;
 }
 
-function addColors(nodeIds) {
+function addColors(nodeIds, renderedContent) {
+	var $wrapped = $('<div>'+renderedContent+'</div>');
     var colorMap = state.get('colorMap');
 	_.each(nodeIds, function (nodeId) {
 		if (colorMap[nodeId] === undefined) {
 			var newColor = Utility.randomColor();
 			colorMap[nodeId] = newColor;
 		}
+		$wrapped.find('span.'+nodeId).css('background-color', colorMap[nodeId]);
 	});
 	state.set('colorMap', colorMap);
 	console.log('the color map:' + JSON.stringify(colorMap));
+	return $wrapped.html();
 }
 
 Template.viewer.events({
