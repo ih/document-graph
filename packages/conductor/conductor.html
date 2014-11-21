@@ -6,12 +6,13 @@
 				<a class="navbar-brand" href="#">Document Graph</a>
 			</div>
 			<div class="collapse navbar-collapse">
+				{{#if currentUser}}
 				{{> navbarSearchForm}}
 				<button class="btn btn-default navbar-btn create-node">Create Node</button>
 				{{#if isSelectionMade}}
 				<button class="btn btn-primary navbar-btn create-linked-node">Create Linked Node</button>
 				{{/if}}
-
+				{{/if}}
 				<ul class="nav navbar-nav navbar-right">
 					{{> loginButtons align="right"}}
 				</ul>
