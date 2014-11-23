@@ -10,6 +10,10 @@ var dummyUsers = {
 	'B': {
 		email: 'b@b.b',
 		password: 'bbbbbb'
+	},
+	'IRVIN': {
+		email: 'irvin.hwang@gmail.com',
+		password: 'password'
 	}
 };
 var dummyNodes = {
@@ -22,8 +26,19 @@ var dummyNodes = {
 		content: 'user a public node content'
 	},
 	'publicTaggedNodeA': {
-		title: 'user a public tagged node', 
+		title: 'user a public tagged node',
 		content: 'this node has two tags'
+	},
+	'realNode': {
+		title: 'Document Graph',
+		content: 'Expander is an easy way to create a network of documents.' +
+			'It should have the following features:\n' +
+			'1. UI that makes it easy to create1 and link documents1 together.\n' +
+			'2. UI that makes it easy to reorganize existing links\n' +
+			'3. UI for easily finding and understanding the context of documents\n' +
+			'4. Extensible by third parties\n' +
+			'5. Permissions for document access3\n' +
+			'6. Promotion of content by the community2'
 	}
 };
 
@@ -154,4 +169,3 @@ function clickSearchResult(resultText) {
 	});
 	casper.wait(1000);
 }
-

@@ -8,13 +8,13 @@ casper.test.begin('Finding both public and private', function suite(test) {
 				if (results.length < 3) {
 					$('.search-submit').click();
 				}
-				return results.length === 3;
+				return results.length === 4;
 			});
 		}, function success() {
 			this.test.pass('public and private node found!');
 		}, function fail() {
 			this.capture('searchnotfound.png');
-			this.test.fail('did not get 3 search results!');
+			this.test.fail('did not get 4 search results!');
 		});
 	});
 
@@ -30,7 +30,7 @@ casper.test.begin('Finding only public nodes', function suite(test) {
 	casper.thenClick('.search-submit');
 	casper.then(function () {
 		this.waitUntilVisible('.search-result', function () {
-			test.assertElementCount('.search-result', 2);
+			test.assertElementCount('.search-result', 3);
 			test.assertSelectorDoesntHaveText('.search-result', 'private');
 		});
 	});

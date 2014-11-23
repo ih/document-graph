@@ -29,6 +29,18 @@ casper.test.begin('Creating tagged node', function suite(test) {
 	});
 });
 
+casper.test.begin('Creating realistic node', function suite(test) {
+	logout();
+	login(test, dummyUsers.IRVIN);
+
+	createNode(dummyNodes.realNode, false, ['document graph', 'overview']);
+	casper.run(function () {
+		test.done();
+	});
+	logout();
+	login(test, dummyUsers.A);
+});
+
 function createNode(nodeData, isPrivate, tags) {
 	casper.thenClick(' button.create-node');
 	casper.waitForSelector('.editor', function () {
