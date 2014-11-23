@@ -18,11 +18,27 @@ Template.nodeListPanel.helpers({
 
 
 Template.nodeListPanel.events({
-	'click .node-count': function (event) {
-		Viewer.showSelections();
-	},
 	'click .hide-selections': function (event) {
 		Viewer.hideSelections();
+	},
+	'click .node-count': function (event) {
+		Viewer.showSelections();
 	}
 });
 
+Template.nodePreview.events({
+	'click .node-preview a': function (event, template) {
+		// event.preventDefault();
+		Tracker.autorun(function (computation) {
+			var clickedNode = GraphAPI.getNode(template.data._id);
+			if (clickedNode) {
+				console.log('clicked on node ' + template.data.id + ':' + JSON.stringify(clickedNode));
+				// Mondrian.setCellContent({templateName: 'viewer', context: clickedNode});
+				Mondrian.divideCell(
+					undefined, undefined, undefined,
+					{templateName: 'viewer', context: clickedNode});
+				computation.stop();
+			}
+		});
+	}
+});

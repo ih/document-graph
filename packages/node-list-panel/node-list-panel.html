@@ -10,15 +10,21 @@
 		</div>
 
 		<div>
-			{{#each getLinkedNodes}}
-			{{> nodePreview this}}
-			{{/each}}
+			<ol>
+				{{#each getLinkedNodes}}
+				<li>
+					{{> nodePreview this}}
+				</li>
+				{{/each}}
+			</ol>
 		</div>
 		{{/if}}
 	</div>
 </template>
 
 <template name="nodePreview">
-	<a href="/node/{{_id}}">{{title}}</a>
+	<div class="node-preview">
+		<a href="/node/{{_id}}">{{title}}</a>
+	</div>
 </template>
 
