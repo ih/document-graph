@@ -28,7 +28,7 @@ Template.nodeListPanel.events({
 
 Template.nodePreview.events({
 	'click .node-preview a': function (event, template) {
-		// event.preventDefault();
+		event.preventDefault();
 		Tracker.autorun(function (computation) {
 			var clickedNode = GraphAPI.getNode(template.data._id);
 			if (clickedNode) {
