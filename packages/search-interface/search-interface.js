@@ -27,6 +27,7 @@ function resultsHandler(error, results) {
 Template.navbarSearchForm.events({
 	'click .search-submit': function (event) {
 		event.preventDefault();
+
 		var query = $('#search-input').val();
 		state.set('query', query);
 		SearchAPI.find(
@@ -34,6 +35,25 @@ Template.navbarSearchForm.events({
 			resultsHandler);
 		state.set('currentPage', 1);
 		Mondrian.setCellContent({templateName: 'searchResults', context: {}});
+	}
+});
+
+Template.searchResult.events({
+	'click .search-result a': function (event, template) {
+		event.preventDefault();
+		Tracker.autorun(function (computation) {
+			console.log('setting search result...');
+			var clickedNode = GraphAPI.getNode(template.data.id);
+			if (clickedNode) {
+				console.log('clicked on node ' + template.data.id + ':' + JSON.stringify(clickedNode));
+				// Mondrian.setCellContent({templateName: 'viewer', context: clickedNode});
+				Mondrian.divideCell(
+					undefined, undefined, {templateName: 'searchResults', context: {}},
+					{templateName: 'viewer', context: clickedNode});
+				computation.stop();
+			}
+
+		});
 	}
 });
 

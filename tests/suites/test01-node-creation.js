@@ -30,7 +30,7 @@ casper.test.begin('Creating tagged node', function suite(test) {
 });
 
 function createNode(nodeData, isPrivate, tags) {
-	casper.thenClick('.create-node button');
+	casper.thenClick(' button.create-node');
 	casper.waitForSelector('.editor', function () {
 		casper.thenEvaluate(function (nodeData, isPrivate, tags) {
 			// setting the values through jquery do not trigger the event handlers

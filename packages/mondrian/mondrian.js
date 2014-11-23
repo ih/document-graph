@@ -132,7 +132,7 @@ Mondrian = {
 	 */
 	divideCell: function (
 		direction, targetCellId, cell1Content, cell2Content) {
-		console.log('diving the cell');
+		console.log('dividing the cell');
 		// TODO assert targetCellId is a leaf
 		if (targetCellId === undefined) {
 			targetCellId = state.get('focusedCellId');

@@ -44,7 +44,9 @@ GraphAPI = {
 		}
 		return neighborData;
 	},
-	getNode: function (nodeId) {
+	/** Must be run in a reactive computation
+	 */
+	getNode: function (nodeId, callback) {
 		Meteor.subscribe('node', nodeId);
 		return Nodes.findOne(nodeId);
 	},
