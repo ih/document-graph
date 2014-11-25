@@ -35,10 +35,20 @@ Viewer = {
 	hideSelections: function () {
 		state.set('showingSelections', false);
 	},
-	filterLinks: function (direction) {
-		var nodeId = Mondrian.getFocusedCellNodeId();
+	filterLinks: function (direction, nodeId, linkedNodeIds) {
 		if (nodeId) {
-			return GraphAPI.getNodeLinks(nodeId, direction);
+			var links = GraphAPI.getNodeLinks(nodeId, direction);
+			if (linkedNodeIds) {
+				if (linkedNodeIds.constructor !== Array) {
+					linkedNodeIds = [linkedNodeIds];
+				}
+				links = _.filter(links, function (link) {
+					return _.contains(
+						linkedNodeIds,
+						link[GraphAPI.otherDirection(direction)]);
+				});
+			}
+			return links;
 		}
 		else {
 			return [];
@@ -59,11 +69,19 @@ Template.viewer.rendered = function () {
 
 
 Template.viewer.helpers({
+	focusedNodeId: function () {
+		// return a list 
+		return Mondrian.getFocusedCellNodeId();
+	},
+	isFocused: function () {
+		return Mondrian.getFocusedCellNodeId() === Template.instance().data._id;
+	},
 	isShowingSelections: function () {
 		return Viewer.isShowingSelections();// state.get('showingSelections');
 	},
-	renderContent: function () {
-		var links = Viewer.filterLinks('from');
+	renderContent: function (linkedNodeIds) {
+		var nodeId = Template.instance().data._id;
+		var links = Viewer.filterLinks('from', nodeId, linkedNodeIds);
 
 		var borderDictionary = createBorderDictionary(links);
         var renderedContent = insertSelectionBorders(

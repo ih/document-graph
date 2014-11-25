@@ -5,7 +5,8 @@ NodeListPanel = {
 Template.nodeListPanel.helpers({
 	getLinkedNodes: function () {
 		var direction = Template.instance().data.direction;
-		var links = Viewer.filterLinks(direction);
+		var links = Viewer.filterLinks(
+			direction, Mondrian.getFocusedCellNodeId());
 		var otherDirection = GraphAPI.otherDirection(direction);
 		return _.map(links, function (link) {
 			return GraphAPI.getNode(link[otherDirection]);
