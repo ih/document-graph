@@ -3,7 +3,7 @@
 </template>
 
 <template name="viewer">
-	<div class="row viewer">
+	<div class="row viewer viewer-{{_id}}">
 		<div class="col-md-12">
 			<div class="title">
 				{{title}}
@@ -13,13 +13,13 @@
 				{{#if isShowingSelections}}
 				<pre>{{{renderContent}}}</pre>
 				{{else}}
-				<pre>{{content}}</pre>
+				<pre>{{{renderContent displayedNodeIds}}}</pre>
 				{{/if}}
 				{{else}}
 				{{#if focusedNodeId}}
 				<pre>{{{renderContent focusedNodeId}}}</pre>
 				{{else}}
-				<pre>{{content}}</pre>
+				<pre>{{{renderContent displayedNodeIds}}}</pre>
 				{{/if}}
 				{{/if}}
 			</span>

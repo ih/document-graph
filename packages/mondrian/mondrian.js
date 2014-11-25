@@ -190,6 +190,21 @@ Mondrian = {
 			return null;
 		}
 	},
+	getAllCellNodeIds: function () {
+		var cellIds = _.filter(_.keys(state.keys), function (stateKey) {
+			return stateKey.indexOf(cellIdPrefix) === 0;
+		});
+		return _.compact(_.map(cellIds, function (cellId) {
+			var cellState = state.get(cellId);
+			var cellContent = cellState && cellState.content;
+			if (cellContent &&  _.has(cellContent.context, '_id')) {
+				return cellContent.context._id;
+			}
+			else {
+				return null;
+			}
+		}));
+	},
 	/**
 	 @param {object} newContent - consists of a template name and the
 	 context data for that template

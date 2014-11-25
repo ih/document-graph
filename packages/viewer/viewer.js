@@ -63,7 +63,7 @@ Template.viewer.created = function () {
 Template.viewer.rendered = function () {
 	console.log('viewer rendered');
 	console.log(this);
-
+	this.$('.title').css('background-color', state.get('colorMap')[this.data._id]);
 };
 
 
@@ -72,6 +72,9 @@ Template.viewer.helpers({
 	focusedNodeId: function () {
 		// return a list 
 		return Mondrian.getFocusedCellNodeId();
+	},
+	displayedNodeIds: function () {
+		return Mondrian.getAllCellNodeIds();
 	},
 	isFocused: function () {
 		return Mondrian.getFocusedCellNodeId() === Template.instance().data._id;
