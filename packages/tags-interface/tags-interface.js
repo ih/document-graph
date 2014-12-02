@@ -10,12 +10,13 @@ var state = new ReactiveDict();
 state.set('activeTags', []);
 
 TagsInterface = {
-};
-
-Template.navbarActiveTags.helpers({
 	getActiveTags: function () {
 		return state.get('activeTags');
 	}
+};
+
+Template.navbarActiveTags.helpers({
+	getActiveTags: TagsInterface.getActiveTags
 });
 
 // used with viewer/template that has an objectId
