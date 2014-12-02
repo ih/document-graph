@@ -4,7 +4,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['templating', 'less', 'tags-api'], 'client');
+	api.use(['templating', 'less', 'tags-api', 'reactive-dict'], 'client');
 	api.add_files(['tags-interface.html', 'tags-interface.js',
 				   'tags-interface.less'], 'client');
 
