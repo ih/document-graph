@@ -12,20 +12,31 @@ state.set('activeTags', []);
 TagsInterface = {
 };
 
-Template.tagsDisplay.getTags = function () {
-	var tags = TagsAPI.getTags(this.objectId);
-	return tags;
-};
+Template.navbarActiveTags.helpers({
+	getActiveTags: function () {
+		return state.get('activeTags');
+	}
+});
+
+// used with viewer/template that has an objectId
+Template.tagsDisplay.helpers({
+	getTags: function () {
+		var tags = TagsAPI.getTags(this.objectId);
+		return tags;
+	}
+});
 
 Template.tag.events({
 	'click .tag': function (event, templateInstance) {
 		var activeTags = state.get('activeTags');
-		var tagId = templateInstance.data._id;
-		if (_.contains(activeTags, tagId)) {
-			activeTags = _.without(activeTags, tagId);
+		var tag = templateInstance.data;
+		if (_.contains(_.pluck(activeTags, '_id'), tag._id)) {
+			activeTags = _.reject(activeTags, function (activeTag) {
+				return tag._id === activeTag._id;
+			});
 		}
 		else {
-			activeTags.push(tagId);
+			activeTags.push(tag);
 		}
 		state.set('activeTags', activeTags);
 	}
@@ -33,7 +44,7 @@ Template.tag.events({
 
 Template.tag.helpers({
 	active: function () {
-		if (_.contains(state.get('activeTags'), this._id)) {
+		if (_.contains(_.pluck(state.get('activeTags'), '_id'), this._id)) {
 			return 'active-tag';
 		}
 		else {
