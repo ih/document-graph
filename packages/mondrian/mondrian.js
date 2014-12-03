@@ -301,17 +301,17 @@ Template.cell.events({
 		event.stopPropagation();
 		Mondrian.changeFocus(template.data.cellId);
 	},
-	'click .divide-horizontal': function (event,  template) {
+	'click .divide-horizontal, click .glyphicon-resize-vertical': function (event,  template) {
 		console.log('horizontal splits');
 		event.stopPropagation();
 		Mondrian.divideCell('horizontal', template.data.cellId);
 	},
-	'click .divide-vertical': function (event,  template) {
+	'click .divide-vertical, click .glyphicon-resize-horizontal': function (event,  template) {
 		console.log('vertical splits');
 		event.stopPropagation();
 		Mondrian.divideCell('vertical', template.data.cellId);
 	},
-	'click .collapse-cell': function (event,  template) {
+	'click .collapse-cell, click .glyphicon-remove': function (event,  template) {
 		console.log('collapse');
 		event.stopPropagation();
 		Mondrian.collapseCell(template.data.cellId);

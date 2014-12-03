@@ -26,6 +26,10 @@ Viewer = {
 	// Consider making state read-only by having a function
 	// readOnly(propertyName) = return state.get(propertyName)
 	state: state,
+	isSelectionMade: function () {
+		return state.get('selection') &&
+			state.get('selection').selectedContent != '';
+	},
 	isShowingSelections: function () {
 		return state.get('showingSelections');
 	},
@@ -83,7 +87,7 @@ Template.viewer.rendered = function () {
 
 Template.viewer.helpers({
 	focusedNodeId: function () {
-		// return a list 
+		// return a list
 		return Mondrian.getFocusedCellNodeId();
 	},
 	displayedNodeIds: function () {
@@ -198,16 +202,20 @@ function addColors(nodeIds, renderedContent) {
 
 Template.viewer.events({
 	// TODO support keyboard highlighting
-	'mouseup .content-viewer': function (event, template) {
-        var selection = window.getSelection();
+	'mouseup .content-viewer': function (event, templateInstance) {
+		if (!state.get('linkMode')) {
+			var selection = window.getSelection();
 
-		var selectionData = getBorderAndSelectedContent(
-			selection);
-		selectionData.nodeId = this._id;
-		state.set('selection', selectionData);
+			var selectionData = getBorderAndSelectedContent(
+				selection, templateInstance);
+			selectionData.nodeId = this._id;
+			state.set('selection', selectionData);
+		}
 	},
-	'mousedown .content-viewer': function(event, template) {
-		removeSelectionMarkers();
+	'mousedown .content-viewer': function(event, templateInstance) {
+		if (!state.get('linkMode')) {
+			removeSelectionMarkers(templateInstance);
+		}
 	}
 });
 
@@ -221,14 +229,14 @@ Template.viewer.events({
  into the  annotated html then remove all annotations and what is remaining is
  the original content with the special markers around the selected content.
 **/
-function getBorderAndSelectedContent(selection) {
+function getBorderAndSelectedContent(selection, templateInstance) {
 	// selection markers get inserted into the DOM through the range/selection
 	// object. that's why we need to pass template instead of an html string
 	// since getting the html has to happen after inserting the selection
 	// markers
 	var selectionMarkers = insertSelectionMarkers(selection);
-	var contentHtmlString = $('.content-viewer pre').html();
-	var nonAnnotatedMarkedContent = removeAnnotations(contentHtmlString);
+	var htmlContent = templateInstance.$('.content-viewer pre').html();
+	var nonAnnotatedMarkedContent = removeAnnotations(htmlContent);
 	var border = {
 		'open': nonAnnotatedMarkedContent.indexOf(selectionMarkers.open),
 		'close': nonAnnotatedMarkedContent.indexOf(selectionMarkers.close) -
@@ -278,10 +286,10 @@ function insertSelectionMarkers(selection) {
 	}
 }
 
-function removeSelectionMarkers() {
+function removeSelectionMarkers(templateInstance) {
 	// http://stackoverflow.com/a/4232971
-	$('.selection-marker').contents().unwrap();
-	$('.close-selection-marker').remove();
+	templateInstance.$('.selection-marker').contents().unwrap();
+	templateInstance.$('.close-selection-marker').remove();
 }
 
 /** Remove everything, but the original content and the selection markers in

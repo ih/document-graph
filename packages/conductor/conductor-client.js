@@ -17,12 +17,48 @@ Template.layout.events({
 		Mondrian.divideCell(
 			'auto', undefined, undefined,
 			{templateName: 'editor', context: {node: newNodeData}});
+	},
+	'click .link-existing-node': function (event, templateInstance) {
+		Viewer.state.set('linkMode', true);
+		var selection = Viewer.state.get('selection');
+		Tracker.autorun(function (computation) {
+			var node = GraphAPI.getNode(selection.nodeId);
+			if (node) {
+				Mondrian.setCellContent(
+					{templateName: 'linkingViewer', context: node});
+				computation.stop();
+			}
+		});
+	},
+	'click .link': function (event, templateInstance) {
+		var selection = Viewer.state.get('selection');
+		var toNodeId = Mondrian.getFocusedCellNodeId();
+		GraphAPI.connect(selection.nodeId, toNodeId, selection);
+		Viewer.state.set('linkMode', false);
+		Viewer.state.set('selection', null);
+		Tracker.autorun(function (computation) {
+			var node = GraphAPI.getNode(selection.nodeId);
+			if (node) {
+				Mondrian.setCellContent(
+					{templateName: 'viewer', context: node});
+				computation.stop();
+			}
+		});
 	}
 });
 
 Template.layout.helpers({
-	isSelectionMade: function () {
-		return Viewer.state.get('selection');
+	isLinkMode: function () {
+		return Viewer.state.get('linkMode');
+	},
+	isSelectionMade: Viewer.isSelectionMade,
+	validCell: function () {
+		if (Mondrian.getFocusedCellNodeId()) {
+			return '';
+		}
+		else {
+			return 'disabled';
+		}
 	}
 });
 

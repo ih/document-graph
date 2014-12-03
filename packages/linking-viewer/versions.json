@@ -5,10 +5,6 @@
       "1.1.2"
     ],
     [
-      "accounts-password",
-      "1.0.4"
-    ],
-    [
       "application-configuration",
       "1.0.3"
     ],
@@ -23,18 +19,6 @@
     [
       "blaze",
       "2.0.3"
-    ],
-    [
-      "blaze-tools",
-      "1.0.1"
-    ],
-    [
-      "boilerplate-generator",
-      "1.0.1"
-    ],
-    [
-      "bootstrap-switch",
-      "0.0.0"
     ],
     [
       "callback-hook",
@@ -53,15 +37,7 @@
       "1.0.5"
     ],
     [
-      "editor",
-      "0.0.0"
-    ],
-    [
       "ejson",
-      "1.0.4"
-    ],
-    [
-      "email",
       "1.0.4"
     ],
     [
@@ -85,36 +61,12 @@
       "0.0.0"
     ],
     [
-      "html-tools",
-      "1.0.2"
-    ],
-    [
       "htmljs",
       "1.0.2"
     ],
     [
-      "http",
-      "1.0.8"
-    ],
-    [
       "id-map",
       "1.0.1"
-    ],
-    [
-      "iron:core",
-      "0.3.4"
-    ],
-    [
-      "iron:dynamic-template",
-      "0.4.1"
-    ],
-    [
-      "iron:layout",
-      "0.4.1"
-    ],
-    [
-      "iron:router",
-      "0.9.3"
     ],
     [
       "jquery",
@@ -129,24 +81,12 @@
       "1.0.11"
     ],
     [
-      "linking-viewer",
-      "0.0.0"
-    ],
-    [
       "links",
       "0.0.0"
     ],
     [
-      "localstorage",
-      "1.0.1"
-    ],
-    [
       "logging",
       "1.0.5"
-    ],
-    [
-      "markdown",
-      "1.0.2"
     ],
     [
       "memberships",
@@ -155,10 +95,6 @@
     [
       "meteor",
       "1.1.3"
-    ],
-    [
-      "minifiers",
-      "1.1.2"
     ],
     [
       "minimongo",
@@ -173,24 +109,8 @@
       "1.0.8"
     ],
     [
-      "mrt:jquery-ui",
-      "1.9.2"
-    ],
-    [
-      "mrt:jquery-ui-bootstrap",
-      "1.8.16"
-    ],
-    [
-      "node-list-panel",
-      "0.0.0"
-    ],
-    [
       "nodes",
       "0.0.0"
-    ],
-    [
-      "npm-bcrypt",
-      "0.7.7"
     ],
     [
       "observe-sequence",
@@ -245,40 +165,12 @@
       "1.0.1"
     ],
     [
-      "routepolicy",
-      "1.0.2"
-    ],
-    [
       "search-api",
-      "0.0.0"
-    ],
-    [
-      "search-interface",
       "0.0.0"
     ],
     [
       "service-configuration",
       "1.0.2"
-    ],
-    [
-      "sha",
-      "1.0.1"
-    ],
-    [
-      "showdown",
-      "1.0.2"
-    ],
-    [
-      "spacebars",
-      "1.0.3"
-    ],
-    [
-      "spacebars-compiler",
-      "1.0.3"
-    ],
-    [
-      "srp",
-      "1.0.1"
     ],
     [
       "tags",
@@ -301,16 +193,8 @@
       "1.0.3"
     ],
     [
-      "ui",
-      "1.0.4"
-    ],
-    [
       "underscore",
       "1.0.1"
-    ],
-    [
-      "url",
-      "1.0.2"
     ],
     [
       "utility",
@@ -319,14 +203,6 @@
     [
       "viewer",
       "0.0.0"
-    ],
-    [
-      "webapp",
-      "1.1.4"
-    ],
-    [
-      "webapp-hashing",
-      "1.0.1"
     ]
   ],
   "pluginDependencies": [],

@@ -2,11 +2,11 @@
 	<div class="node-list-panel">
 		{{#if showCount}}
 		<div class="node-count">
-			{{count getLinkedNodes}}
+			<span class="badge">{{count getLinkedNodes}}</span>
 		</div>
 		{{else}}
 		<div class="hide-selections">
-			X
+			<span class="glyphicon glyphicon-remove"></span>
 		</div>
 
 		<div>
