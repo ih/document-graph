@@ -1,7 +1,7 @@
 /** A tag is a string associated with an object
 */
 TagsAPI = {
-	tagProperties: ['objectId', 'tag'],
+	tagProperties: ['objectId', 'label'],
 	// add allow rules to Tags that call the securityAPI or 
 	// each API should handle it's own security
 	createTag: function (tagData) {

@@ -1,55 +1,53 @@
 /**
-activeTags - tags currently selected and used as filters for different subsystems
+activeLabels - tags currently selected and used as filters for different subsystems
 state:
 {
- activeTags: [tagId,... ]
+ activeLabels: [tagId,... ]
 }
 **/
 var state = new ReactiveDict();
 
-state.set('activeTags', []);
+state.set('activeLabels', []);
 
 TagsInterface = {
-	getActiveTags: function () {
-		return state.get('activeTags');
+	getActiveLabels: function () {
+		return state.get('activeLabels');
 	}
 };
 
-Template.navbarActiveTags.helpers({
-	getActiveTags: TagsInterface.getActiveTags
+Template.navbarActiveLabels.helpers({
+	getActiveLabels: TagsInterface.getActiveLabels
 });
 
 // used with viewer/template that has an objectId
-Template.tagsDisplay.helpers({
-	getTags: function () {
+Template.labelsDisplay.helpers({
+	getLabels: function () {
 		var tags = TagsAPI.getTags(this.objectId);
-		return tags;
+		return _.pluck(tags, 'label');
 	}
 });
 
-Template.tag.events({
-	'click .tag': function (event, templateInstance) {
-		var activeTags = state.get('activeTags');
-		var tag = templateInstance.data;
-		if (_.contains(_.pluck(activeTags, '_id'), tag._id)) {
-			activeTags = _.reject(activeTags, function (activeTag) {
-				return tag._id === activeTag._id;
-			});
+Template.label.events({
+	'click .tag-label': function (event, templateInstance) {
+		var activeLabels = state.get('activeLabels');
+		var label = templateInstance.data;
+		if (_.contains(activeLabels, label)) {
+			activeLabels = _.without(activeLabels, label);
 		}
 		else {
-			activeTags.push(tag);
+			activeLabels.push(label);
 		}
-		state.set('activeTags', activeTags);
+		state.set('activeLabels', activeLabels);
 	}
 });
 
-Template.tag.helpers({
+Template.label.helpers({
 	active: function () {
-		if (_.contains(_.pluck(state.get('activeTags'), '_id'), this._id)) {
-			return 'active-tag';
+		if (_.contains(state.get('activeLabels'), Template.instance().data)) {
+			return 'active-label';
 		}
 		else {
-			return 'inactive-tag';
+			return 'inactive-label';
 		}
 	}
 });

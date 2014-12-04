@@ -1,19 +1,19 @@
-<template name="navbarActiveTags">
-	{{#each getActiveTags}}
-	{{> tag}}
+<template name="navbarActiveLabels">
+	{{#each getActiveLabels}}
+	{{> label}}
 	{{/each}}
 </template>
 
-<template name="tagsDisplay">
-	<div class="tags-display">
-		{{#each getTags}}
-		{{> tag}}
+<template name="labelsDisplay">
+	<div class="labels-display">
+		{{#each getLabels}}
+		{{> label}}
 		{{/each}}
 	</div>
 </template>
 
-<template name="tag">
-	<div class="tag btn btn-info {{active}}">
-		{{tag}}
+<template name="label">
+	<div class="tag-label btn btn-info {{active}}">
+		{{this}}
 	</div>
 </template>

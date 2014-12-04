@@ -54,17 +54,15 @@ Viewer = {
 			}
 
 			// filter by tag (make function?)
-			var activeTags = TagsInterface.getActiveTags();
-			if (activeTags.length > 0) {
+			var activeLabels = TagsInterface.getActiveLabels();
+			if (activeLabels.length > 0) {
 				links = _.filter(links, function (link) {
 					var neighborId = link[GraphAPI.otherDirection(direction)];
 					var neighborTags = TagsAPI.getTags(neighborId);
 					return _.intersection(
-						_.pluck(activeTags, 'tag'),
-						_.pluck(neighborTags, 'tag')).length > 0;
+						activeLabels, _.pluck(neighborTags, 'label')).length > 0;
 				});
 			}
-
 			return links;
 		}
 		else {

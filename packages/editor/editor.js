@@ -69,8 +69,8 @@ Template.editor.events({
 		}
 
 		function getTags() {
-			return _.map($('#myTags').tagit("assignedTags"), function (tag) {
-				return {objectId: nodeData._id, tag: tag};
+			return _.map($('#myTags').tagit("assignedTags"), function (label) {
+				return {objectId: nodeData._id, label: label};
 			});
 		}
 
