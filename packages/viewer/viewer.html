@@ -26,6 +26,11 @@
 			<div>
 				{{_id}}
 			</div>
+			<div>
+				{{#if canUpdate}}
+				<button class="btn btn-primary">Edit</button>
+				{{/if}}
+			</div>
 
 			{{> ratingsInterface objectId=_id}}
 

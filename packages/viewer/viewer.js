@@ -107,6 +107,10 @@ Template.viewer.helpers({
 		var nodeIds = _.pluck(links, 'to');
 		renderedContent = addColors(nodeIds, renderedContent);
         return renderedContent;
+	},
+	canUpdate: function () {
+		var nodeId = Template.instance().data._id;
+		return PermissionsAPI.hasPermission(Meteor.userId(), 'update', nodeId);
 	}
 });
 

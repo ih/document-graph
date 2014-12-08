@@ -19,28 +19,5 @@ Meteor.methods({
 				Permissions.find({actorId: groupRole}).fetch());
 		});
 		return permissions;
-	},
-	hasPermission: function (userId, action, resourceId) {
-		console.log('checking permission for ' + userId + ' to ' + action + ' ' + resourceId);
-		var permission = Permissions.findOne({
-			actorId: userId, actions: action, resourceId: resourceId});
-		console.log(permission);
-		if (!permission) {
-			console.log('no individual permission so checking group roles... ');
-			var userGroupRoles = GroupsAPI.getUserGroupRoles(userId);
-			console.log(userGroupRoles);
-			// TODO maybe there's a better way to do this if it turns out
-			// to be a bottleneck/slow
-			_.each(userGroupRoles, function (groupRole) {
-				var groupRolePermission = Permissions.findOne({
-					actorId: groupRole, actions: action, resourceId: resourceId});
-				if (groupRolePermission) {
-					permission = groupRolePermission;
-				}
-			});
-		}
-		console.log('the permission');
-		console.log(permission);
-		return !!permission;
 	}
 });
