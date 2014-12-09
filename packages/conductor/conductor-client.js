@@ -1,6 +1,10 @@
 Template.layout.created = function () {
-	console.log('subscribing to my permissions');
-	Meteor.subscribe('myPermissions');
+	Tracker.autorun(function () {
+		if (Meteor.userId()) {
+			console.log('subscribing to my permissions');
+			Meteor.subscribe('myPermissions');
+		}
+	});
 };
 
 Template.registerHelper('count', function (countable) {

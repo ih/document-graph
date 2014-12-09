@@ -41,6 +41,7 @@ Viewer = {
 	},
 	filterLinks: function (direction, nodeId, linkedNodeIds) {
 		if (nodeId) {
+			console.log('getting links for viewer');
 			var links = GraphAPI.getNodeLinks(nodeId, direction);
 			if (linkedNodeIds) {
 				if (linkedNodeIds.constructor !== Array) {
@@ -78,7 +79,7 @@ Template.viewer.created = function () {
 Template.viewer.rendered = function () {
 	console.log('viewer rendered');
 	console.log(this);
-	this.$('.title').css('background-color', state.get('colorMap')[this.data._id]);
+	this.$('.title').css('background-color', SelectionRendering.colorMap.get(this.data._id));
 };
 
 
@@ -100,12 +101,13 @@ Template.viewer.helpers({
 	renderContent: function (linkedNodeIds) {
 		var nodeId = Template.instance().data._id;
 		var links = Viewer.filterLinks('from', nodeId, linkedNodeIds);
-
-		var borderDictionary = createBorderDictionary(links);
-        var renderedContent = insertSelectionBorders(
-			Template.instance().data.content, borderDictionary);
-		var nodeIds = _.pluck(links, 'to');
-		renderedContent = addColors(nodeIds, renderedContent);
+		var renderedContent = SelectionRendering.addSelections(
+			Template.instance().data.content, links);
+		// var borderDictionary = createBorderDictionary(links);
+        // var renderedContent = insertSelectionBorders(
+		// 	Template.instance().data.content, borderDictionary);
+		// var nodeIds = _.pluck(links, 'to');
+		// renderedContent = addColors(nodeIds, renderedContent);
         return renderedContent;
 	},
 	canUpdate: function () {
@@ -114,95 +116,11 @@ Template.viewer.helpers({
 	}
 });
 
-/**
-Border Dictionary structure:
-{
- index in content: {open: [node id,... ], close: [node id,... ]},
-...
-}
-*/
-function createBorderDictionary(links) {
-    var borderDictionary = {};
-    _.each(links, function (link) {
-        if (borderDictionary[link.selection.border.open] === undefined) {
-            borderDictionary[link.selection.border.open] = {open : [],
-															close : []};
-        }
-        if (borderDictionary[link.selection.border.close] === undefined) {
-            borderDictionary[link.selection.border.close] = {open : [],
-															 close : []};
-        }
-        borderDictionary[link.selection.border.open]['open'].push(link.to);
-        borderDictionary[link.selection.border.close]['close'].push(link.to);
-    });
-    return borderDictionary;
-}
-
-function insertSelectionBorders (content, borderDictionary) {
-    var newContent = '';
-	var openSelections = [];
-	var openSpanCount = 0;
-    /*
-     Insert selection borders by iterating over content instead of selections
-     since adding borders will change the length of the new content and
-     make the selection border information incorrect
-     */
-	for (var index = 0; index <= content.length; index++ ) {
-		var character = content[index];
-		// selectionList => {open: [id,... ],close: [id,... ]}
-		var selectionList = borderDictionary[index];
-        if (selectionList) {
-			// TODO refactor the create of the border tag lists
-			// create the html tags that represent borders of a selection
-			var borders = _.map(_.range(openSpanCount), function () {
-				return '</span>';
-			});
-			_.map(selectionList['close'], function(selectionId) {
-				openSelections = _.without(openSelections, selectionId);
-			});
-
-			if (selectionList['open'].length > 0 ||
-				(borders.length > 0 && openSelections.length > 0)) {
-				var selectionIds = borders.length > 0 ?
-						selectionList['open'].concat(openSelections) :
-						selectionList['open'];
-				var openBorderElement = '<span class="selection-border ' +
-						selectionIds.join(' ') + '">';
-				borders.push(openBorderElement);
-				openSelections = openSelections.concat(selectionList['open']);
-				openSpanCount += 1;
-			}
-
-			// insert the closing border html elements before the open ones for
-			// asthetics
-            _.each(borders, function(span) {
-                newContent += span;
-            });
-        }
-		// don't try to add any characters after content is over
-		if (index < content.length) {
-			newContent += character;
-		}
-	}
-    return newContent;
-}
-
-function addColors(nodeIds, renderedContent) {
-	var $wrapped = $('<div>'+renderedContent+'</div>');
-    var colorMap = state.get('colorMap');
-	_.each(nodeIds, function (nodeId) {
-		if (colorMap[nodeId] === undefined) {
-			var newColor = Utility.randomColor();
-			colorMap[nodeId] = newColor;
-		}
-		$wrapped.find('span.'+nodeId).css('background-color', colorMap[nodeId]);
-	});
-	state.set('colorMap', colorMap);
-	console.log('the color map:' + JSON.stringify(colorMap));
-	return $wrapped.html();
-}
-
 Template.viewer.events({
+	'click .edit-node': function (event, templateInstance) {
+		Mondrian.setCellContent(
+			{templateName: 'editor', context: {node: templateInstance.data}});
+	},
 	// TODO support keyboard highlighting
 	'mouseup .content-viewer': function (event, templateInstance) {
 		if (!state.get('linkMode')) {

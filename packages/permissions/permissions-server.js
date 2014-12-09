@@ -9,7 +9,7 @@ Meteor.publish('myPermissions', function () {
 });
 
 Meteor.publish('myGroupRolePermissions', function (resourceId) {
-	var userGroupRoles = GroupsAPI.getUserGroupRoles(userId);
+	var userGroupRoles = GroupsAPI.getUserGroupRoles(this.userId);
 	return Permissions.find(
 		{actorId: {$in: userGroupRoles}, resourceId: resourceId});
 });

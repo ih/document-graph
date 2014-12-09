@@ -99,7 +99,26 @@ Template.editor.created = function () {
 		this.data.node.permissions = PermissionsAPI.getResourcePermissions(
 			this.data.node.nodeId);
 	}
+	this.links = new ReactiveVar();
 };
+
+Template.editor.helpers({
+	renderContent: function () {
+		var templateInstance = Template.instance();
+
+		console.log('rendering editor preview content');
+		var links = templateInstance.links.get();
+		if (links) {
+			var newContent = SelectionRendering.addSelections(
+				templateInstance.data.node.content, links);
+			return newContent;
+		}
+		else {
+			return templateInstance.data.node.content;
+		}
+
+	}
+});
 
 Template.editor.rendered = function () {
 	this.$('textarea').autogrow();
@@ -109,6 +128,13 @@ Template.editor.rendered = function () {
 	if (!isPublic(this.data.node.permissions)) {
 		this.$('#privacy-editor').bootstrapSwitch('setState', false);
 	}
+	var templateInstance = this;
+
+	Tracker.autorun(function (computation) {
+		console.log('setting links for editor');
+		var links = GraphAPI.getNodeLinks(templateInstance.data.node._id, 'from');
+		templateInstance.links.set(links);
+	});
 };
 
 function isPublic(permissions) {
