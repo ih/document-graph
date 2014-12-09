@@ -15,28 +15,28 @@ var Editor = {
 
 Template.editor.events({
 	// make nodeData reactive for preview functionality
-	// 'input .content': function (event, templateInstance) {
-	// 	templateInstance.data.node.nodeContent = event.target.value;
-	// },
-	// 'input .title': function (event, templateInstance) {
-	// 	templateInstance.data.node.title = event.target.value;
-	// },
+	'input .content': function (event, templateInstance) {
+		templateInstance.data.node.set('content', event.target.value);
+	},
+	'input .title': function (event, templateInstance) {
+		templateInstance.data.node.set('title', event.target.value);
+	},
 	'click .save': function (event, templateInstance) {
 		// the keys property of a reactive dict is basically the plain dict
 		var nodeData = templateInstance.data.node;
 		var updatedNodeData = {
-			_id: nodeData._id,
+			_id: nodeData.get('_id'),
 			content: templateInstance.$('textarea.content').val(),
 			title: templateInstance.$('input.title').val()
 		};
 		GraphAPI.updateNode(updatedNodeData);
 
 		updateReferencedObjects(
-			nodeData._id, getTags(), TagsAPI.getTags, TagsAPI.createTag,
+			nodeData.get('_id'), getTags(), TagsAPI.getTags, TagsAPI.createTag,
 			GraphAPI.deleteTag);
 
 		updateReferencedObjects(
-			nodeData._id, getPermissions(),
+			nodeData.get('_id'), getPermissions(),
 			PermissionsAPI.getResourcePermissions,
 			PermissionsAPI.createPermission,
 			PermissionsAPI.deletePermission
@@ -54,7 +54,7 @@ Template.editor.events({
 			var permissions = [{
 				actorId: Meteor.userId(),
 				actions: PermissionsAPI.ALL,
-				resourceId: nodeData._id
+				resourceId: nodeData.get('_id')
 			}];
 
 			if ($('#privacy-editor').is(':checked')) {
@@ -62,7 +62,7 @@ Template.editor.events({
 					actorId: GroupsAPI.combineGroupRole(
 						'public', GroupsAPI.MEMBER),
 					actions: PermissionsAPI.READ,
-					resourceId: nodeData._id
+					resourceId: nodeData.get('_id')
 				});
 			}
 			return permissions;
@@ -70,7 +70,7 @@ Template.editor.events({
 
 		function getTags() {
 			return _.map($('#myTags').tagit("assignedTags"), function (label) {
-				return {objectId: nodeData._id, label: label};
+				return {objectId: nodeData.get('_id'), label: label};
 			});
 		}
 
@@ -91,50 +91,60 @@ Template.editor.events({
 });
 
 Template.editor.created = function () {
-	console.log('creating the editor with node ' + this.data.node._id);
+	var templateInstance = this;
+	templateInstance.data.node = Utility.makeReactive(
+		templateInstance.data.node);
+	templateInstance.links = new ReactiveVar();
+	console.log('creating the editor with node ' + this.data.node.get('_id'));
 	// TODO check for tags/node properties in data.node
 	// if they are not present fetch them from mongo
 	// this.node = this.data.node;
-	if (!this.data.node.permissions) {
-		this.data.node.permissions = PermissionsAPI.getResourcePermissions(
-			this.data.node.nodeId);
+
+	if (!templateInstance.data.node.permissions) {
+		templateInstance.data.node.permissions = PermissionsAPI.getResourcePermissions(
+			templateInstance.data.node.nodeId);
 	}
-	this.links = new ReactiveVar();
 };
 
 Template.editor.helpers({
+	nodeContent: function () {
+		return Template.instance().data.node.get('content');
+	},
+	nodeTitle: function () {
+		return Template.instance().data.node.get('title');
+	},
 	renderContent: function () {
 		var templateInstance = Template.instance();
 
 		console.log('rendering editor preview content');
 		var links = templateInstance.links.get();
-		if (links) {
-			var newContent = SelectionRendering.addSelections(
-				templateInstance.data.node.content, links);
+		var content = templateInstance.data.node.get('content');
+		if (links && content) {
+			var newContent = SelectionRendering.addSelections(content, links);
 			return newContent;
 		}
 		else {
-			return templateInstance.data.node.content;
+			return templateInstance.data.node.get('content');
 		}
-
 	}
 });
 
 Template.editor.rendered = function () {
-	this.$('textarea').autogrow();
-	this.$('#privacy-editor').bootstrapSwitch();
-
-	this.$('#myTags').tagit();
-	if (!isPublic(this.data.node.permissions)) {
-		this.$('#privacy-editor').bootstrapSwitch('setState', false);
-	}
 	var templateInstance = this;
+	templateInstance.$('textarea').autogrow();
+	templateInstance.$('#privacy-editor').bootstrapSwitch();
 
 	Tracker.autorun(function (computation) {
 		console.log('setting links for editor');
-		var links = GraphAPI.getNodeLinks(templateInstance.data.node._id, 'from');
+		var links = GraphAPI.getNodeLinks(
+			templateInstance.data.node.get('_id'), 'from');
 		templateInstance.links.set(links);
 	});
+
+	templateInstance.$('#myTags').tagit();
+	if (!isPublic(templateInstance.data.node.get('permissions'))) {
+		templateInstance.$('#privacy-editor').bootstrapSwitch('setState', false);
+	}
 };
 
 function isPublic(permissions) {
@@ -153,7 +163,7 @@ function resetEditor(templateInstance) {
 
 	_.each(GraphAPI.nodeProperties, function (nodeProperty) {
 		// TODO figure out a better way to set the default value
-		templateInstance.data.node[nodeProperty] = '';
+		templateInstance.data.node.set(nodeProperty, '');
 	});
 	clearTags();
 	console.log('cleared state');

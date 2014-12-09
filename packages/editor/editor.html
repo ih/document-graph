@@ -2,10 +2,10 @@
 	<div class="row editor">
 		<div class="col-md-6 input">
 			<div class="title-container">
-				<input type="text" class="title" value="{{node.title}}">
+				<input type="text" class="title" value="{{nodeTitle}}">
 			</div>
 			<div class="content-container">
-				<textarea class="content">{{node.content}}</textarea>
+				<textarea class="content">{{nodeContent}}</textarea>
 			</div>
 
 			<div class="tag-editor-container">
@@ -28,7 +28,7 @@
 		</div>
 		<div class="col-md-6 preview">
 			<div class="">
-				<h1>{{node.title}}</h1>
+				<h1>{{nodeTitle}}</h1>
 			</div>
 			<div class="">
 				<!-- TODO see why markdown isn't working with meteor ui -->

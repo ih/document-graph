@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, when) {
-	api.use(['underscore'], ['client', 'server']);
+	api.use(['underscore', 'reactive-dict'], ['client', 'server']);
 	api.add_files(['utility.js'], ['client', 'server']);
 
 	if (api.export) {
