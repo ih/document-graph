@@ -38,7 +38,7 @@ Template.editor.events({
 
 		updateReferencedObjects(
 			nodeData.get('_id'), getTags(), TagsAPI.getTags, TagsAPI.createTag,
-			GraphAPI.deleteTag);
+			TagsAPI.deleteTag);
 
 		updateReferencedObjects(
 			nodeData.get('_id'), getPermissions(),
@@ -81,13 +81,15 @@ Template.editor.events({
 
 		function updateReferencedObjects(
 			nodeId, updatedObjects, getObjects, createObject, deleteObject) {
-			var existingObjects = getObjects(nodeId);
-			var objectsToCreate = _.difference(updatedObjects, existingObjects);
+			var existingObjects = _.map(getObjects(nodeId), function (object) {
+				return _.omit(object, '_id');
+			});
+			var objectsToCreate = Utility.difference(updatedObjects, existingObjects);
 			_.each(objectsToCreate, function (newObject) {
 				createObject(newObject);
 			});
 
-			var objectsToDelete = _.difference(existingObjects, updatedObjects);
+			var objectsToDelete = Utility.difference(existingObjects, updatedObjects);
 			_.each(objectsToDelete, function (oldObject) {
 				deleteObject(oldObject);
 			});
@@ -114,6 +116,10 @@ Template.editor.created = function () {
 Template.editor.helpers({
 	nodeContent: function () {
 		return Template.instance().data.node.get('content');
+	},
+	nodeTags: function () {
+		return _.pluck(
+			TagsAPI.getTags(Template.instance().data.node.get('_id')), 'label');
 	},
 	nodeTitle: function () {
 		return Template.instance().data.node.get('title');
