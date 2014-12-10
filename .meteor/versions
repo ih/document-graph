@@ -15,7 +15,7 @@ check@1.0.2
 conductor@0.0.0
 ctl-helper@1.0.4
 ctl@1.0.2
-ddp@1.0.11
+ddp@1.0.12
 deps@1.0.5
 editor@0.0.0
 ejson@1.0.4
@@ -30,10 +30,14 @@ html-tools@1.0.2
 htmljs@1.0.2
 http@1.0.8
 id-map@1.0.1
-iron:core@0.3.4
-iron:dynamic-template@0.4.1
-iron:layout@0.4.1
-iron:router@0.9.3
+iron:controller@1.0.3
+iron:core@1.0.3
+iron:dynamic-template@1.0.3
+iron:layout@1.0.3
+iron:location@1.0.3
+iron:middleware-stack@1.0.3
+iron:router@1.0.3
+iron:url@1.0.3
 jquery@1.0.1
 json@1.0.1
 launch-screen@1.0.0
@@ -51,7 +55,7 @@ minifiers@1.1.2
 minimongo@1.0.5
 mobile-status-bar@1.0.1
 mondrian@0.0.0
-mongo@1.0.8
+mongo@1.0.9
 mrt:jquery-ui-bootstrap@1.8.16
 mrt:jquery-ui@1.9.2
 nemo64:bootstrap-data@3.3.0_1
