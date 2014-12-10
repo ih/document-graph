@@ -16,6 +16,11 @@ var Editor = {
 Template.editor.events({
 	// make nodeData reactive for preview functionality
 	'input .content': function (event, templateInstance) {
+		var updatedLinks = adjustLinks(
+			templateInstance.links.get(),
+			templateInstance.data.node.get('content'), event.target.value, 
+			event.target.selectionStart);
+		templateInstance.links.set(updatedLinks);
 		templateInstance.data.node.set('content', event.target.value);
 	},
 	'input .title': function (event, templateInstance) {
@@ -117,7 +122,7 @@ Template.editor.helpers({
 		var templateInstance = Template.instance();
 
 		console.log('rendering editor preview content');
-		var links = templateInstance.links.get();
+		var links = templateInstance.links ? templateInstance.links.get() : undefined;
 		var content = templateInstance.data.node.get('content');
 		if (links && content) {
 			var newContent = SelectionRendering.addSelections(content, links);
@@ -130,6 +135,7 @@ Template.editor.helpers({
 });
 
 Template.editor.rendered = function () {
+	console.log('editor rendered');
 	var templateInstance = this;
 	templateInstance.$('textarea').autogrow();
 	templateInstance.$('#privacy-editor').bootstrapSwitch();
@@ -171,4 +177,26 @@ function resetEditor(templateInstance) {
 
 function clearTags() {
 	return $("#myTags").tagit("removeAll");
+}
+
+function adjustLinks(links, oldContent, newContent, newCaretPosition) {
+	var changeLength = newContent.length - oldContent.length;
+	if (changeLength === 0) {
+		return links;
+	}
+	_.each(links, function (link) {
+		link.selection.border.open = adjustBorder(link.selection.border.open);
+		link.selection.border.close = adjustBorder(link.selection.border.close);
+	});
+
+	return links;
+
+	function adjustBorder(borderPosition) {
+		if (borderPosition >= newCaretPosition) {
+			return borderPosition + changeLength;
+		}
+		else {
+			return borderPosition;
+		}
+	}
 }
