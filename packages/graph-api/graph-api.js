@@ -58,6 +58,10 @@ GraphAPI = {
 		// allowed in allow
 		Nodes.update(
 			nodeData._id, {$set: _.pick(nodeData, GraphAPI.nodeProperties)});
+	},
+	updateLink: function (linkData) {
+		Links.update(
+			linkData._id, {$set: _.pick(linkData, GraphAPI.linkProperties)});
 	}
 };
 

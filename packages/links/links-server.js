@@ -13,7 +13,8 @@ Links.allow({
 		console.log(doc);
 		console.log('with modifier:');
 		console.log(modifier);
-		return PermissionsAPI.hasPermission(userId, 'read', doc.from) && 
+		// rethink the logic for this
+		return PermissionsAPI.hasPermission(userId, 'read', doc.from) || 
 			PermissionsAPI.hasPermission(userId, 'update', doc.to);
 	}
 });

@@ -36,6 +36,10 @@ Template.editor.events({
 		};
 		GraphAPI.updateNode(updatedNodeData);
 
+		_.each(templateInstance.links.get(), function (link) {
+			GraphAPI.updateLink(link);
+		});
+
 		updateReferencedObjects(
 			nodeData.get('_id'), getTags(), TagsAPI.getTags, TagsAPI.createTag,
 			TagsAPI.deleteTag);
