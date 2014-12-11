@@ -15,8 +15,9 @@ Template.layout.events({
 	'click .create-node': function (event) {
 		var newNodeData = makeNode();
 
-		Mondrian.setCellContent(
-			{templateName: 'editor', context: {node: newNodeData}});
+		Mondrian.setCellContent({
+			templateName: 'editor',
+			context: {node: newNodeData, mode: 'create'}});
 	},
 	'click .create-linked-node': function (event) {
 		var selection = Viewer.state.get('selection');
@@ -24,8 +25,9 @@ Template.layout.events({
 		GraphAPI.connect(selection.nodeId, newNodeData._id, selection);
 
 		Mondrian.divideCell(
-			'auto', undefined, undefined,
-			{templateName: 'editor', context: {node: newNodeData}});
+			'auto', undefined, undefined, {
+				templateName: 'editor',
+				context: {node: newNodeData, mode: 'create'}});
 	},
 	'click .link-existing-node': function (event, templateInstance) {
 		Viewer.state.set('linkMode', true);

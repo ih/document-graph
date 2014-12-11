@@ -118,8 +118,9 @@ Template.viewer.helpers({
 
 Template.viewer.events({
 	'click .edit-node': function (event, templateInstance) {
-		Mondrian.setCellContent(
-			{templateName: 'editor', context: {node: templateInstance.data}});
+		Mondrian.setCellContent({
+			templateName: 'editor',
+			context: {node: templateInstance.data, mode: 'edit'}});
 	},
 	// TODO support keyboard highlighting
 	'mouseup .content-viewer': function (event, templateInstance) {

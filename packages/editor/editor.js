@@ -53,7 +53,18 @@ Template.editor.events({
 
 		SearchAPI.index('nodes', updatedNodeData);
 
-		resetEditor(templateInstance);
+		if (templateInstance.data.mode === 'create') {
+			resetEditor(templateInstance);
+		}
+		else if (templateInstance.data.mode === 'edit') {
+			Mondrian.setCellContent({templateName: 'viewer', context: updatedNodeData});
+		}
+		else {
+			console.error('unknown mode for editor!');
+			resetEditor(templateInstance);
+		}
+
+
 
 		// TODO move these functions into their own packages when
 		// privacy and tags become separate ui components

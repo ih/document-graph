@@ -6,7 +6,7 @@ Package.on_use(function (api, where) {
   api.use(['templating', 'reactive-var', 'showdown', 'less', 'graph-api',
 		   'bootstrap-switch', 'groups-api', 'permissions-api', 'tags-api',
 		   'search-api', 'mrt:jquery-ui', 'mrt:jquery-ui-bootstrap',
-		   'selection-rendering', 'utility'],
+		   'selection-rendering', 'utility', 'mondrian'],
 		  ['client', 'server']);
 
   api.add_files(
