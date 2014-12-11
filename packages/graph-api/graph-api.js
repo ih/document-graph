@@ -47,7 +47,9 @@ GraphAPI = {
 	/** Must be run in a reactive computation
 	 */
 	getNode: function (nodeId, callback) {
-		Meteor.subscribe('node', nodeId);
+		if (Meteor.isClient) {
+			Meteor.subscribe('node', nodeId);
+		}
 		return Nodes.findOne(nodeId);
 	},
 	otherDirection: function (direction) {

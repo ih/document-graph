@@ -4,8 +4,10 @@ Meteor.methods({
 		Permissions.insert(permissionData);
 	},
 	deletePermission: function (permissionData) {
+		// check that user has permission to be deleting
 		var targetPermission = Permissions.findOne(permissionData);
-		return Tags.remove(targetTag._id);
+		console.log('removing permission:' + JSON.stringify(targetPermission));
+		return Permissions.remove(targetPermission._id);
 	},
 	getResourcePermissions: function (resourceId) {
 		var permissions = Permissions.find({resourceId: resourceId}).fetch() || [];

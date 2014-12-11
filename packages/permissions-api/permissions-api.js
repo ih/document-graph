@@ -11,7 +11,10 @@ PermissionsAPI = {
 		return Meteor.call('deletePermission', permissionData);
 	},
 	getResourcePermissions: function (resourceId) {
-		return Meteor.call('getResourcePermissions', resourceId);
+		if (Meteor.isClient) {
+			Meteor.subscribe('myGroupRolePermissions', resourceId);
+		}
+		return Permissions.find({resourceId: resourceId}).fetch() || [];
 	},
 	getUserPermissions: function (userId) {
 		return Meteor.call('getUserPermissions', userId);

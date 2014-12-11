@@ -111,10 +111,6 @@ Template.editor.created = function () {
 	// if they are not present fetch them from mongo
 	// this.node = this.data.node;
 
-	if (!templateInstance.data.node.permissions) {
-		templateInstance.data.node.permissions = PermissionsAPI.getResourcePermissions(
-			templateInstance.data.node.nodeId);
-	}
 };
 
 Template.editor.helpers({
@@ -158,9 +154,20 @@ Template.editor.rendered = function () {
 	});
 
 	templateInstance.$('#myTags').tagit();
-	if (!isPublic(templateInstance.data.node.get('permissions'))) {
-		templateInstance.$('#privacy-editor').bootstrapSwitch('setState', false);
-	}
+	Tracker.autorun(function (computation) {
+
+		templateInstance.data.node.set('permissions', PermissionsAPI.getResourcePermissions(
+			templateInstance.data.node.get('_id')));
+		console.log('got the permissions' + JSON.stringify(templateInstance.data.node.get('permissions')));
+
+		if (!isPublic(templateInstance.data.node.get('permissions'))) {
+			templateInstance.$('#privacy-editor').bootstrapSwitch('setState', false);
+		}
+		else {
+			templateInstance.$('#privacy-editor').bootstrapSwitch('setState', true);
+		}
+
+	});
 };
 
 function isPublic(permissions) {
