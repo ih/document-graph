@@ -9,7 +9,11 @@ Template.nodeListPanel.helpers({
 			direction, Mondrian.getFocusedCellNodeId());
 		var otherDirection = GraphAPI.otherDirection(direction);
 		return _.map(links, function (link) {
-			return GraphAPI.getNode(link[otherDirection]);
+			var linkedNode = GraphAPI.getNode(link[otherDirection]);
+			if (linkedNode) {
+				linkedNode.link = link;
+			}
+			return linkedNode;
 		});
 	},
 	showCount: function () {
@@ -41,5 +45,12 @@ Template.nodePreview.events({
 				computation.stop();
 			}
 		});
+	},
+	'click .unlink': function (event, templateInstance) {
+		GraphAPI.deleteLink(templateInstance.data.link);
 	}
 });
+
+Template.nodePreview.rendered = function () {
+	this.$('.title').css('background-color', SelectionRendering.colorMap.get(this.data._id));
+};

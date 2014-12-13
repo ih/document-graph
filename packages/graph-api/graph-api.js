@@ -64,6 +64,9 @@ GraphAPI = {
 	updateLink: function (linkData) {
 		Links.update(
 			linkData._id, {$set: _.pick(linkData, GraphAPI.linkProperties)});
+	},
+	deleteLink: function (link) {
+		return Links.remove(link._id);
 	}
 };
 

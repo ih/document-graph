@@ -3,8 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['groups-api'], ['server']);
-	api.use(['permissions'], ['client', 'server']);
+	api.use(['groups-api', 'permissions'], ['client', 'server']);
 	api.add_files(['permissions-api-methods.js'], ['server']);
 	api.add_files(['permissions-api.js'], ['server', 'client']);
 	if (api.export) {

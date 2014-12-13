@@ -54,6 +54,7 @@ Template.searchResult.events({
 			}
 
 		});
+		Tracker.flush();
 	}
 });
 
