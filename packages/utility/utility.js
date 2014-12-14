@@ -28,5 +28,23 @@ Utility = {
 			}
 			return null;
 		}));
+	},
+	/** By referenced object we mean like tags for a node
+	 */
+	updateReferencedObjects: function (
+		mainObjectId, updatedObjects, getObjects, createObject, 
+		deleteObject) {
+		var existingObjects = _.map(getObjects(mainObjectId), function (object) {
+			return _.omit(object, '_id');
+		});
+		var objectsToCreate = Utility.difference(updatedObjects, existingObjects);
+		_.each(objectsToCreate, function (newObject) {
+			createObject(newObject);
+		});
+
+		var objectsToDelete = Utility.difference(existingObjects, updatedObjects);
+		_.each(objectsToDelete, function (oldObject) {
+			deleteObject(oldObject);
+		});
 	}
 };

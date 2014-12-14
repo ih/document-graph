@@ -110,9 +110,9 @@ Template.viewer.helpers({
 		// renderedContent = addColors(nodeIds, renderedContent);
         return renderedContent;
 	},
-	canUpdate: function () {
+	can: function (action) {
 		var nodeId = Template.instance().data._id;
-		return PermissionsAPI.hasPermission(Meteor.userId(), 'update', nodeId);
+		return PermissionsAPI.hasPermission(Meteor.userId(), action, nodeId);
 	}
 });
 
@@ -121,6 +121,19 @@ Template.viewer.events({
 		Mondrian.setCellContent({
 			templateName: 'editor',
 			context: {node: templateInstance.data, mode: 'edit'}});
+	},
+	'click .delete-node': function (event, templateInstance) {
+		GraphAPI.deleteNode(templateInstance.data);
+		Mondrian.collapseCell();
+		// delete the tags
+		Utility.updateReferencedObjects(
+			templateInstance.data._id, [], TagsAPI.getTags, TagsAPI.createTag,
+			TagsAPI.deleteTag);
+		Utility.updateReferencedObjects(
+			templateInstance.data._id, [], PermissionsAPI.getResourcePermissions,
+			PermissionsAPI.createPermission, PermissionsAPI.deletePermission);
+		// delete the permissions
+		SearchAPI.remove('nodes', templateInstance.data);
 	},
 	// TODO support keyboard highlighting
 	'mouseup .content-viewer': function (event, templateInstance) {

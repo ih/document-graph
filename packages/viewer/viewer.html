@@ -27,8 +27,12 @@
 				{{_id}}
 			</div>
 			<div>
-				{{#if canUpdate}}
+				{{#if can 'update'}}
 				<button class="btn btn-primary edit-node">Edit</button>
+				{{/if}}
+
+				{{#if can 'delete'}}
+				<button class="btn btn-primary delete-node">Delete</button>
 				{{/if}}
 			</div>
 

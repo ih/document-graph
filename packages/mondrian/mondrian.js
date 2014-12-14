@@ -91,6 +91,8 @@ Mondrian = {
 		var cellState = state.get(targetCellId);
 		if (isRootCell(cellState)) {
 			console.log('cannot collapse the root cell');
+			Mondrian.setCellContent(
+				{templateName: 'text', context: {text: 'howdy'}});
 			return false;
 		}
 		if (!isLeafCell(cellState)) {

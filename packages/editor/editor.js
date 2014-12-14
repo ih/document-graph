@@ -30,8 +30,7 @@ Template.editor.events({
 		var node = templateInstance.data.node;
 		if (templateInstance.data.mode === 'create') {
 			GraphAPI.deleteNode(node);
-			Mondrian.setCellContent({
-				templateName: 'text', context: {text: 'howdy'}});
+			Mondrian.collapseCell();
 		}
 		else if (templateInstance.data.mode === 'edit') {
 			Mondrian.setCellContent({
@@ -55,11 +54,11 @@ Template.editor.events({
 			GraphAPI.updateLink(link);
 		});
 
-		updateReferencedObjects(
+		Utility.updateReferencedObjects(
 			nodeData.get('_id'), getTags(), TagsAPI.getTags, TagsAPI.createTag,
 			TagsAPI.deleteTag);
 
-		updateReferencedObjects(
+		Utility.updateReferencedObjects(
 			nodeData.get('_id'), getPermissions(),
 			PermissionsAPI.getResourcePermissions,
 			PermissionsAPI.createPermission,
@@ -96,22 +95,6 @@ Template.editor.events({
 		function getTags() {
 			return _.map($('#myTags').tagit("assignedTags"), function (label) {
 				return {objectId: nodeData.get('_id'), label: label};
-			});
-		}
-
-		function updateReferencedObjects(
-			nodeId, updatedObjects, getObjects, createObject, deleteObject) {
-			var existingObjects = _.map(getObjects(nodeId), function (object) {
-				return _.omit(object, '_id');
-			});
-			var objectsToCreate = Utility.difference(updatedObjects, existingObjects);
-			_.each(objectsToCreate, function (newObject) {
-				createObject(newObject);
-			});
-
-			var objectsToDelete = Utility.difference(existingObjects, updatedObjects);
-			_.each(objectsToDelete, function (oldObject) {
-				deleteObject(oldObject);
 			});
 		}
 	}

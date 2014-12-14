@@ -15,5 +15,8 @@ SearchAPI = {
 		// this is important because for nodes we want to create the search
 		// document then add access information to the document right after
 		Meteor.call('index', collectionName, newDocument);
+	},
+	remove: function (collectionName, document) {
+		Meteor.call('remove', collectionName, document);
 	}
 };

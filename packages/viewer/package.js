@@ -4,8 +4,8 @@ Package.describe({
 
 Package.on_use(function (api, where) {
 	api.use(['templating', 'reactive-dict', 'graph-api', 'less', 'mondrian',
-			 'utility', 'tracker', 'underscore', 'selection-rendering'],
-			['client']);
+			 'utility', 'tracker', 'underscore', 'selection-rendering',
+			 'search-api'],	['client']);
 	api.use(['ratings-interface', 'tags-interface', 'tags-api',
 			 'permissions-api'], ['client', 'server']);
 

@@ -100,5 +100,10 @@ Meteor.methods({
 			console.log(result);
 			return result;
 		});
+	},
+	remove: function (collectionName, document) {
+		var url = searchHostUrl + '/' + collectionName + '/' + 
+				collectionName.slice(0, -1) + '/' + document._id;
+		HTTP.del(url);
 	}
 });
