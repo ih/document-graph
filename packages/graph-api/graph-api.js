@@ -67,6 +67,9 @@ GraphAPI = {
 	},
 	deleteLink: function (link) {
 		return Links.remove(link._id);
+	},
+	deleteNode: function (node) {
+		return Nodes.remove(node._id);
 	}
 };
 

@@ -14,6 +14,10 @@ Nodes.allow({
 		console.log('with modifier:');
 		console.log(modifier);
 		return PermissionsAPI.hasPermission(userId, 'update', doc._id);
+	},
+	remove: function (userId, doc) {
+		console.log('deleting node:' + JSON.stringify(doc));
+		return PermissionsAPI.hasPermission(userId, 'delete', doc._id);
 	}
 });
 

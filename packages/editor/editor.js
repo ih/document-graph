@@ -18,17 +18,32 @@ Template.editor.events({
 	'input .content': function (event, templateInstance) {
 		var updatedLinks = adjustLinks(
 			templateInstance.links.get(),
-			templateInstance.data.node.get('content'), event.target.value, 
+			templateInstance.data.reactiveNode.get('content'), event.target.value, 
 			event.target.selectionStart);
 		templateInstance.links.set(updatedLinks);
-		templateInstance.data.node.set('content', event.target.value);
+		templateInstance.data.reactiveNode.set('content', event.target.value);
 	},
 	'input .title': function (event, templateInstance) {
-		templateInstance.data.node.set('title', event.target.value);
+		templateInstance.data.reactiveNode.set('title', event.target.value);
+	},
+	'click .cancel': function (event, templateInstance) {
+		var node = templateInstance.data.node;
+		if (templateInstance.data.mode === 'create') {
+			GraphAPI.deleteNode(node);
+			Mondrian.setCellContent({
+				templateName: 'text', context: {text: 'howdy'}});
+		}
+		else if (templateInstance.data.mode === 'edit') {
+			Mondrian.setCellContent({
+				templateName: 'viewer', context: node});
+		}
+		else {
+			console.error('Editor in an unrecognized mode');
+		}
 	},
 	'click .save': function (event, templateInstance) {
 		// the keys property of a reactive dict is basically the plain dict
-		var nodeData = templateInstance.data.node;
+		var nodeData = templateInstance.data.reactiveNode;
 		var updatedNodeData = {
 			_id: nodeData.get('_id'),
 			content: templateInstance.$('textarea.content').val(),
@@ -53,17 +68,7 @@ Template.editor.events({
 
 		SearchAPI.index('nodes', updatedNodeData);
 
-		if (templateInstance.data.mode === 'create') {
-			resetEditor(templateInstance);
-		}
-		else if (templateInstance.data.mode === 'edit') {
-			Mondrian.setCellContent({templateName: 'viewer', context: updatedNodeData});
-		}
-		else {
-			console.error('unknown mode for editor!');
-			resetEditor(templateInstance);
-		}
-
+		Mondrian.setCellContent({templateName: 'viewer', context: updatedNodeData});
 
 
 		// TODO move these functions into their own packages when
@@ -114,10 +119,10 @@ Template.editor.events({
 
 Template.editor.created = function () {
 	var templateInstance = this;
-	templateInstance.data.node = Utility.makeReactive(
+	templateInstance.data.reactiveNode = Utility.makeReactive(
 		templateInstance.data.node);
 	templateInstance.links = new ReactiveVar();
-	console.log('creating the editor with node ' + this.data.node.get('_id'));
+	console.log('creating the editor with node ' + this.data.reactiveNode.get('_id'));
 	// TODO check for tags/node properties in data.node
 	// if they are not present fetch them from mongo
 	// this.node = this.data.node;
@@ -126,27 +131,27 @@ Template.editor.created = function () {
 
 Template.editor.helpers({
 	nodeContent: function () {
-		return Template.instance().data.node.get('content');
+		return Template.instance().data.reactiveNode.get('content');
 	},
 	nodeTags: function () {
 		return _.pluck(
-			TagsAPI.getTags(Template.instance().data.node.get('_id')), 'label');
+			TagsAPI.getTags(Template.instance().data.reactiveNode.get('_id')), 'label');
 	},
 	nodeTitle: function () {
-		return Template.instance().data.node.get('title');
+		return Template.instance().data.reactiveNode.get('title');
 	},
 	renderContent: function () {
 		var templateInstance = Template.instance();
 
 		console.log('rendering editor preview content');
 		var links = templateInstance.links ? templateInstance.links.get() : undefined;
-		var content = templateInstance.data.node.get('content');
+		var content = templateInstance.data.reactiveNode.get('content');
 		if (links && content) {
 			var newContent = SelectionRendering.addSelections(content, links);
 			return newContent;
 		}
 		else {
-			return templateInstance.data.node.get('content');
+			return templateInstance.data.reactiveNode.get('content');
 		}
 	}
 });
@@ -160,18 +165,18 @@ Template.editor.rendered = function () {
 	Tracker.autorun(function (computation) {
 		console.log('setting links for editor');
 		var links = GraphAPI.getNodeLinks(
-			templateInstance.data.node.get('_id'), 'from');
+			templateInstance.data.reactiveNode.get('_id'), 'from');
 		templateInstance.links.set(links);
 	});
 
 	templateInstance.$('#myTags').tagit();
 	Tracker.autorun(function (computation) {
 
-		templateInstance.data.node.set('permissions', PermissionsAPI.getResourcePermissions(
-			templateInstance.data.node.get('_id')));
-		console.log('got the permissions' + JSON.stringify(templateInstance.data.node.get('permissions')));
+		templateInstance.data.reactiveNode.set('permissions', PermissionsAPI.getResourcePermissions(
+			templateInstance.data.reactiveNode.get('_id')));
+		console.log('got the permissions' + JSON.stringify(templateInstance.data.reactiveNode.get('permissions')));
 
-		if (!isPublic(templateInstance.data.node.get('permissions'))) {
+		if (!isPublic(templateInstance.data.reactiveNode.get('permissions'))) {
 			templateInstance.$('#privacy-editor').bootstrapSwitch('setState', false);
 		}
 		else {
@@ -197,7 +202,7 @@ function resetEditor(templateInstance) {
 
 	_.each(GraphAPI.nodeProperties, function (nodeProperty) {
 		// TODO figure out a better way to set the default value
-		templateInstance.data.node.set(nodeProperty, '');
+		templateInstance.data.reactiveNode.set(nodeProperty, '');
 	});
 	clearTags();
 	console.log('cleared state');
