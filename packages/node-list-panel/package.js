@@ -5,7 +5,8 @@ Package.describe({
 
 Package.on_use(function (api, where) {
 	api.use(['templating', 'less',  'mondrian', 'viewer', 'graph-api',
-			 'permissions-api', 'selection-rendering'], ['client']);
+			 'permissions-api', 'selection-rendering', 'reactive-var'],
+			['client']);
 
 	api.add_files(['node-list-panel.html', 'node-list-panel.js'], 'client');
 

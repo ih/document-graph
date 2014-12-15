@@ -1,5 +1,14 @@
 GraphAPI = {
-	linkProperties: ['from', 'to', 'selection'],
+	/**
+	 from, to are node ids
+	 Selection Object
+	 {
+		 border: {close: [index for selection end], open: [index of selection start]},
+		 nodeId: [viewed node id],
+		 selectedContent: [part of content that was selected]
+	 }
+	 */
+	linkProperties: ['from', 'to', 'selection', 'createTime'],
 	nodeProperties: ['content', 'title'],
 	// add allow rules to Nodes that call the securityAPI or
 	// each API should handle it's own security
@@ -19,7 +28,9 @@ GraphAPI = {
 		return nodeId;
 	},
 	connect: function (fromNodeId, toNodeId, selectionData) {
-		Links.insert({from: fromNodeId, to: toNodeId, selection: selectionData});
+		Links.insert({
+			from: fromNodeId, to: toNodeId, selection: selectionData,
+			createTime: (new Date()).toISOString()});
 	},
 	getNodeLinks: function (nodeId, direction) {
 		var selector = {};
@@ -56,7 +67,7 @@ GraphAPI = {
 		return direction === 'to' ? 'from' : 'to';
 	},
 	updateNode: function (nodeData) {
-		// do this as a method for now since udpating whole document is not 
+		// do this as a method for now since udpating whole document is not
 		// allowed in allow
 		Nodes.update(
 			nodeData._id, {$set: _.pick(nodeData, GraphAPI.nodeProperties)});
@@ -72,6 +83,3 @@ GraphAPI = {
 		return Nodes.remove(node._id);
 	}
 };
-
-
-

@@ -39,10 +39,14 @@ Viewer = {
 	hideSelections: function () {
 		state.set('showingSelections', false);
 	},
-	filterLinks: function (direction, nodeId, linkedNodeIds) {
+	filterLinks: function (
+		direction, nodeId, sortProperty, sortAscending, linkedNodeIds) {
 		if (nodeId) {
 			console.log('getting links for viewer');
 			var links = GraphAPI.getNodeLinks(nodeId, direction);
+			if (!sortProperty) {
+				sortProperty = 'occurence';
+			}
 			if (linkedNodeIds) {
 				if (linkedNodeIds.constructor !== Array) {
 					linkedNodeIds = [linkedNodeIds];
@@ -63,6 +67,24 @@ Viewer = {
 					return _.intersection(
 						activeLabels, _.pluck(neighborTags, 'label')).length > 0;
 				});
+			}
+
+			// sorting related code
+			if (sortProperty === 'rating') {
+				_.each(links, function (link) {
+					// sortBy is ascending and we want ratings to be descending
+					link.rating = -1 * RatingsAPI.getCommunityRating(
+						link[GraphAPI.otherDirection(direction)]);
+				});
+			}
+			if (sortProperty === 'occurence') {
+				_.each(links, function (link) {
+					link.occurence = link.selection.border.open;
+				});
+			}
+			links = _.sortBy(links, sortProperty);
+			if (!sortAscending) {
+				links.reverse();
 			}
 			return links;
 		}
@@ -100,7 +122,7 @@ Template.viewer.helpers({
 	},
 	renderContent: function (linkedNodeIds) {
 		var nodeId = Template.instance().data._id;
-		var links = Viewer.filterLinks('from', nodeId, linkedNodeIds);
+		var links = Viewer.filterLinks('from', nodeId, null, true, linkedNodeIds);
 		var renderedContent = SelectionRendering.addSelections(
 			Template.instance().data.content, links);
 		// var borderDictionary = createBorderDictionary(links);
