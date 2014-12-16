@@ -46,10 +46,10 @@ Template.searchResult.events({
 			var clickedNode = GraphAPI.getNode(template.data.id);
 			if (clickedNode) {
 				console.log('clicked on node ' + template.data.id + ':' + JSON.stringify(clickedNode));
-				// Mondrian.setCellContent({templateName: 'viewer', context: clickedNode});
-				Mondrian.divideCell(
-					undefined, undefined, {templateName: 'searchResults', context: {}},
-					{templateName: 'viewer', context: clickedNode});
+				Mondrian.setCellContent({templateName: 'viewer', context: clickedNode});
+				// Mondrian.divideCell(
+				// 	undefined, undefined, {templateName: 'searchResults', context: {}},
+				// 	{templateName: 'viewer', context: clickedNode});
 				computation.stop();
 			}
 

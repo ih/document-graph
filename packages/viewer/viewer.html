@@ -5,10 +5,10 @@
 <template name="viewer">
 	<div class="row viewer viewer-{{_id}}">
 		<div class="col-md-12">
-			<div class="title">
-				{{title}}
+			<div class="title single-row">
+				<h3>{{title}}</h3>
 			</div>
-			<span class="content-viewer" contenteditable="true">
+			<div class="content-viewer single-row">
 				{{#if isFocused}}
 				{{#if isShowingSelections}}
 				<pre>{{{renderContent}}}</pre>
@@ -22,11 +22,11 @@
 				<pre>{{{renderContent displayedNodeIds}}}</pre>
 				{{/if}}
 				{{/if}}
-			</span>
-			<div>
-				{{_id}}
 			</div>
-			<div>
+			<!--div>
+				{{_id}}
+			</div-->
+			<div class="single-row">
 				{{#if can 'update'}}
 				<button class="btn btn-primary edit-node">Edit</button>
 				{{/if}}
@@ -36,9 +36,12 @@
 				{{/if}}
 			</div>
 
-			{{> ratingsInterface objectId=_id}}
-
-			{{> labelsDisplay objectId=_id}}
+			<div class="single-row">
+				{{> ratingsInterface objectId=_id}}
+			</div>
+			<div class="single-row">
+				{{> labelsDisplay objectId=_id}}
+			</div>
 		</div>
 	</div>
 </template>
