@@ -81,7 +81,7 @@ function addColors(nodeIds, renderedContent) {
 	var $wrapped = $('<div>'+renderedContent+'</div>');
 	_.each(nodeIds, function (nodeId) {
 		if (colorMap.get(nodeId) === undefined) {
-			var newColor = Utility.randomColor();
+			var newColor = Utility.randomContrastColor(true);
 			colorMap.set(nodeId, newColor);
 		}
 		$wrapped.find('span.'+nodeId).css('background-color', colorMap.get(nodeId));
