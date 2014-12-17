@@ -14,7 +14,7 @@ Utility = {
 			var randomColor = Utility.randomColor();
 			var randomRGB = Utility.hexToRgb(randomColor);
 			var colorBrightness = (randomRGB.r + randomRGB.g + randomRGB.b) / 3;
-		} while (isLight ? colorBrightness < 170 : colorBrightness >= 170);
+		} while (isLight ? colorBrightness < 140 : colorBrightness >= 140);
 		console.log('hex:' + randomColor + ' rgb:' + JSON.stringify(randomRGB) + ' brightness:' + colorBrightness);
 		return randomColor;
 	},

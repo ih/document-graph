@@ -142,7 +142,7 @@ Template.editor.helpers({
 Template.editor.rendered = function () {
 	console.log('editor rendered');
 	var templateInstance = this;
-	templateInstance.$('textarea').autogrow();
+	templateInstance.$('textarea').autogrow({onInitialize: true});
 	templateInstance.$('#privacy-editor').bootstrapSwitch();
 
 	Tracker.autorun(function (computation) {

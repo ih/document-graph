@@ -9,6 +9,5 @@ accounts-ui
 conductor
 mrt:jquery-ui
 less
-mrt:jquery-ui-bootstrap
 iron:router
 nemo64:bootstrap

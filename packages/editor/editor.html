@@ -1,14 +1,16 @@
 <template name="editor">
 	<div class="row editor">
 		<div class="col-md-6 input">
-			<div class="title-container">
-				<input type="text" class="title" value="{{nodeTitle}}">
-			</div>
-			<div class="content-container">
-				<textarea class="content">{{nodeContent}}</textarea>
+			<h3>
+				<div class="title-container single-row">
+					<input type="text" class="title input-lg" value="{{nodeTitle}}" placeholder="Put Title Here">
+				</div>
+			</h3>
+			<div class="content-container single-row">
+				<textarea class="content" placeholder="Content goes here">{{nodeContent}}</textarea>
 			</div>
 
-			<div class="tag-editor-container">
+			<div class="tag-editor-container single-row">
 				<ul id="myTags">
 					{{#each nodeTags}}
 					<li>{{this}}</li>
@@ -16,12 +18,12 @@
 				</ul>
 			</div>
 			<!-- TODO: turn this back into its own template -->
-			<div class="privacy-editor-container">
+			<div class="privacy-editor-container single-row">
 				<input id="privacy-editor" type="checkbox" checked data-on-label="Public" data-off-label="Private" class="switch-large">
 			</div>
 
 
-			<div class="text-center">
+			<div class="text-center single-row">
 				<button class="btn btn-primary save">Save</button>
 				<button class="btn btn-default cancel">Cancel</button>
 			</div>
@@ -31,7 +33,7 @@
 				<h1>{{nodeTitle}}</h1>
 			</div>
 			<div class="">
-				{{{renderContent}}}
+				<pre>{{{renderContent}}}</pre>
 			</div>
 		</div>
 	</div>

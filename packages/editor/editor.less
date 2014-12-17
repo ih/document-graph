@@ -1,20 +1,27 @@
+@import "../../client/css/custom.bootstrap.import.less";
+@import "../../client/css/docgraph.less";
 
-.editor, .input, .row, textarea {
-		width: 100%;
-		//height: 100%;
+.editor {
+		input, .row, textarea {
+				width: 100%;
+		}
+
+		textarea, input {
+				border: none;
+				box-shadow: none;
+				color: @input-color;
+				resize: none;
+		}
+
+		.title {
+				font-size: @font-size-h2;
+		}
+
+		.title::-webkit-input-placeholder {
+				line-height: (@font-size-h2 * 1.2);
+		}
 }
-
-textarea, input {
-		border: none;
-		resize: none;
-		-moz-box-shadow:none;
-}
-
 
 textarea:focus, input:focus {
 		outline: none;
-}
-
-input {
-		background-color: #eee;
 }
