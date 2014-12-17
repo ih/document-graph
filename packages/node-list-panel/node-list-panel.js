@@ -1,11 +1,13 @@
 NodeListPanel = {
-
+	// better way than having this "global variable"?
+	openStates: new ReactiveDict()
 };
 
 Template.nodeListPanel.created = function () {
 	// if it's a left panel then initialize the sort property to rating
 	this.sortProperty = new ReactiveVar('occurence');
 	this.sortAscending = new ReactiveVar(true);
+	NodeListPanel.openStates.set(this.data.direction, false);
 };
 
 Template.nodeListPanel.helpers({
@@ -31,7 +33,7 @@ Template.nodeListPanel.helpers({
 		return optionProperty === Template.instance().sortProperty.get() ? 'selected' : '';
 	},
 	showCount: function () {
-		return !Viewer.isShowingSelections();
+		return !NodeListPanel.openStates.get(Template.instance().data.direction);
 	},
 	sortDirection: function () {
 		if (Template.instance().sortAscending.get()) {
@@ -43,16 +45,19 @@ Template.nodeListPanel.helpers({
 	}
 });
 
-
 Template.nodeListPanel.events({
 	'change .sort-property': function (event, templateInstance) {
 		console.log('changing the sort order to: ' + event.target.value);
 		templateInstance.sortProperty.set(event.target.value);
 	},
-	'click .hide-selections': function (event) {
-		Viewer.hideSelections();
+	'click .close-panel': function (event, templateInstance) {
+		NodeListPanel.openStates.set(templateInstance.data.direction, false);
+		if (!NodeListPanel.openStates.get(GraphAPI.otherDirection(templateInstance.data.direction))) {
+			Viewer.hideSelections();
+		}
 	},
-	'click .node-count': function (event) {
+	'click .node-count': function (event, templateInstance) {
+		NodeListPanel.openStates.set(templateInstance.data.direction, true);
 		Viewer.showSelections();
 	},
 	'click .sort-direction': function (event, templateInstance) {

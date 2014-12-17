@@ -95,7 +95,7 @@ Viewer = {
 };
 
 Template.viewer.created = function () {
-	state.set('showingSelections', false);
+
 };
 
 Template.viewer.rendered = function () {
