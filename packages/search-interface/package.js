@@ -8,7 +8,8 @@ Package.on_use(function (api, where) {
 	  ['client']);
 
   api.add_files(
-	  ['search-interface.html', 'search-interface.js'], 'client');
+	  ['search-interface.html', 'search-interface.js', 'search-interface.less'],
+	  'client');
 
   if (api.export) {
 	  api.export('SearchInterface');
