@@ -63,6 +63,25 @@ Template.layout.helpers({
 		return Viewer.state.get('linkMode');
 	},
 	isSelectionMade: Viewer.isSelectionMade,
+	panelWidth: function (direction) {
+		if (NodeListPanel.openStates.get(direction)) {
+			return 'col-md-2';
+		}
+		else {
+			return 'col-md-1';
+		}
+	},
+	mainViewWidth: function () {
+		if (NodeListPanel.openStates.get('to') && NodeListPanel.openStates.get('from')) {
+			return 'col-md-8';
+		}
+		else if (NodeListPanel.openStates.get('to') || NodeListPanel.openStates.get('from')) {
+			return 'col-md-9';
+		}
+		else {
+			return 'col-md-10';
+		}
+	},
 	validCell: function () {
 		if (Mondrian.getFocusedCellNodeId()) {
 			return '';

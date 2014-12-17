@@ -28,13 +28,13 @@
 	<div class="container-fluid document-graph">
 		{{#if currentUser}}
 		<div class="row">
-			<div class="col-md-2">
+			<div class="{{panelWidth 'to'}}">
 				{{> nodeListPanel direction='to'}}
 			</div>
-			<div id="main-view" class="col-md-8">
+			<div id="main-view" class="{{mainViewWidth}}">
 				{{> mondrian}}
 			</div>
-			<div class="col-md-2">
+			<div class="{{panelWidth 'from'}}">
 				{{> nodeListPanel direction='from'}}
 			</div>
 		</div>
