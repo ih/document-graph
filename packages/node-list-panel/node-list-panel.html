@@ -5,17 +5,19 @@
 			<span class="badge">{{count getLinkedNodes}}</span>
 		</div>
 		{{else}}
-		<div class="node-list-panel-controls">
-			<span class="close-panel glyphicon glyphicon-remove"></span>
+		<div class="node-list-panel-controls form-inline single-row">
+			<button class="btn btn-default sort-direction">
+				<span class="glyphicon {{sortDirection}}"></span>
+			</button>
 			<select class="form-control sort-property">
 				<option value="occurence" {{selected 'occurrence'}}>Occurence</option>
 				<option value="rating" {{selected 'rating'}}>Rating</option>
 				<option value="createTime" {{selected 'createTime'}}>Link Time</option>
 			</select>
+			<div class="btn btn-danger"> <span class="close-panel glyphicon glyphicon-remove"></span></div>
 		</div>
-		<button class="btn btn-default sort-direction">
-			<span class="glyphicon {{sortDirection}}"></span>
-		</button>
+
+
 		<div>
 			<ol class="list-unstyled">
 				{{#each getLinkedNodes}}

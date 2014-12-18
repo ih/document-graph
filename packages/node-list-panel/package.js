@@ -8,7 +8,8 @@ Package.on_use(function (api, where) {
 			 'permissions-api', 'selection-rendering', 'reactive-var',
 			 'reactive-dict'], ['client']);
 
-	api.add_files(['node-list-panel.html', 'node-list-panel.js'], 'client');
+	api.add_files(['node-list-panel.html', 'node-list-panel.js',
+				   'node-list-panel.less'], 'client');
 
 	if (api.export) {
 		api.export('NodeListPanel');
