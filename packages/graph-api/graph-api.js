@@ -8,13 +8,13 @@ GraphAPI = {
 		 selectedContent: [part of content that was selected]
 	 }
 	 */
-	linkProperties: ['from', 'to', 'selection', 'createTime'],
-	nodeProperties: ['content', 'title'],
+	linkProperties: ['from', 'to', 'selection', 'createdAt'],
+	nodeProperties: ['content', 'title', 'createdAt'],
 	// add allow rules to Nodes that call the securityAPI or
 	// each API should handle it's own security
 	createNode: function (nodeData) {
 		console.log('createNode of the graphAPI');
-
+		nodeData['createdAt'] = Utility.makeTimeStamp();
 		// TOOD make all this transactional node/recordcreation, permission
 		// setting, etc
 		var nodeId = Nodes.insert(_.pick(nodeData, GraphAPI.nodeProperties));
@@ -30,7 +30,7 @@ GraphAPI = {
 	connect: function (fromNodeId, toNodeId, selectionData) {
 		Links.insert({
 			from: fromNodeId, to: toNodeId, selection: selectionData,
-			createTime: (new Date()).toISOString()});
+			createdAt: Utility.makeTimeStamp()});
 	},
 	getNodeLinks: function (nodeId, direction) {
 		var selector = {};

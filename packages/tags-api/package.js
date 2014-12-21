@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-	api.use(['tags', 'records-api'], ['client', 'server']);
+	api.use(['tags', 'records-api', 'utility'], ['client', 'server']);
 	api.add_files(['tags-api.js'], ['client', 'server']);
 	if (api.export) {
 		api.export('TagsAPI');

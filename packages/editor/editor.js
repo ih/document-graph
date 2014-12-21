@@ -118,7 +118,8 @@ Template.editor.helpers({
 	},
 	nodeTags: function () {
 		return _.pluck(
-			TagsAPI.getTags(Template.instance().data.reactiveNode.get('_id')), 'label');
+			TagsAPI.getTags(
+				Template.instance().data.reactiveNode.get('_id'), true), 'label');
 	},
 	nodeTitle: function () {
 		return Template.instance().data.reactiveNode.get('title');

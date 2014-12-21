@@ -4,14 +4,17 @@ var DIMENSIONS = {'width': 1200, 'height': 768, 'top': 0, 'left': 0};
 var privateNodeTitle = 'first private node title';
 var dummyUsers = {
 	'A': {
+		username: 'aaa',
 		email: 'a@a.a',
 		password: 'aaaaaa'
 	},
 	'B': {
+		username: 'bbb',
 		email: 'b@b.b',
 		password: 'bbbbbb'
 	},
 	'IRVIN': {
+		username: 'irvin',
 		email: 'irvin.hwang@gmail.com',
 		password: 'password'
 	}
@@ -46,11 +49,11 @@ function waitForLogin(test, account) {
 	casper.start(SERVER, function () {
 		this.viewport(1200, 768);
 		this.waitForSelector('#login-name-link', function success() {
-			test.assertSelectorHasText('#login-name-link', account.email);
+			test.assertSelectorHasText('#login-name-link', account.username);
 		});
 
 		this.waitForSelector('#login-name-link', function success() {
-			test.assertSelectorHasText('#login-name-link', account.email);
+			test.assertSelectorHasText('#login-name-link', account.username);
 		});
 	});
 }
@@ -68,9 +71,10 @@ function createAccount(test, account) {
 		});
 	});
 
-	casper.echo('making accoutn... ');
+	casper.echo('making account... ');
 	casper.echo(account);
 	casper.thenEvaluate(function (account) {
+		$('#login-username').val(account.username);
 		$('#login-email').val(account.email);
 		$('#login-password').val(account.password);
 	}, account);
@@ -79,7 +83,7 @@ function createAccount(test, account) {
 
 	casper.then(function () {
 		this.waitForSelector('#login-name-link', function success() {
-			test.assertSelectorHasText('#login-name-link', account.email);
+			test.assertSelectorHasText('#login-name-link', account.username);
 		});
 	});
 }
@@ -109,7 +113,7 @@ function login(test, account) {
 	casper.echo('logging in');
 	casper.thenClick('#login-sign-in-link');
 	casper.thenEvaluate(function (account) {
-		$('#login-email').val(account.email);
+		$('#login-username-or-email').val(account.email);
 		$('#login-password').val(account.password);
 	}, account);
 
@@ -117,7 +121,7 @@ function login(test, account) {
 
 	casper.then(function () {
 		this.waitForSelector('#login-name-link', function success() {
-			test.assertSelectorHasText('#login-name-link', account.email);
+			test.assertSelectorHasText('#login-name-link', account.username);
 		});
 	});
 }
@@ -168,4 +172,46 @@ function clickSearchResult(resultText) {
 		});
 	});
 	casper.wait(1000);
+}
+
+
+function createNode(nodeData, isPrivate, tags) {
+	casper.thenClick(' button.create-node');
+	casper.waitForSelector('.editor', function () {
+		casper.thenEvaluate(function (nodeData, isPrivate, tags) {
+			// setting the values through jquery do not trigger the event handlers
+			$('.editor input.title').val(nodeData.title);
+			$('.editor input.title').trigger('input');
+			$('.editor textarea.content').val(nodeData.content);
+			$('.editor textarea.content').trigger('input');
+			if (!isPrivate) {
+				$('#privacy-editor').click();
+			}
+			if (tags) {
+				_.each(tags, function (tag) {
+					$('#myTags').tagit('createTag', tag);
+				});
+			}
+		}, nodeData, isPrivate, tags);
+	});
+
+	casper.thenClick('.editor button.save', function success() {
+		this.test.pass('created node!');
+	});
+
+	// save node id
+	casper.wait(1000, function () {
+		casper.thenClick('.search-submit');
+		casper.echo('search for saving node id');
+		casper.waitForText(nodeData.title, function () {
+			casper.echo('saving node id');
+			var url = this.evaluate(function (title) {
+				return $(
+					'.search-result a:contains("'+ title +'")').attr(
+						'href').slice(1);
+			}, nodeData.title);
+			this.echo('create node url:'+ url);
+			nodeData.url = url;
+		});
+	});
 }

@@ -51,7 +51,7 @@ casper.test.begin('View tags of node', function suite(test) {
 	casper.then(function () {
 		this.waitForSelector('.tag-label', function () {
 			this.capture('viewing-tags.png');
-			test.assertElementCount('.tag-label', 2);
+			test.assertElementCount('.tag-label', 3);
 		});
 	});
 

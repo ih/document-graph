@@ -1,10 +1,17 @@
 /** A tag is a string associated with an object
 */
 TagsAPI = {
-	tagProperties: ['objectId', 'label'],
-	// add allow rules to Tags that call the securityAPI or 
+	tagProperties: ['objectId', 'label', 'type', 'createdAt'],
+	USER: 'user',
+	SYSTEM: 'system',
+	tagTypes: ['user', 'system'],
+	// add allow rules to Tags that call the securityAPI or
 	// each API should handle it's own security
 	createTag: function (tagData) {
+		tagData.createdAt = Utility.makeTimeStamp();
+		if (!_.has(tagData, 'type')) {
+			tagData.type = TagsAPI.USER;
+		};
 		var tagId = Tags.insert(tagData);
 		var recordId = RecordsAPI.record({
 			'objectId': tagId,
@@ -22,10 +29,24 @@ TagsAPI = {
 	deleteTag: function (tagData) {
 		// probably a better way to do this, maybe make deleteTag take tag _id
 		var targetTag = Tags.findOne(tagData);
+		if (targetTag.type === TagsAPI.SYSTEM) {
+			console.warn('Cannot delete system tag');
+			return false;
+		}
 		return Tags.remove(targetTag._id);
 	},
-	getTags: function (objectId) {
+	getTags: function (objectId, userOnly) {
 		Meteor.subscribe('tags', objectId);
+		if (userOnly) {
+			return Tags.find({objectId: objectId, type: TagsAPI.USER}).fetch();
+		}
 		return Tags.find({objectId: objectId}).fetch();
+	},
+	makeCreatorTag: function (resourceId) {
+		TagsAPI.createTag({
+			objectId: resourceId,
+			label: 'made by ' + Meteor.user().username,
+			type: TagsAPI.SYSTEM
+		});
 	}
 };

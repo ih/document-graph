@@ -115,6 +115,7 @@ function makeNode(content, title) {
 		actions: PermissionsAPI.ALL,
 		resourceId: newNodeData._id
 	});
+	TagsAPI.makeCreatorTag(newNodeData._id);
 
 	return newNodeData;
 }

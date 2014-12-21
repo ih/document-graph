@@ -19,6 +19,11 @@ Ratings.allow({
 		return PermissionsAPI.hasPermission(
 			raterId, 'multiple-rate', rating.ratedId) ||
 			_.contains([-1, 0, 1], newValue);
+	},
+	remove: function (userId, doc) {
+		// TODO also let the rater delete their rating
+		console.log('checking ' + userId + ' can remove rating ' + JSON.stringify(doc));
+		return PermissionsAPI.hasPermission(userId, 'delete', doc.ratedId);
 	}
 });
 Meteor.publish('ratingsForObject', function (objectId) {

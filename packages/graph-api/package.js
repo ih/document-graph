@@ -4,7 +4,7 @@ Package.describe({
 
 Package.on_use(function (api, where) {
 	api.use(['nodes', 'links', 'records-api', 'search-api', 'permissions-api', 
-			 'tags-api'],
+			 'tags-api', 'utility'],
 			['client', 'server']);
 	api.add_files(['graph-api.js'], ['client', 'server']);
 	if (api.export) {

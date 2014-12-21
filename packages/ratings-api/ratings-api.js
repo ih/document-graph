@@ -1,5 +1,22 @@
 RatingsAPI = {
 	ratingProperties: ['value', 'raterId', 'ratedId'],
+	deleteRating: function (ratingData) {
+		console.log('removing rating:' + JSON.stringify(ratingData));
+		var targetRating = Ratings.findOne(ratingData);
+		return Ratings.remove(targetRating._id);
+	},
+	getCommunityRating: function (ratedId) {
+		console.log('getting community rating for ' + ratedId);
+		Meteor.subscribe('ratingsForObject', ratedId);
+		var ratings = Ratings.find({'ratedId': ratedId}).fetch();
+		return _.reduce(ratings, function (memo, rating){
+			return memo + rating.value;
+		}, 0);
+	},
+	getRatings: function (ratedId) {
+		Meteor.subscribe('ratingsForObject', ratedId);
+		return Ratings.find({'ratedId': ratedId}).fetch();
+	},
 	incrementRating: function (ratedId, valueChange, raterId) {
 		if (raterId === undefined) {
 			raterId = Meteor.userId();
@@ -17,13 +34,5 @@ RatingsAPI = {
 			Ratings.insert({value: valueChange, raterId: raterId, ratedId: ratedId});
 			console.log(Ratings.findOne());
 		}
-	},
-	getCommunityRating: function (ratedId) {
-		console.log('getting community rating for ' + ratedId);
-		Meteor.subscribe('ratingsForObject', ratedId);
-		var ratings = Ratings.find({'ratedId': ratedId}).fetch();
-		return _.reduce(ratings, function (memo, rating){
-			return memo + rating.value;
-		}, 0);
 	}
 };

@@ -147,13 +147,19 @@ Template.viewer.events({
 	'click .delete-node': function (event, templateInstance) {
 		GraphAPI.deleteNode(templateInstance.data);
 		Mondrian.collapseCell();
+		var nodeId = templateInstance.data._id;
 		// delete the tags
 		Utility.updateReferencedObjects(
-			templateInstance.data._id, [], TagsAPI.getTags, TagsAPI.createTag,
-			TagsAPI.deleteTag);
+			nodeId, [], TagsAPI.getTags, TagsAPI.createTag,	TagsAPI.deleteTag);
 		Utility.updateReferencedObjects(
-			templateInstance.data._id, [], PermissionsAPI.getResourcePermissions,
+			nodeId, [], RatingsAPI.getRatings, RatingsAPI.createRating,
+			RatingsAPI.deleteRating);
+		// DELETING PERMISSIONS  MUST BE LAST!
+		Utility.updateReferencedObjects(
+			nodeId, [], PermissionsAPI.getResourcePermissions,
 			PermissionsAPI.createPermission, PermissionsAPI.deletePermission);
+
+
 		// delete the permissions
 		SearchAPI.remove('nodes', templateInstance.data);
 	},

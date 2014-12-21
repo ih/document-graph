@@ -2,6 +2,9 @@ Utility = {
 	choose: function(array) {
 		return array[Math.floor(Math.random() * array.length)];
 	},
+	makeTimeStamp: function () {
+		return (new Date()).toISOString();
+	},
 	// http://www.paulirish.com/2009/random-hex-color-code-snippets/
 	randomColor: function () {
 		return '#' + (function co(lor){
@@ -72,7 +75,7 @@ Utility = {
 	/** By referenced object we mean like tags for a node
 	 */
 	updateReferencedObjects: function (
-		mainObjectId, updatedObjects, getObjects, createObject, 
+		mainObjectId, updatedObjects, getObjects, createObject,
 		deleteObject) {
 		var existingObjects = _.map(getObjects(mainObjectId), function (object) {
 			return _.omit(object, '_id');
