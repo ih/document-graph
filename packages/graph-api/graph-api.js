@@ -33,10 +33,19 @@ GraphAPI = {
 			createdAt: Utility.makeTimeStamp()});
 	},
 	getNodeLinks: function (nodeId, direction) {
-		var selector = {};
-		selector[direction] = nodeId;
-		Meteor.subscribe('nodeLinks', nodeId, direction);
-		return Links.find(selector).fetch();
+		if (!direction) {
+			console.log('getting all the node links');
+			Meteor.subscribe('nodeLinks', nodeId, 'from');
+			Meteor.subscribe('nodeLinks', nodeId, 'to');
+			return Links.find({$or: [{from: nodeId}, {to: nodeId}]}).fetch();
+		}
+		else {
+			console.log('getting links in the ' + direction + ' direction');
+			var selector = {};
+			selector[direction] = nodeId;
+			Meteor.subscribe('nodeLinks', nodeId, direction);
+			return Links.find(selector).fetch();
+		}
 	},
 	getNeighbors: function (nodeId, direction, justNodes) {
 		var otherDirection = GraphAPI.otherDirection(direction);
@@ -77,6 +86,9 @@ GraphAPI = {
 			linkData._id, {$set: _.pick(linkData, GraphAPI.linkProperties)});
 	},
 	deleteLink: function (link) {
+		if (!_.has(link, '_id')) {
+			link = Links.findOne(link);
+		}
 		return Links.remove(link._id);
 	},
 	deleteNode: function (node) {

@@ -152,8 +152,11 @@ Template.viewer.events({
 		Utility.updateReferencedObjects(
 			nodeId, [], TagsAPI.getTags, TagsAPI.createTag,	TagsAPI.deleteTag);
 		Utility.updateReferencedObjects(
-			nodeId, [], RatingsAPI.getRatings, RatingsAPI.createRating,
+			nodeId, [], RatingsAPI.getRatings, undefined,
 			RatingsAPI.deleteRating);
+		Utility.updateReferencedObjects(
+			nodeId, [], GraphAPI.getNodeLinks, undefined, GraphAPI.deleteLink);
+
 		// DELETING PERMISSIONS  MUST BE LAST!
 		Utility.updateReferencedObjects(
 			nodeId, [], PermissionsAPI.getResourcePermissions,
