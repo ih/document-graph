@@ -26,14 +26,21 @@ TagsAPI = {
 		// SearchAPI.index('nodes', _.extend(nodeData, {'_id': nodeId}));
 		return tagId;
 	},
-	deleteTag: function (tagData) {
+	// deleting system tags should be more protected
+	deleteTag: function (tagData, system) {
 		// probably a better way to do this, maybe make deleteTag take tag _id
-		var targetTag = Tags.findOne(tagData);
-		if (targetTag.type === TagsAPI.SYSTEM) {
+		if (!_.has(tagData, '_id')) {
+			tagData = Tags.findOne(tagData);
+		}
+
+		if (tagData.type === TagsAPI.SYSTEM && !system) {
 			console.warn('Cannot delete system tag');
 			return false;
 		}
-		return Tags.remove(targetTag._id);
+		return Tags.remove(tagData._id);
+	},
+	deleteAllTags: function (tagData) {
+		return TagsAPI.deleteTag(tagData, true);
 	},
 	getTags: function (objectId, userOnly) {
 		Meteor.subscribe('tags', objectId);

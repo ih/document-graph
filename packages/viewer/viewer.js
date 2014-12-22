@@ -150,7 +150,8 @@ Template.viewer.events({
 		var nodeId = templateInstance.data._id;
 		// delete the tags
 		Utility.updateReferencedObjects(
-			nodeId, [], TagsAPI.getTags, TagsAPI.createTag,	TagsAPI.deleteTag);
+			nodeId, [], TagsAPI.getTags, TagsAPI.createTag,
+			TagsAPI.deleteAllTags);
 		Utility.updateReferencedObjects(
 			nodeId, [], RatingsAPI.getRatings, undefined,
 			RatingsAPI.deleteRating);
