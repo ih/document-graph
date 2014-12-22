@@ -1,6 +1,9 @@
-var searchHostUrl =
-		'http://localhost:9200';
-// 'http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3';
+var searchHostUrl =	'http://localhost:9200';
+if (Meteor.settings.elasticSearchServer) {
+	searchHostUrl =	Meteor.settings.elasticSearchServer;
+}
+
+console.log('Searching with ' + searchHostUrl);
 
 Meteor.startup(function () {
 	// set the mapping for elasticsearch
