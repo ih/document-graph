@@ -31,7 +31,7 @@ Template.navbarSearchForm.events({
 		var query = $('#search-input').val();
 		state.set('query', query);
 		SearchAPI.find(
-			'nodes', state.get('query'), 0, PAGE_SIZE, GraphAPI.nodeProperties,
+			'nodes', state.get('query'), 0, PAGE_SIZE, GraphAPI.nodeProperties.concat(['tags']),
 			resultsHandler);
 		state.set('currentPage', 1);
 		Mondrian.setCellContent({templateName: 'searchResults', context: {}});
@@ -71,7 +71,7 @@ Template.pagination.events({
 		var pageNumber = Number($(event.target).html());
 		SearchAPI.find(
 			'nodes', state.get('query'), (pageNumber - 1)*PAGE_SIZE, PAGE_SIZE,
-			GraphAPI.nodeProperties, resultsHandler);
+			GraphAPI.nodeProperties.concat(['tags']), resultsHandler);
 		state.set('currentPage', pageNumber);
 	}
 });

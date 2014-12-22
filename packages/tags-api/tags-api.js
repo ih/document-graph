@@ -43,11 +43,13 @@ TagsAPI = {
 		return TagsAPI.deleteTag(tagData, true);
 	},
 	getTags: function (objectId, userOnly) {
-		Meteor.subscribe('tags', objectId);
+		if (Meteor.isClient) {
+			Meteor.subscribe('tags', objectId);
+		}
 		if (userOnly) {
 			return Tags.find({objectId: objectId, type: TagsAPI.USER}).fetch();
 		}
-		return Tags.find({objectId: objectId}).fetch();
+		return Tags.find({objectId: objectId}).fetch() || [];
 	},
 	makeCreatorTag: function (resourceId) {
 		TagsAPI.createTag({

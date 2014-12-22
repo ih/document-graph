@@ -26,7 +26,9 @@ function elasticSearchParse(httpResponse) {
 				'title': hit._source.title,
 				'id': hit._source._id,
 				'type': hit._type,
-				'highlight': hit.highlight};
+				'highlight': hit.highlight,
+				'score': hit._score
+			};
 		}),
 		totalHitCount: httpResponse.data.hits.total
 	};
@@ -48,6 +50,7 @@ Meteor.methods({
 		var userActorIds = _.pluck(userReadPermissions, 'actorId');
 		console.log('searching');
 		console.log(userActorIds);
+		console.log(fields);
 		var queryData = {
 			'from': offset,
 			'size': pageSize,
@@ -70,7 +73,8 @@ Meteor.methods({
 			'highlight': {
 				'fields': {
 					'title': {},
-					'content': {}
+					'content': {},
+					'tags': {}
 				},
 				'require_field_match': true
 			}
@@ -94,6 +98,8 @@ Meteor.methods({
 		});
 		var validActors = _.pluck(readPermissions, 'actorId');
 		newDocument.privacySettings = validActors;
+		newDocument.tags = _.pluck(TagsAPI.getTags(newDocument._id), 'label');
+		console.log('about to put the document:' + JSON.stringify(newDocument));
 
 		HTTP.put(url, {'data': newDocument}, function (error, result) {
 			console.log(error);
