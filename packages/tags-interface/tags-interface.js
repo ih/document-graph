@@ -12,6 +12,13 @@ state.set('activeLabels', []);
 TagsInterface = {
 	getActiveLabels: function () {
 		return state.get('activeLabels');
+	},
+	getChildLabels: function (nodeId) {
+		var links = GraphAPI.getNodeLinks(nodeId, 'from');
+		return _.uniq(_.flatten(_.map(links, function (link) {
+			var childId = link.to;
+			return _.pluck(TagsAPI.getTags(childId), 'label');
+		})));
 	}
 };
 
@@ -23,7 +30,9 @@ Template.navbarActiveLabels.helpers({
 Template.labelsDisplay.helpers({
 	getLabels: function () {
 		var tags = TagsAPI.getTags(this.objectId);
-		return _.pluck(tags, 'label');
+		var childLabels = TagsInterface.getChildLabels(this.objectId);
+		console.log('the child labels:' + JSON.stringify(childLabels));
+		return _.uniq(_.pluck(tags, 'label').concat(childLabels));
 	}
 });
 

@@ -39,6 +39,7 @@ TagsAPI = {
 		}
 		return Tags.remove(tagData._id);
 	},
+	// TODO this should be server only?
 	deleteAllTags: function (tagData) {
 		return TagsAPI.deleteTag(tagData, true);
 	},

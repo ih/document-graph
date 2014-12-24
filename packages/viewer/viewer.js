@@ -57,12 +57,6 @@ Viewer = {
 						link[GraphAPI.otherDirection(direction)]);
 				});
 			}
-			// filter by access to linked node
-			links = _.filter(links, function (link) {
-				var neighborId = link[GraphAPI.otherDirection(direction)];
-				return PermissionsAPI.hasPermission(
-					Meteor.userId(), 'read', neighborId);
-			});
 
 			// filter by tag (make function?)
 			var activeLabels = TagsInterface.getActiveLabels();
@@ -162,7 +156,7 @@ Template.viewer.events({
 			nodeId, [], RatingsAPI.getRatings, undefined,
 			RatingsAPI.deleteRating);
 		Utility.updateReferencedObjects(
-			nodeId, [], GraphAPI.getNodeLinks, undefined, GraphAPI.deleteLink);
+			nodeId, [], GraphAPI.getAllNodeLinks, undefined, GraphAPI.deleteLink);
 
 		// DELETING PERMISSIONS  MUST BE LAST!
 		Utility.updateReferencedObjects(
