@@ -57,6 +57,12 @@ Viewer = {
 						link[GraphAPI.otherDirection(direction)]);
 				});
 			}
+			// filter by access to linked node
+			links = _.filter(links, function (link) {
+				var neighborId = link[GraphAPI.otherDirection(direction)];
+				return PermissionsAPI.hasPermission(
+					Meteor.userId(), 'read', neighborId);
+			});
 
 			// filter by tag (make function?)
 			var activeLabels = TagsInterface.getActiveLabels();

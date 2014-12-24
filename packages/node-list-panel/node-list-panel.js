@@ -73,10 +73,8 @@ Template.nodePreview.events({
 			var clickedNode = GraphAPI.getNode(template.data._id);
 			if (clickedNode) {
 				console.log('clicked on node ' + template.data.id + ':' + JSON.stringify(clickedNode));
-				// Mondrian.setCellContent({templateName: 'viewer', context: clickedNode});
-				Mondrian.divideCell(
-					undefined, undefined, undefined,
-					{templateName: 'viewer', context: clickedNode});
+				Mondrian.setCellContent({templateName: 'viewer', context: clickedNode});
+
 				computation.stop();
 			}
 		});
