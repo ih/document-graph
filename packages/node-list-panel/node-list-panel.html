@@ -1,4 +1,5 @@
 <template name="nodeListPanel">
+	{{#if hasLinks}}
 	<div class="node-list-panel">
 		{{#if showCount}}
 		<div class="node-count">
@@ -29,6 +30,7 @@
 		</div>
 		{{/if}}
 	</div>
+	{{/if}}
 </template>
 
 <template name="nodePreview">

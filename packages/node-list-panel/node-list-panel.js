@@ -29,6 +29,11 @@ Template.nodeListPanel.helpers({
 			return linkedNode;
 		});
 	},
+	hasLinks: function () {
+		var links = Viewer.filterLinks(
+			Template.instance().data.direction, Mondrian.getFocusedCellNodeId());
+		return links.length > 0;
+	},
 	selected: function (optionProperty) {
 		return optionProperty === Template.instance().sortProperty.get() ? 'selected' : '';
 	},
