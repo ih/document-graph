@@ -30,8 +30,12 @@ Template.nodeListPanel.helpers({
 		});
 	},
 	hasLinks: function () {
+		var direction = Template.instance().data.direction;
 		var links = Viewer.filterLinks(
-			Template.instance().data.direction, Mondrian.getFocusedCellNodeId());
+			direction, Mondrian.getFocusedCellNodeId());
+		if (links.length === 0) {
+			NodeListPanel.openStates.set(direction, false);
+		}
 		return links.length > 0;
 	},
 	selected: function (optionProperty) {
