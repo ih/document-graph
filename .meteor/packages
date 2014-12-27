@@ -5,9 +5,9 @@
 
 standard-app-packages
 accounts-password
-accounts-ui
 conductor
 mrt:jquery-ui
 less
 iron:router
 nemo64:bootstrap
+ian:accounts-ui-bootstrap-3
