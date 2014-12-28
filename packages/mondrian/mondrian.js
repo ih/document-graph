@@ -233,6 +233,13 @@ Mondrian = {
 		cellState['content'] = newContent;
 		state.set(targetCellId, cellState);
 
+		if (newContent.templateName === 'viewer') {
+			analytics.track('Viewed Document', {
+				nodeId: newContent.context._id,
+				title: newContent.context.title
+			});
+		}
+
 		return true;
 	}
 };

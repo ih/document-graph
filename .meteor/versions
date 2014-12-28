@@ -64,6 +64,7 @@ nodes@0.0.0
 npm-bcrypt@0.7.7
 observe-sequence@1.0.4
 ordered-dict@1.0.2
+percolatestudio:segment.io@1.1.0_1
 permissions@0.0.0
 permissions-api@0.0.0
 random@1.0.2

@@ -35,6 +35,9 @@ Template.navbarSearchForm.events({
 			resultsHandler);
 		state.set('currentPage', 1);
 		Mondrian.setCellContent({templateName: 'searchResults', context: {}});
+		analytics.track('Searched', {
+			query: query
+		});
 	}
 });
 

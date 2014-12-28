@@ -1,10 +1,24 @@
-Template.layout.created = function () {
+Meteor.startup(function () {
+	console.log('starting with segment' + Meteor.settings.public.segmentKey);
+	analytics.load(Meteor.settings.public.segmentKey);
+
 	Tracker.autorun(function () {
-		if (Meteor.userId()) {
+		var user = Meteor.user();
+		if (user) {
 			console.log('subscribing to my permissions');
 			Meteor.subscribe('myPermissions');
+			analytics.identify(user._id, {
+				username: user.username,
+				email: user.emails[0].address
+			});
+			// TODO move to account creation
+			analytics.track("Logged In");
 		}
 	});
+});
+
+Template.layout.created = function () {
+
 };
 
 Template.registerHelper('count', function (countable) {

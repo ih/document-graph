@@ -1,0 +1,6 @@
+{
+    "elasticSearchServer": "http://localhost:9200",
+    "public": {
+	"segmentKey": "r4hBuJaUKvohtuHYRmHcBq8EsLtxOan8"
+    }
+}

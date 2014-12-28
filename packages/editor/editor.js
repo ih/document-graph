@@ -67,6 +67,15 @@ Template.editor.events({
 
 		SearchAPI.index('nodes', updatedNodeData);
 
+		if (templateInstance.data.mode === 'create') {
+			analytics.track('Created Document');
+		}
+		else if (templateInstance.data.mode === 'edit') {
+			analytics.track('Edited Document', {
+				nodeId: updatedNodeData._id
+			});
+		}
+
 		Mondrian.setCellContent({templateName: 'viewer', context: updatedNodeData});
 
 

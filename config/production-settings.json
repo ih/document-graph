@@ -1,3 +1,6 @@
 {
-    "elasticSearchServer": "http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3"
+    "elasticSearchServer": "http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3",
+    "public": {
+	"segmentKey": "wIi3lEhTV05WadDN6OHA4rlr7oGcEjss"
+    }
 }
