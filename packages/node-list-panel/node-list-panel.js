@@ -35,6 +35,10 @@ Template.nodeListPanel.helpers({
 			direction, Mondrian.getFocusedCellNodeId());
 		if (links.length === 0) {
 			NodeListPanel.openStates.set(direction, false);
+			var otherDirection = GraphAPI.otherDirection(direction);
+			if (!NodeListPanel.openStates.get(otherDirection)) {
+				Viewer.hideSelections();
+			}
 		}
 		return links.length > 0;
 	},
