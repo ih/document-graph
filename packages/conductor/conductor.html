@@ -4,19 +4,28 @@
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#">Document Graph</a>
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
 			</div>
 			<div class="collapse navbar-collapse">
 				{{#if currentUser}}
 				{{> navbarSearchForm}}
-				<button class="btn btn-default navbar-btn create-node">Create Node</button>
-				{{#if isSelectionMade}}
-				<button class="btn btn-primary navbar-btn create-linked-node">Create Linked Node</button>
-				{{#if isLinkMode}}
-				<button class="btn btn-primary navbar-btn link {{validCell}}">Link</button>
-				{{else}}
-				<button class="btn btn-primary navbar-btn link-existing-node">Link To Existing Node</button>
-				{{/if}}
-				{{/if}}
+				<form class="navbar-form navbar-left">
+					<!--putting these in a form seems to prevent overflow of signin, but why? -->
+					<button class="btn btn-default create-node">Create Node</button>
+					{{#if isSelectionMade}}
+					<button class="btn btn-primary create-linked-node">Create Linked Node</button>
+					{{#if isLinkMode}}
+					<button class="btn btn-primary link {{validCell}}">Link</button>
+					{{else}}
+					<button class="btn btn-primary link-existing-node">Link To Existing Node</button>
+					{{/if}}
+					{{/if}}
+				</form>
 				{{> navbarActiveLabels}}
 				{{/if}}
 				<ul class="nav navbar-nav navbar-right">

@@ -27,6 +27,7 @@ Template.registerHelper('count', function (countable) {
 
 Template.layout.events({
 	'click .create-node': function (event) {
+		event.preventDefault();
 		var newNodeData = makeNode();
 
 		Mondrian.setCellContent({
@@ -34,6 +35,7 @@ Template.layout.events({
 			context: {node: newNodeData, mode: 'create'}});
 	},
 	'click .create-linked-node': function (event) {
+		event.preventDefault();
 		var selection = Viewer.state.get('selection');
 		var newNodeData = makeNode('', selection.selectedContent);
 		GraphAPI.connect(selection.nodeId, newNodeData._id, selection);
@@ -44,6 +46,7 @@ Template.layout.events({
 				context: {node: newNodeData, mode: 'create'}});
 	},
 	'click .link-existing-node': function (event, templateInstance) {
+		event.preventDefault();
 		Viewer.state.set('linkMode', true);
 		var selection = Viewer.state.get('selection');
 		Tracker.autorun(function (computation) {
@@ -56,6 +59,7 @@ Template.layout.events({
 		});
 	},
 	'click .link': function (event, templateInstance) {
+		event.preventDefault();
 		var selection = Viewer.state.get('selection');
 		var toNodeId = Mondrian.getFocusedCellNodeId();
 		GraphAPI.connect(selection.nodeId, toNodeId, selection);
