@@ -19,7 +19,7 @@ Template.nodeListPanel.helpers({
 		var direction = Template.instance().data.direction;
 		var links = Viewer.filterLinks(
 			direction, Mondrian.getFocusedCellNodeId(), sortProperty,
-			sortAscending);
+			sortAscending, undefined, true);
 		var otherDirection = GraphAPI.otherDirection(direction);
 		return _.map(links, function (link) {
 			var linkedNode = GraphAPI.getNode(link[otherDirection]);
@@ -36,9 +36,9 @@ Template.nodeListPanel.helpers({
 		if (links.length === 0) {
 			NodeListPanel.openStates.set(direction, false);
 			var otherDirection = GraphAPI.otherDirection(direction);
-			if (!NodeListPanel.openStates.get(otherDirection)) {
-				Viewer.hideSelections();
-			}
+			// if (!NodeListPanel.openStates.get(otherDirection)) {
+			// 	Viewer.hideSelections();
+			// }
 		}
 		return links.length > 0;
 	},
@@ -65,9 +65,9 @@ Template.nodeListPanel.events({
 	},
 	'click .close-panel': function (event, templateInstance) {
 		NodeListPanel.openStates.set(templateInstance.data.direction, false);
-		if (!NodeListPanel.openStates.get(GraphAPI.otherDirection(templateInstance.data.direction))) {
-			Viewer.hideSelections();
-		}
+		// if (!NodeListPanel.openStates.get(GraphAPI.otherDirection(templateInstance.data.direction))) {
+		// 	Viewer.hideSelections();
+		// }
 	},
 	'click .node-count': function (event, templateInstance) {
 		NodeListPanel.openStates.set(templateInstance.data.direction, true);

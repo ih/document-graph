@@ -25,6 +25,10 @@ Template.registerHelper('count', function (countable) {
 	return countable.length;
 });
 
+Template.registerHelper('isShowingSelections', function () {
+	return Viewer.isShowingSelections();
+});
+
 Template.layout.events({
 	'click .create-node': function (event) {
 		event.preventDefault();
@@ -73,6 +77,15 @@ Template.layout.events({
 				computation.stop();
 			}
 		});
+	},
+	'click .toggle-selections': function (event, templateInstance) {
+		event.preventDefault();
+		if (Viewer.isShowingSelections()) {
+			Viewer.hideSelections();
+		}
+		else {
+			Viewer.showSelections();
+		}
 	}
 });
 

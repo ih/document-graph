@@ -85,6 +85,11 @@ GraphAPI = {
 		}
 		return Nodes.findOne(nodeId);
 	},
+	isIntersecting: function (border1, border2) {
+		var earlierBorder = border1.open < border2.open ? border1 : border2;
+		var laterBorder = border1.open < border2.open ? border2 : border1;
+		return earlierBorder.close >= laterBorder.open;
+	},
 	otherDirection: function (direction) {
 		return direction === 'to' ? 'from' : 'to';
 	},

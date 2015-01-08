@@ -18,6 +18,8 @@ showingSelections boolean variable
 
 var state = new ReactiveDict();
 state.set('colorMap', {});
+state.set('showingSelections', true);
+console.log('state initialized');
 
 Viewer = {
 	initialize: function () {
@@ -26,6 +28,20 @@ Viewer = {
 	// Consider making state read-only by having a function
 	// readOnly(propertyName) = return state.get(propertyName)
 	state: state,
+	getSelectedLinks: function (nodeId) {
+		if (state.get('selection')) {
+			var links = Viewer.filterLinks('from', nodeId);
+			console.log('getting the selected links out of all links: ' + JSON.stringify(links));
+			console.log('based on selection ' + JSON.stringify(state.get('selection')));
+			return _.filter(links, function (link) {
+				return GraphAPI.isIntersecting(
+					state.get('selection').border, link.selection.border);
+			});
+		}
+		else {
+			return [];
+		}
+	},
 	isSelectionMade: function () {
 		return state.get('selection') &&
 			state.get('selection').selectedContent != '';
@@ -40,7 +56,7 @@ Viewer = {
 		state.set('showingSelections', false);
 	},
 	filterLinks: function (
-		direction, nodeId, sortProperty, sortAscending, linkedNodeIds) {
+		direction, nodeId, sortProperty, sortAscending, linkedNodeIds, bySelection) {
 		if (nodeId) {
 			console.log('getting links for viewer');
 			var links = GraphAPI.getNodeLinks(nodeId, direction);
@@ -69,6 +85,18 @@ Viewer = {
 				});
 			}
 
+			// filter by selection
+			// (only show links that intersect with the current selection)
+			if (state.get('selection')) {
+				var intersectingLinks = _.filter(links, function (link) {
+					return GraphAPI.isIntersecting(
+						state.get('selection').border, link.selection.border);
+				});
+				if (bySelection && intersectingLinks.length > 0) {
+					links = intersectingLinks;
+				}
+			}
+
 			// sorting related code
 			if (sortProperty === 'rating') {
 				_.each(links, function (link) {
@@ -95,13 +123,21 @@ Viewer = {
 };
 
 Template.viewer.created = function () {
-
+	function getTime() {
+		setTimeout(function () {
+			Session.set('time', Date.now());
+			getTime();
+		}, 5000);
+	}
+	getTime();
 };
 
 Template.viewer.rendered = function () {
+	var templateInstance = this;
 	console.log('viewer rendered');
-	console.log(this);
-	this.$('.title').css('background-color', SelectionRendering.colorMap.get(this.data._id));
+	console.log(templateInstance);
+	templateInstance.$('.title').css(
+		'background-color', SelectionRendering.colorMap.get(this.data._id));
 };
 
 
@@ -117,24 +153,31 @@ Template.viewer.helpers({
 	isFocused: function () {
 		return Mondrian.getFocusedCellNodeId() === Template.instance().data._id;
 	},
-	isShowingSelections: function () {
-		return Viewer.isShowingSelections();// state.get('showingSelections');
-	},
 	renderContent: function (linkedNodeIds) {
+		// workaround for meteor bug with rendering when there is a selection?
+		// if (Template.instance().firstNode) {
+		// 	Template.instance().$('.content-viewer pre').empty();
+		// }
+
 		var nodeId = Template.instance().data._id;
 		var links = Viewer.filterLinks('from', nodeId, null, true, linkedNodeIds);
 		var renderedContent = SelectionRendering.addSelections(
-			Template.instance().data.content, links);
-		// var borderDictionary = createBorderDictionary(links);
-        // var renderedContent = insertSelectionBorders(
-		// 	Template.instance().data.content, borderDictionary);
-		// var nodeIds = _.pluck(links, 'to');
-		// renderedContent = addColors(nodeIds, renderedContent);
-        return renderedContent;
+			Template.instance().data.content, links, state.get('selection'));
+		// work around
+
+		if (Template.instance().firstNode) {
+			Template.instance().find('.content-viewer pre').innerHTML = renderedContent;
+		}
+
+		return renderedContent;
 	},
 	can: function (action) {
 		var nodeId = Template.instance().data._id;
 		return PermissionsAPI.hasPermission(Meteor.userId(), action, nodeId);
+	},
+	test: function () {
+		var selection = window.getSelection();
+		return Session.get('time');
 	}
 });
 
@@ -174,13 +217,14 @@ Template.viewer.events({
 
 			var selectionData = getBorderAndSelectedContent(
 				selection, templateInstance);
-			selectionData.nodeId = this._id;
+			// selectionData.nodeId = this._id;
 			state.set('selection', selectionData);
+			// state.set('selection', Date.now());
 		}
 	},
 	'mousedown .content-viewer': function(event, templateInstance) {
 		if (!state.get('linkMode')) {
-			removeSelectionMarkers(templateInstance);
+			// state.set('selection', null);
 		}
 	}
 });
@@ -214,7 +258,18 @@ function getBorderAndSelectedContent(selection, templateInstance) {
 	console.log(border);
 	console.log('selected content:'+selectedContent);
 
-	// removeSelectionMarkers();
+	removeSelectionMarkers(templateInstance);
+
+	// workaround for meteor bug with rendering when there is a selection?
+	// if (selectedContent.length > 0) {
+	// 	templateInstance.$('.content-viewer pre').empty();
+	// }
+
+
+	// try to recreate and submit issue
+	// var range = selection.getRangeAt(0);
+	// range.deleteContents();
+	// selection.removeAllRanges();
 	return {border: border, selectedContent: selectedContent};
 }
 
@@ -225,16 +280,21 @@ function insertSelectionMarkers(selection) {
 	var markers = createMarkers();
 	// http://stackoverflow.com/a/9829634 to move the cursor to the end
 	var range = selection.getRangeAt(0);
-	var selectedContent = range.toString();
-	range.deleteContents();
-	var selectionNode = $(
-		markers.open + selectedContent + markers.close + '</span>')[0];
-	range.insertNode(selectionNode);
 
-	range.setStartAfter(selectionNode);
-	range.setEndAfter(selectionNode);
-	selection.removeAllRanges();
-	selection.addRange(range);
+	range.insertNode($(markers.open)[0]);
+	// insert the closing marker at the end of the selection
+	range.collapse(false);
+	range.insertNode($(markers.close)[0]);
+	// var selectedContent = range.toString();
+	// range.deleteContents();
+	// var selectionNode = $(
+	// 	markers.open + selectedContent + markers.close + '</span>')[0];
+	// range.insertNode(selectionNode);
+
+	// range.setStartAfter(selectionNode);
+	// range.setEndAfter(selectionNode);
+	// selection.removeAllRanges();
+	// selection.addRange(range);
 
 	return markers;
 
@@ -242,20 +302,34 @@ function insertSelectionMarkers(selection) {
 		// need a string that probably does not appear in the content
 		// so that we can use indexOf to find it
 		var uniqueString = new Date().getTime();
-		// this tag is closed when the dom node is created
 		var openMarker =
-			'<span class="selection-marker" id="open'+uniqueString+'">';
-		var closeMarker = '<span class="close-selection-marker" id="close' +
-				uniqueString + '"></span>';
-
+			'<span class="selectionMarker" id="open'+uniqueString+'"></span>';
+		var closeMarker =
+			'<span class="selectionMarker" id="close'+uniqueString+'"></span>';
+		// [0] since they are jquery created and you need to extract the dom
+		// node for insertNode
 		return {open: openMarker, close: closeMarker};
 	}
+
+	// function createMarkers() {
+	// 	// need a string that probably does not appear in the content
+	// 	// so that we can use indexOf to find it
+	// 	var uniqueString = new Date().getTime();
+	// 	// this tag is closed when the dom node is created
+	// 	var openMarker =
+	// 		'<span class="selection-marker" id="open'+uniqueString+'">';
+	// 	var closeMarker = '<span class="close-selection-marker" id="close' +
+	// 			uniqueString + '"></span>';
+
+	// 	return {open: openMarker, close: closeMarker};
+	// }
 }
 
 function removeSelectionMarkers(templateInstance) {
 	// http://stackoverflow.com/a/4232971
-	templateInstance.$('.selection-marker').contents().unwrap();
-	templateInstance.$('.close-selection-marker').remove();
+	templateInstance.$('.selectionMarker').remove();
+	// templateInstance.$('.selection-marker').contents().unwrap();
+	// templateInstance.$('.close-selection-marker').remove();
 }
 
 /** Remove everything, but the original content and the selection markers in

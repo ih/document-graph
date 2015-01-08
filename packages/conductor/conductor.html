@@ -16,6 +16,13 @@
 				{{> navbarSearchForm}}
 				<form class="navbar-form navbar-left">
 					<!--putting these in a form seems to prevent overflow of signin, but why? -->
+					<button class="toggle-selections btn btn-default">
+						{{#if isShowingSelections}}
+						<span class="glyphicon glyphicon-eye-open"></span>
+						{{else}}
+						<span class="glyphicon glyphicon-eye-close"></span>
+						{{/if}}
+					</button>
 					<button class="btn btn-default create-node">Create Node</button>
 					{{#if isSelectionMade}}
 					<button class="btn btn-primary create-linked-node">Create Linked Node</button>

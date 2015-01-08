@@ -1,8 +1,8 @@
 var colorMap = new ReactiveDict();
 
 SelectionRendering = {
-	addSelections: function (content, links) {
-		var borderDictionary = createBorderDictionary(links);
+	addSelections: function (content, links, currentSelection) {
+		var borderDictionary = createBorderDictionary(links, currentSelection);
 		var renderedContent = insertSelectionBorders(content, borderDictionary);
 		renderedContent = addColors(_.pluck(links, 'to'), renderedContent);
 		return renderedContent;
@@ -11,8 +11,14 @@ SelectionRendering = {
 };
 
 
-function createBorderDictionary(links) {
+function createBorderDictionary(links, currentSelection) {
     var borderDictionary = {};
+	// add selection as a "link" if it exists
+	// if (currentSelection && currentSelection.selectedContent != '') {
+	// 	var fakeLink = {selection: currentSelection};
+	// 	fakeLink.to = 'selection-marker';
+	// 	links.push(fakeLink);
+	// }
     _.each(links, function (link) {
         if (borderDictionary[link.selection.border.open] === undefined) {
             borderDictionary[link.selection.border.open] = {open : [],
@@ -25,6 +31,20 @@ function createBorderDictionary(links) {
         borderDictionary[link.selection.border.open]['open'].push(link.to);
         borderDictionary[link.selection.border.close]['close'].push(link.to);
     });
+
+	if (currentSelection && currentSelection.selectedContent != '') {
+        if (borderDictionary[currentSelection.border.open] === undefined) {
+            borderDictionary[currentSelection.border.open] = {open : [],
+															close : []};
+        }
+        if (borderDictionary[currentSelection.border.close] === undefined) {
+            borderDictionary[currentSelection.border.close] = {open : [],
+															 close : []};
+        }
+        borderDictionary[currentSelection.border.open]['open'].push('selection-marker');
+        borderDictionary[currentSelection.border.close]['close'].push('selection-marker');
+	}
+
     return borderDictionary;
 }
 
@@ -78,6 +98,7 @@ function insertSelectionBorders (content, borderDictionary) {
 }
 
 function addColors(nodeIds, renderedContent) {
+	// nodeIds = _.without(nodeIds, 'selection-marker');
 	var $wrapped = $('<div>'+renderedContent+'</div>');
 	_.each(nodeIds, function (nodeId) {
 		if (colorMap.get(nodeId) === undefined) {
