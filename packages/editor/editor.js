@@ -30,7 +30,18 @@ Template.editor.events({
 		var node = templateInstance.data.node;
 		if (templateInstance.data.mode === 'create') {
 			GraphAPI.deleteNode(node);
+			Utility.updateReferencedObjects(
+				node._id, [], TagsAPI.getTags, TagsAPI.createTag,
+				TagsAPI.deleteAllTags);
+			Utility.updateReferencedObjects(
+				node._id, [], GraphAPI.getAllNodeLinks, undefined, GraphAPI.deleteLink);
 			Mondrian.collapseCell();
+
+			// DELETING PERMISSIONS  MUST BE LAST!
+			Utility.updateReferencedObjects(
+				node._id, [], PermissionsAPI.getResourcePermissions,
+				PermissionsAPI.createPermission, PermissionsAPI.deletePermission);
+
 		}
 		else if (templateInstance.data.mode === 'edit') {
 			Mondrian.setCellContent({
