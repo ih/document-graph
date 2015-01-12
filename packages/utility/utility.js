@@ -89,5 +89,31 @@ Utility = {
 		_.each(objectsToDelete, function (oldObject) {
 			deleteObject(oldObject);
 		});
+	},
+	// based on http://davecardwell.co.uk/javascript/jquery/plugins/jquery-getpath/jquery-getpath.js
+	getSelector: function (targetElement, rootElement, path) {
+		if (typeof path == 'undefined') {
+			path = '';
+		}
+		// make this more robust
+		if (targetElement.tagName === rootElement.tagName &&
+			targetElement.className === rootElement.className) {
+			return path;
+		}
+
+		var tagName = targetElement.tagName.toLowerCase();
+		var id = targetElement.id;
+		var classes = targetElement.className;
+
+		if (id != '') {
+			tagName += '#' + id;
+		}
+
+		if (classes != '') {
+			tagName += '.' + classes.split(/[\s\n]+/).join('.');
+		}
+
+		return Utility.getSelector(
+			targetElement.parentElement, rootElement, ' > ' + tagName + path);
 	}
 };

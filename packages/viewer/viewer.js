@@ -12,8 +12,10 @@ Selection Object
 }
 
 it also determines whether selections are being shown via the
-
 showingSelections boolean variable
+
+also has a boolean,isIntersectingSelection, for whether the selection is
+ intersecting with a link
 */
 
 var state = new ReactiveDict();
@@ -33,9 +35,11 @@ Viewer = {
 			var links = Viewer.filterLinks('from', nodeId);
 			console.log('getting the selected links out of all links: ' + JSON.stringify(links));
 			console.log('based on selection ' + JSON.stringify(state.get('selection')));
+			// add to state variable so that node-list-panel has access
+			state.set('isIntersectingSelection', GraphAPI.isIntersecting(
+					state.get('selection').border, link.selection.border));
 			return _.filter(links, function (link) {
-				return GraphAPI.isIntersecting(
-					state.get('selection').border, link.selection.border);
+				return state.get('isIntersectingSelection');
 			});
 		}
 		else {
@@ -163,21 +167,12 @@ Template.viewer.helpers({
 		var links = Viewer.filterLinks('from', nodeId, null, true, linkedNodeIds);
 		var renderedContent = SelectionRendering.addSelections(
 			Template.instance().data.content, links, state.get('selection'));
-		// work around
-
-		if (Template.instance().firstNode) {
-			Template.instance().find('.content-viewer pre').innerHTML = renderedContent;
-		}
 
 		return renderedContent;
 	},
 	can: function (action) {
 		var nodeId = Template.instance().data._id;
 		return PermissionsAPI.hasPermission(Meteor.userId(), action, nodeId);
-	},
-	test: function () {
-		var selection = window.getSelection();
-		return Session.get('time');
 	}
 });
 
@@ -217,14 +212,13 @@ Template.viewer.events({
 
 			var selectionData = getBorderAndSelectedContent(
 				selection, templateInstance);
-			// selectionData.nodeId = this._id;
+			selectionData.nodeId = this._id;
 			state.set('selection', selectionData);
-			// state.set('selection', Date.now());
 		}
 	},
 	'mousedown .content-viewer': function(event, templateInstance) {
 		if (!state.get('linkMode')) {
-			// state.set('selection', null);
+			state.set('selection', null);
 		}
 	}
 });
@@ -244,9 +238,10 @@ function getBorderAndSelectedContent(selection, templateInstance) {
 	// object. that's why we need to pass template instead of an html string
 	// since getting the html has to happen after inserting the selection
 	// markers
-	var selectionMarkers = insertSelectionMarkers(selection);
-	var htmlContent = templateInstance.$('.content-viewer pre').html();
-	var nonAnnotatedMarkedContent = removeAnnotations(htmlContent);
+	var $htmlCopy = $('.content-viewer pre').clone();
+	var selectionMarkers = insertSelectionMarkers(selection, $htmlCopy);
+
+	var nonAnnotatedMarkedContent = removeAnnotations($htmlCopy.html());
 	var border = {
 		'open': nonAnnotatedMarkedContent.indexOf(selectionMarkers.open),
 		'close': nonAnnotatedMarkedContent.indexOf(selectionMarkers.close) -
@@ -258,7 +253,7 @@ function getBorderAndSelectedContent(selection, templateInstance) {
 	console.log(border);
 	console.log('selected content:'+selectedContent);
 
-	removeSelectionMarkers(templateInstance);
+
 
 	// workaround for meteor bug with rendering when there is a selection?
 	// if (selectedContent.length > 0) {
@@ -276,25 +271,22 @@ function getBorderAndSelectedContent(selection, templateInstance) {
 /** Markers (special html tags) get inserted into the node content to
  indicate the location of the selection borders.
 **/
-function insertSelectionMarkers(selection) {
+function insertSelectionMarkers(selection, $htmlCopy) {
 	var markers = createMarkers();
 	// http://stackoverflow.com/a/9829634 to move the cursor to the end
 	var range = selection.getRangeAt(0);
 
-	range.insertNode($(markers.open)[0]);
-	// insert the closing marker at the end of the selection
-	range.collapse(false);
-	range.insertNode($(markers.close)[0]);
-	// var selectedContent = range.toString();
-	// range.deleteContents();
-	// var selectionNode = $(
-	// 	markers.open + selectedContent + markers.close + '</span>')[0];
-	// range.insertNode(selectionNode);
+	if (range.collapsed) {
+		// insert close marker first otherwise the offsets will be wrong
+		insertMarker(markers.close, selection.anchorNode, selection.anchorOffset);
+		insertMarker(markers.open, selection.anchorNode, selection.anchorOffset);
+	}
+	else {
+		// insert close marker first otherwise the offsets will be wrong
+		insertMarker(markers.close, range.endContainer, range.endOffset);
+		insertMarker(markers.open, range.startContainer, range.startOffset);
+	}
 
-	// range.setStartAfter(selectionNode);
-	// range.setEndAfter(selectionNode);
-	// selection.removeAllRanges();
-	// selection.addRange(range);
 
 	return markers;
 
@@ -311,25 +303,22 @@ function insertSelectionMarkers(selection) {
 		return {open: openMarker, close: closeMarker};
 	}
 
-	// function createMarkers() {
-	// 	// need a string that probably does not appear in the content
-	// 	// so that we can use indexOf to find it
-	// 	var uniqueString = new Date().getTime();
-	// 	// this tag is closed when the dom node is created
-	// 	var openMarker =
-	// 		'<span class="selection-marker" id="open'+uniqueString+'">';
-	// 	var closeMarker = '<span class="close-selection-marker" id="close' +
-	// 			uniqueString + '"></span>';
+	function insertMarker(marker, rangeNode, rangeOffset) {
+		// assumes rangeNode is uniquely identifiable in
+		var parentSelector = Utility.getSelector(rangeNode.parentElement, $htmlCopy[0]);
+		var indexOfNode = _.indexOf(rangeNode.parentElement.childNodes, rangeNode);
 
-	// 	return {open: openMarker, close: closeMarker};
-	// }
-}
+		var parentElementCopy = $htmlCopy[0];
 
-function removeSelectionMarkers(templateInstance) {
-	// http://stackoverflow.com/a/4232971
-	templateInstance.$('.selectionMarker').remove();
-	// templateInstance.$('.selection-marker').contents().unwrap();
-	// templateInstance.$('.close-selection-marker').remove();
+		if (parentSelector != '') {
+			parentElementCopy = $htmlCopy.find(parentSelector)[0];
+		}
+
+		// https://developer.mozilla.org/en-US/docs/Web/API/Text.splitText
+		var textNode = parentElementCopy.childNodes[indexOfNode];
+		var replacementNode = textNode.splitText(rangeOffset);
+		parentElementCopy.insertBefore($(marker)[0], replacementNode);
+	}
 }
 
 /** Remove everything, but the original content and the selection markers in

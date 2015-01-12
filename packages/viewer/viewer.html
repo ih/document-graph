@@ -6,27 +6,22 @@
 	<div class="row viewer viewer-{{_id}}">
 		<div class="col-md-12">
 			<div class="title single-row">
-
 				<h2>
 					{{title}}
 				</h2>
-
-				<div>
-					{{test}}
-				</div>
 			</div>
 			<div class="content-viewer single-row">
 				{{#if isFocused}}
 				{{#if isShowingSelections}}
-				<pre>{{{renderContent}}}</pre>
+				<pre class="content">{{{renderContent}}}</pre>
 				{{else}}
-				<pre>{{{renderContent displayedNodeIds}}}</pre>
+				<pre class="content">{{{renderContent displayedNodeIds}}}</pre>
 				{{/if}}
 				{{else}}
 				{{#if focusedNodeId}}
-				<pre>{{{renderContent focusedNodeId}}}</pre>
+				<pre class="content">{{{renderContent focusedNodeId}}}</pre>
 				{{else}}
-				<pre>{{{renderContent displayedNodeIds}}}</pre>
+				<pre class="content">{{{renderContent displayedNodeIds}}}</pre>
 				{{/if}}
 				{{/if}}
 			</div>
