@@ -8,6 +8,12 @@ Template.nodeListPanel.created = function () {
 	this.sortProperty = new ReactiveVar('occurence');
 	this.sortAscending = new ReactiveVar(true);
 	NodeListPanel.openStates.set(this.data.direction, false);
+
+	Tracker.autorun(function (computation) {
+		if (Viewer.state.get('linkClicked')) {
+			NodeListPanel.openStates.set('from', true);
+		}
+	});
 };
 
 Template.nodeListPanel.helpers({

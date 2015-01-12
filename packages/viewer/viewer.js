@@ -35,11 +35,10 @@ Viewer = {
 			var links = Viewer.filterLinks('from', nodeId);
 			console.log('getting the selected links out of all links: ' + JSON.stringify(links));
 			console.log('based on selection ' + JSON.stringify(state.get('selection')));
-			// add to state variable so that node-list-panel has access
-			state.set('isIntersectingSelection', GraphAPI.isIntersecting(
-					state.get('selection').border, link.selection.border));
+
 			return _.filter(links, function (link) {
-				return state.get('isIntersectingSelection');
+				return GraphAPI.isIntersecting(
+					state.get('selection').border, link.selection.border);
 			});
 		}
 		else {
@@ -204,6 +203,10 @@ Template.viewer.events({
 
 		// delete the permissions
 		SearchAPI.remove('nodes', templateInstance.data);
+	},
+	'click .selection-border': function (event, templateInstance) {
+		// TODO keep track if this is a to or from selection
+		state.set('linkClicked', Date.now().toString());
 	},
 	// TODO support keyboard highlighting
 	'mouseup .content-viewer': function (event, templateInstance) {
