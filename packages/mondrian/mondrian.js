@@ -188,6 +188,9 @@ Mondrian = {
 		if (cellContent && _.has(cellContent.context, '_id')) {
 			return cellContent.context._id;
 		}
+		else if (cellContent && cellContent.templateName === 'Editor') {
+			return cellContent.context.node._id;
+		}
 		else {
 			return null;
 		}

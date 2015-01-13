@@ -14,8 +14,7 @@ Selection Object
 it also determines whether selections are being shown via the
 showingSelections boolean variable
 
-also has a boolean,isIntersectingSelection, for whether the selection is
- intersecting with a link
+linkedClickEvent which holds the last time a link was clicked
 */
 
 var state = new ReactiveDict();
@@ -30,21 +29,6 @@ Viewer = {
 	// Consider making state read-only by having a function
 	// readOnly(propertyName) = return state.get(propertyName)
 	state: state,
-	getSelectedLinks: function (nodeId) {
-		if (state.get('selection')) {
-			var links = Viewer.filterLinks('from', nodeId);
-			console.log('getting the selected links out of all links: ' + JSON.stringify(links));
-			console.log('based on selection ' + JSON.stringify(state.get('selection')));
-
-			return _.filter(links, function (link) {
-				return GraphAPI.isIntersecting(
-					state.get('selection').border, link.selection.border);
-			});
-		}
-		else {
-			return [];
-		}
-	},
 	isSelectionMade: function () {
 		return state.get('selection') &&
 			state.get('selection').selectedContent != '';
@@ -126,13 +110,7 @@ Viewer = {
 };
 
 Template.viewer.created = function () {
-	function getTime() {
-		setTimeout(function () {
-			Session.set('time', Date.now());
-			getTime();
-		}, 5000);
-	}
-	getTime();
+
 };
 
 Template.viewer.rendered = function () {
@@ -157,17 +135,16 @@ Template.viewer.helpers({
 		return Mondrian.getFocusedCellNodeId() === Template.instance().data._id;
 	},
 	renderContent: function (linkedNodeIds) {
-		// workaround for meteor bug with rendering when there is a selection?
-		// if (Template.instance().firstNode) {
-		// 	Template.instance().$('.content-viewer pre').empty();
-		// }
-
 		var nodeId = Template.instance().data._id;
 		var links = Viewer.filterLinks('from', nodeId, null, true, linkedNodeIds);
-		var renderedContent = SelectionRendering.addSelections(
-			Template.instance().data.content, links, state.get('selection'));
-
-		return renderedContent;
+		if (state.get('selection') && nodeId === state.get('selection').nodeId) {
+			return SelectionRendering.addSelections(
+				Template.instance().data.content, links, state.get('selection'));
+		}
+		else {
+			return SelectionRendering.addSelections(
+				Template.instance().data.content, links);
+		}
 	},
 	can: function (action) {
 		var nodeId = Template.instance().data._id;
@@ -206,7 +183,13 @@ Template.viewer.events({
 	},
 	'click .selection-border': function (event, templateInstance) {
 		// TODO keep track if this is a to or from selection
-		state.set('linkClicked', Date.now().toString());
+		console.log('clicked on selection border');
+		state.set('linkClickedEvent', Date.now().toString());
+	},
+	'click .viewer': function (event, templateInstance) {
+		if (state.get('selection') && this._id != state.get('selection').nodeId) {
+			state.set('selection', null);
+		}
 	},
 	// TODO support keyboard highlighting
 	'mouseup .content-viewer': function (event, templateInstance) {
@@ -241,7 +224,7 @@ function getBorderAndSelectedContent(selection, templateInstance) {
 	// object. that's why we need to pass template instead of an html string
 	// since getting the html has to happen after inserting the selection
 	// markers
-	var $htmlCopy = $('.content-viewer pre').clone();
+	var $htmlCopy = templateInstance.$('.content-viewer pre').clone();
 	var selectionMarkers = insertSelectionMarkers(selection, $htmlCopy);
 
 	var nonAnnotatedMarkedContent = removeAnnotations($htmlCopy.html());

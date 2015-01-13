@@ -27,6 +27,8 @@ Template.editor.events({
 		templateInstance.data.reactiveNode.set('title', event.target.value);
 	},
 	'click .cancel': function (event, templateInstance) {
+		// needed to prevent focus onto this cell after it's been removed
+		event.stopPropagation();
 		var node = templateInstance.data.node;
 		if (templateInstance.data.mode === 'create') {
 			GraphAPI.deleteNode(node);
