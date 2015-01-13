@@ -294,13 +294,20 @@ function insertSelectionMarkers(selection, $htmlCopy) {
 		var parentSelector = Utility.getSelector(rangeNode.parentElement, $htmlCopy[0]);
 		var indexOfNode = _.indexOf(rangeNode.parentElement.childNodes, rangeNode);
 
+
 		var parentElementCopy = $htmlCopy[0];
 
 		if (parentSelector != '') {
-			// the last will be the most specific, covers the case of 
-			// overlapping links since the intersection of the links will be
-			// returned by parentSelector
-			parentElementCopy = _.last($htmlCopy.find(parentSelector));
+			// assumes rangeNode parent uniquely identifiable by tag name, id, and class name
+			// TODO make more robust
+			// can't use isEqualNode comparison between elements in $htmlCopy and
+			// rangeNode. parentElement b/c the parent element copy changes as
+			// markers get inserted
+			parentElementCopy = _.filter(
+				$htmlCopy.find(parentSelector), function (element) {
+					return element.tagName === rangeNode.parentElement.tagName && 
+						element.className === rangeNode.parentElement.className;
+				})[0];
 		}
 
 		// https://developer.mozilla.org/en-US/docs/Web/API/Text.splitText
