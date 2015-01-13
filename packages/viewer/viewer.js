@@ -297,7 +297,10 @@ function insertSelectionMarkers(selection, $htmlCopy) {
 		var parentElementCopy = $htmlCopy[0];
 
 		if (parentSelector != '') {
-			parentElementCopy = $htmlCopy.find(parentSelector)[0];
+			// the last will be the most specific, covers the case of 
+			// overlapping links since the intersection of the links will be
+			// returned by parentSelector
+			parentElementCopy = _.last($htmlCopy.find(parentSelector));
 		}
 
 		// https://developer.mozilla.org/en-US/docs/Web/API/Text.splitText
