@@ -8,14 +8,14 @@ RatingsAPI = {
 	getCommunityRating: function (ratedId) {
 		console.log('getting community rating for ' + ratedId);
 		Meteor.subscribe('ratingsForObject', ratedId);
-		var ratings = Ratings.find({'ratedId': ratedId}).fetch();
+		var ratings = Ratings.find({ratedId: ratedId}).fetch();
 		return _.reduce(ratings, function (memo, rating){
 			return memo + rating.value;
 		}, 0);
 	},
 	getRatings: function (ratedId) {
 		Meteor.subscribe('ratingsForObject', ratedId);
-		return Ratings.find({'ratedId': ratedId}).fetch();
+		return Ratings.find({ratedId: ratedId}).fetch();
 	},
 	incrementRating: function (ratedId, valueChange, raterId) {
 		if (raterId === undefined) {
@@ -23,7 +23,7 @@ RatingsAPI = {
 		}
 		console.log(raterId + ' changing value ' + valueChange + ' to object ' + ratedId);
 		// assumes subscription already exists, maybe should not
-		var rating = Ratings.findOne({'raterId': raterId});
+		var rating = Ratings.findOne({raterId: raterId, ratedId: ratedId});
 		if (rating) {
 			Ratings.update(rating._id, {$inc: {value: valueChange}});
 			console.log('incrementing a rating');
