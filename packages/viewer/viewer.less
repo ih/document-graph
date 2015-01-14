@@ -3,14 +3,19 @@
 @import "../../client/css/docgraph.less";
 
 span.selection-border {
+		border-radius: @border-radius-base;
 		cursor: pointer;
 }
 
 span.selection-marker {
+		border-radius: @border-radius-base;
 		background-color: @hightlight-color !important;
 }
 
 
 .viewer {
 		margin: 0;
+		.title {
+				border-radius: @border-radius-base;
+		}
 }

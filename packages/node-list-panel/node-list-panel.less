@@ -1,8 +1,17 @@
+// figure out a better way to do this
+@import "../../client/css/custom.bootstrap.import.less";
+@import "../../client/css/docgraph.less";
+
 .node-list-panel {
 		height: 85vh;
 		overflow: scroll;
 
 		.badge {
+				cursor: pointer;
+		}
+
+		.panel-title {
+				border-radius: @border-radius-small;
 				cursor: pointer;
 		}
 }

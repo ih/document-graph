@@ -87,7 +87,7 @@ Template.nodeListPanel.events({
 });
 
 Template.nodePreview.events({
-	'click .node-preview a': function (event, template) {
+	'click .node-preview .panel-title': function (event, template) {
 		event.preventDefault();
 		Tracker.autorun(function (computation) {
 			var clickedNode = GraphAPI.getNode(template.data._id);
