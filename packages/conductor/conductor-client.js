@@ -29,6 +29,10 @@ Template.registerHelper('isShowingSelections', function () {
 	return Viewer.isShowingSelections();
 });
 
+Template.registerHelper('date', function (isoTimeStamp) {
+	return isoTimeStamp.slice(0, 10);
+});
+
 Template.layout.events({
 	'click .create-node': function (event) {
 		event.preventDefault();
