@@ -187,7 +187,8 @@ Template.viewer.events({
 		state.set('linkClickedEvent', Date.now().toString());
 	},
 	'click .viewer': function (event, templateInstance) {
-		if (state.get('selection') && this._id != state.get('selection').nodeId) {
+		if (state.get('selection') && this._id != state.get('selection').nodeId 
+			&& !state.get('linkMode')) {
 			state.set('selection', null);
 		}
 	},
