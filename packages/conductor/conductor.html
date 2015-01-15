@@ -46,13 +46,13 @@
 	<div class="container-fluid document-graph">
 		{{#if currentUser}}
 		<div class="row">
-			<div class="{{panelWidth 'to'}}">
+			<div class="pane {{panelWidth 'to'}}">
 				{{> nodeListPanel direction='to'}}
 			</div>
-			<div id="main-view" class="{{mainViewWidth}}">
+			<div id="main-view" class="pane {{mainViewWidth}}">
 				{{> mondrian}}
 			</div>
-			<div class="{{panelWidth 'from'}}">
+			<div class="pane {{panelWidth 'from'}}">
 				{{> nodeListPanel direction='from'}}
 			</div>
 		</div>
