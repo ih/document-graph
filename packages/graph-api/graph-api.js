@@ -9,12 +9,16 @@ GraphAPI = {
 	 }
 	 */
 	linkProperties: ['from', 'to', 'selection', 'createdAt'],
-	nodeProperties: ['content', 'title', 'createdAt'],
+	nodeProperties: ['content', 'title', 'createdAt', 'hasBeenSaved'],
 	// add allow rules to Nodes that call the securityAPI or
 	// each API should handle it's own security
 	createNode: function (nodeData) {
 		console.log('createNode of the graphAPI');
 		nodeData['createdAt'] = Utility.makeTimeStamp();
+		// currently nodes get created and passed to the editor before a user
+		// saves so there is potential for "junk" nodes to be present
+		// having this property
+		nodeData['hasBeenSaved'] = false;
 		// TOOD make all this transactional node/recordcreation, permission
 		// setting, etc
 		var nodeId = Nodes.insert(_.pick(nodeData, GraphAPI.nodeProperties));
@@ -96,6 +100,7 @@ GraphAPI = {
 	updateNode: function (nodeData) {
 		// do this as a method for now since udpating whole document is not
 		// allowed in allow
+		nodeData['hasBeenSaved'] = true;
 		Nodes.update(
 			nodeData._id, {$set: _.pick(nodeData, GraphAPI.nodeProperties)});
 	},
