@@ -53,6 +53,13 @@ Template.editor.events({
 			console.error('Editor in an unrecognized mode');
 		}
 	},
+	'click .preview-off': function (event, templateInstance) {
+		templateInstance.preview.set(false);
+	},
+	'click .preview-on': function (event, templateInstance) {
+		templateInstance.preview.set(true);
+	},
+
 	'click .save': function (event, templateInstance) {
 		// the keys property of a reactive dict is basically the plain dict
 		var nodeData = templateInstance.data.reactiveNode;
@@ -127,6 +134,7 @@ Template.editor.created = function () {
 	templateInstance.data.reactiveNode = Utility.makeReactive(
 		templateInstance.data.node);
 	templateInstance.links = new ReactiveVar();
+	templateInstance.preview = new ReactiveVar();
 	console.log('creating the editor with node ' + this.data.reactiveNode.get('_id'));
 	// TODO check for tags/node properties in data.node
 	// if they are not present fetch them from mongo
@@ -135,6 +143,14 @@ Template.editor.created = function () {
 };
 
 Template.editor.helpers({
+	editorWidth: function () {
+		if (Template.instance().preview.get()) {
+			return 'col-md-6';
+		}
+		else {
+			return 'col-md-12';
+		}
+	},
 	nodeContent: function () {
 		return Template.instance().data.reactiveNode.get('content');
 	},
@@ -145,6 +161,17 @@ Template.editor.helpers({
 	},
 	nodeTitle: function () {
 		return Template.instance().data.reactiveNode.get('title');
+	},
+	preview: function () {
+		return Template.instance().preview.get();
+	},
+	previewWidth: function () {
+		if (Template.instance().preview.get()) {
+			return 'col-md-6';
+		}
+		else {
+			return 'hidden';
+		}
 	},
 	renderContent: function () {
 		var templateInstance = Template.instance();
