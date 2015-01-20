@@ -12,7 +12,7 @@
         </button>
 			</div>
 			<div class="collapse navbar-collapse">
-				{{#if currentUser}}
+				
 				{{> navbarSearchForm}}
 				<form class="navbar-form navbar-left">
 					<!--putting these in a form seems to prevent overflow of signin, but why? -->
@@ -23,6 +23,7 @@
 						<span class="glyphicon glyphicon-eye-close"></span>
 						{{/if}}
 					</button>
+					{{#if currentUser}}
 					<button class="btn btn-default create-node">Create Node</button>
 					{{#if isSelectionMade}}
 					<button class="btn btn-primary create-linked-node">Create Linked Node</button>
@@ -32,11 +33,12 @@
 					<button class="btn btn-primary link-existing-node">Link To Existing Node</button>
 					{{/if}}
 					{{/if}}
+					{{/if}}
 				</form>
 				<form class="navbar-form navbar-left">
 					{{> navbarActiveLabels}}
 				</form>
-				{{/if}}
+
 				<ul class="nav navbar-nav navbar-right">
 					{{> loginButtons align="right"}}
 				</ul>
@@ -44,7 +46,7 @@
 		</div>
 	</div>
 	<div class="container-fluid document-graph">
-		{{#if currentUser}}
+
 		<div class="row">
 			<div class="pane {{panelWidth 'to'}}">
 				{{> nodeListPanel direction='to'}}
@@ -57,9 +59,6 @@
 			</div>
 		</div>
 
-		{{else}}
-		Please log in
-		{{/if}}
 	</div>
 
 </template>

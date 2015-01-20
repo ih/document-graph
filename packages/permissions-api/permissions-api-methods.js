@@ -13,10 +13,17 @@ Meteor.methods({
 		var permissions = Permissions.find({resourceId: resourceId}).fetch() || [];
 		return permissions;
 	},
+	getUserActorIds: function (userId) {
+		var userGroupRoles = GroupsAPI.getUserGroupRoles(userId);
+		return userId ? [userId].concat(userGroupRoles) : userGroupRoles;
+	},
 	getUserPermissions: function (userId) {
 		var permissions = Permissions.find({actorId: userId}).fetch() || [];
 		var userGroupRoles = GroupsAPI.getUserGroupRoles(userId);
 		_.each(userGroupRoles, function (groupRole) {
+			// probably bad for public-member? currently only used by search
+			// so could optimize by directly getting group roles in
+			// search-api-methods.js
 			permissions = permissions.concat(
 				Permissions.find({actorId: groupRole}).fetch());
 		});

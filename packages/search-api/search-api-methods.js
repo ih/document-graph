@@ -43,14 +43,8 @@ Meteor.methods({
 		var url = searchHostUrl + '/' + collectionName + '/_search';
 		console.log('in find method');
 		console.log(this.userId);
-		var userReadPermissions = _.filter(
-			PermissionsAPI.getUserPermissions(this.userId),
-			function (permission) {
-				return _.contains(permission.actions, 'read');
-			});
-		// could be optimized by using GroupsAPI.getMyGroupRoles, but leaks
-		// permissions abstraction
-		var userActorIds = _.pluck(userReadPermissions, 'actorId');
+		// assumes user has read access for all their groups
+		var userActorIds = PermissionsAPI.getUserActorIds(this.userId);
 		console.log('searching');
 		console.log(userActorIds);
 		console.log(fields);

@@ -16,6 +16,9 @@ PermissionsAPI = {
 		}
 		return Permissions.find({resourceId: resourceId}).fetch() || [];
 	},
+	getUserActorIds: function (userId) {
+		return Meteor.call('getUserActorIds', userId);
+	},
 	getUserPermissions: function (userId) {
 		return Meteor.call('getUserPermissions', userId);
 	},

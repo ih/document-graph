@@ -51,6 +51,10 @@ GroupsAPI = {
 		return Groups.find({'creatorId': memberId}).fetch();
 	},
 	getUserGroupRoles: function (userId) {
+		if (!userId) {
+			// anonymous users are members of public
+			return [GroupsAPI.combineGroupRole('public', GroupsAPI.MEMBER)];
+		}
 		var groupRoles = [];
 		var memberships = Memberships.find({memberId: userId});
 		memberships.forEach(function (membership) {
