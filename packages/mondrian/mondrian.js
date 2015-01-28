@@ -323,7 +323,7 @@ Template.cell.events({
 		event.stopPropagation();
 		Mondrian.divideCell('vertical', template.data.cellId);
 	},
-	'click .collapse-cell, click .glyphicon-remove': function (event,  template) {
+	'click .collapse-cell, click .collapse-cell span': function (event,  template) {
 		console.log('collapse');
 		event.stopPropagation();
 		Mondrian.collapseCell(template.data.cellId);

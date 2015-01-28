@@ -11,7 +11,7 @@ Router.map(function() {
 		path: '/'
 	});
 	this.route('viewer', {
-		path: '/node/:_id',
+		path: '/:_id',
 		data: function () {
 			console.log('setting data for router');
 			var targetNode = GraphAPI.getNode(this.params._id);

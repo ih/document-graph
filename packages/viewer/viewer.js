@@ -15,11 +15,13 @@ it also determines whether selections are being shown via the
 showingSelections boolean variable
 
 linkedClickEvent which holds the last time a link was clicked
+
 */
 
 var state = new ReactiveDict();
 state.set('colorMap', {});
 state.set('showingSelections', true);
+
 console.log('state initialized');
 
 Viewer = {
@@ -110,7 +112,8 @@ Viewer = {
 };
 
 Template.viewer.created = function () {
-
+	var templateInstance = this;
+	templateInstance.showUrl = new ReactiveVar(false);
 };
 
 Template.viewer.rendered = function () {
@@ -121,8 +124,6 @@ Template.viewer.rendered = function () {
 		'background-color', SelectionRendering.colorMap.get(this.data._id));
 };
 
-
-
 Template.viewer.helpers({
 	focusedNodeId: function () {
 		// return a list
@@ -130,6 +131,9 @@ Template.viewer.helpers({
 	},
 	displayedNodeIds: function () {
 		return Mondrian.getAllCellNodeIds();
+	},
+	domain: function () {
+		return document.domain;
 	},
 	isFocused: function () {
 		return Mondrian.getFocusedCellNodeId() === Template.instance().data._id;
@@ -144,6 +148,14 @@ Template.viewer.helpers({
 		else {
 			return SelectionRendering.addSelections(
 				Template.instance().data.content, links);
+		}
+	},
+	showUrl: function () {
+		if (Template.instance().showUrl.get()) {
+			return '';
+		}
+		else {
+			return 'hidden';
 		}
 	},
 	can: function (action) {
@@ -185,6 +197,12 @@ Template.viewer.events({
 		// TODO keep track if this is a to or from selection
 		console.log('clicked on selection border');
 		state.set('linkClickedEvent', Date.now().toString());
+	},
+	'click .url-toggle': function (event, templateInstance) {
+		templateInstance.showUrl.set(!templateInstance.showUrl.get());
+	},
+	'click .url-close, click .collapse-cell span': function (event, templateInstance) {
+		templateInstance.showUrl.set(false);
 	},
 	'click .viewer': function (event, templateInstance) {
 		if (state.get('selection') && this._id != state.get('selection').nodeId 
