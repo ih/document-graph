@@ -7,12 +7,32 @@ Meteor.startup(function () {
 		if (user) {
 			console.log('subscribing to my permissions');
 			Meteor.subscribe('myPermissions');
+			var anonId = localStorage.getItem('userId');
+			// need to change to only happen on account creation
+			if (anonId) {
+				analytics.alias(user._id);
+			}
 			analytics.identify(user._id, {
 				username: user.username,
 				email: user.emails[0].address
 			});
 			// TODO move to account creation
 			analytics.track("Logged In");
+		}
+		else {
+			console.log('setting up anonymous user');
+			// http://www.mattzeunert.com/2014/10/29/tracking-anonymous-users-with-mixpanel.html
+			var userId = localStorage.getItem('userId');
+			if (!userId){
+				userId = 'anonymous' + Math.round(Math.random() * 1000000000);
+				userId = userId.toString();
+				localStorage.setItem('userId', userId);
+			}
+			analytics.identify(userId, {
+				username: userId,
+				email: userId + '@anon.com'
+			});
+			analytics.track("Anonymous Visit");
 		}
 	});
 });
