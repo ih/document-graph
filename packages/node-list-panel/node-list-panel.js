@@ -32,6 +32,8 @@ Template.nodeListPanel.helpers({
 			var linkedNode = GraphAPI.getNode(link[otherDirection]);
 			if (linkedNode) {
 				linkedNode.link = link;
+				// for checking unlinking permissions
+				linkedNode.originNodeId = Mondrian.getFocusedCellNodeId();
 			}
 			return linkedNode;
 		});
@@ -101,6 +103,18 @@ Template.nodePreview.events({
 	},
 	'click .unlink': function (event, templateInstance) {
 		GraphAPI.deleteLink(templateInstance.data.link);
+	}
+});
+
+Template.nodePreview.helpers({
+	canUnlink: function () {
+		var linkedNodeId = Template.instance().data._id;
+		var originNodeId = Template.instance().data.originNodeId;
+		var canUpdateLinked = PermissionsAPI.hasPermission(
+			Meteor.userId(), 'update', linkedNodeId);
+		var canUpdateOrigin = PermissionsAPI.hasPermission(
+			Meteor.userId(), 'update', originNodeId);
+		return canUpdateLinked || canUpdateOrigin;
 	}
 });
 
