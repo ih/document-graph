@@ -7,11 +7,8 @@ Meteor.startup(function () {
 		if (user) {
 			console.log('subscribing to my permissions');
 			Meteor.subscribe('myPermissions');
-			var anonId = localStorage.getItem('userId');
-			// need to change to only happen on account creation
-			if (anonId) {
-				analytics.alias(user._id);
-			}
+			// TODO alias anonymous id w/ this one
+
 			analytics.identify(user._id, {
 				username: user.username,
 				email: user.emails[0].address
