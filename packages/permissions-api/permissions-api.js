@@ -68,7 +68,6 @@ PermissionsAPI = {
 				// Maybe this doesn't scale nicely so could special case public
 				// group when interacting with groups
 				GroupsAPI.joinGroup('public', user._id);
-				console.log('test');
 			}
 		});
 	}

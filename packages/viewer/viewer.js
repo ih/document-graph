@@ -132,8 +132,8 @@ Template.viewer.helpers({
 	displayedNodeIds: function () {
 		return Mondrian.getAllCellNodeIds();
 	},
-	domain: function () {
-		return document.domain;
+	getNodeUrl: function () {
+		return GraphAPI.getNodeUrl(Template.instance().data._id);
 	},
 	isFocused: function () {
 		return Mondrian.getFocusedCellNodeId() === Template.instance().data._id;
@@ -151,7 +151,7 @@ Template.viewer.helpers({
 		}
 	},
 	showUrl: function () {
-		if (Template.instance().showUrl.get()) {
+		if (Template.instance().showUrl.get() || state.get('linkMode')) {
 			return '';
 		}
 		else {

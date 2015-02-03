@@ -68,6 +68,7 @@ Template.editor.events({
 			content: templateInstance.$('textarea.content').val(),
 			title: templateInstance.$('input.title').val()
 		};
+
 		GraphAPI.updateNode(updatedNodeData);
 
 		_.each(templateInstance.links.get(), function (link) {
@@ -85,7 +86,19 @@ Template.editor.events({
 			PermissionsAPI.deletePermission
 		);
 
-		SearchAPI.index('nodes', updatedNodeData);
+		// hack to index createdAt with the node
+		Tracker.autorun(function (computation) {
+			console.log('indexing the edit');
+			// want to get the creation date
+			var updatedNode = GraphAPI.getNode(nodeData.get('_id'));
+			if (updatedNode) {
+				// in case the above write isn't done before getNode returns
+				_.extend(updatedNode, updatedNodeData);
+				SearchAPI.index('nodes', updatedNode);
+				computation.stop();
+			}
+		});
+
 
 		if (templateInstance.data.mode === 'create') {
 			analytics.track('Created Document');

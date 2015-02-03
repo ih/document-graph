@@ -14,6 +14,7 @@ check@1.0.4
 conductor@0.0.0
 ddp@1.0.14
 deps@1.0.6
+documentation@0.0.0
 editor@0.0.0
 ejson@1.0.5
 email@1.0.5
@@ -41,7 +42,6 @@ jquery@1.11.3
 json@1.0.2
 launch-screen@1.0.1
 less@1.0.12
-linking-viewer@0.0.0
 links@0.0.0
 livedata@1.0.12
 localstorage@1.0.2

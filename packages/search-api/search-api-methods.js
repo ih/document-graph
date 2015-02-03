@@ -77,7 +77,13 @@ Meteor.methods({
 			}
 		};
 		console.log('meteor method searching... ');
-		var results = elasticSearchParse(HTTP.get(url, {'data': queryData}));
+		try {
+			var results = elasticSearchParse(HTTP.get(url, {'data': queryData}));
+		} catch (e) {
+			console.log('error with search');
+			console.log(JSON.stringify(e));
+		}
+
 		return results;
 	},
 	index: function (collectionName, newDocument) {
