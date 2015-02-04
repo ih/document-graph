@@ -1,6 +1,7 @@
 // this implementation duplicates a lot of functionality from the main system
 // probably want to do this differently in the future or get rid of it
 Meteor.startup(function () {
+	var adminId = 'admin';
 	console.log('inside the documentation package');
 	// really should use an observer for this...
 	if (!Meteor.users.findOne({username: 'admin'})) {
@@ -9,7 +10,12 @@ Meteor.startup(function () {
 			email: 'admin@memograph.link',
 			password: 'password'
 		});
-		GroupsAPI.joinGroup('public', newAdminId);
+		// do some hijinks to make the admin document id 'admin'
+		var admin = Meteor.users.findOne({username: 'admin'});
+		admin._id = adminId;
+		Meteor.users.remove({username: 'admin'});
+		Meteor.users.insert(admin);
+		GroupsAPI.joinGroup('public', adminId);
 	}
 	// create a node for how to link
 	if (!Nodes.findOne({_id: 'how-to-link'})) {
@@ -30,7 +36,7 @@ Meteor.startup(function () {
 			resourceId: nodeId
 		});
 
-		var adminId = Meteor.users.findOne({username: 'admin'})._id;
+
 		// make sure admin can modify
 		PermissionsAPI.createPermission({
 			actorId: adminId,
