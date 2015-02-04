@@ -47,6 +47,9 @@ Meteor.methods({
 		var userActorIds = PermissionsAPI.getUserActorIds(this.userId);
 		console.log('searching');
 		console.log(userActorIds);
+		// remove date fields, TODO find a better way to do this
+		// maybe make fields a dictionary keyed by field type
+		fields = _.without(fields, 'createdAt');
 		console.log(fields);
 		var queryData = {
 			'from': offset,

@@ -30,11 +30,9 @@ Template.navbarSearchForm.events({
 
 		var query = $('#search-input').val();
 		state.set('query', query);
-		var stringFields = _.without(
-			GraphAPI.nodeProperties.concat(['tags']), 'createdAt');
+		var fields = GraphAPI.nodeProperties.concat(['tags']);
 		SearchAPI.find(
-			'nodes', state.get('query'), 0, PAGE_SIZE, stringFields,
-			resultsHandler);
+			'nodes', state.get('query'), 0, PAGE_SIZE, fields, resultsHandler);
 		state.set('currentPage', 1);
 		Mondrian.setCellContent({templateName: 'searchResults', context: {}});
 		analytics.track('Searched', {
