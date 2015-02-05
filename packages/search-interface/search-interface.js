@@ -33,7 +33,7 @@ Template.navbarSearchForm.events({
 
 		var fields = GraphAPI.nodeProperties.concat(['tags']);
 		SearchAPI.find(
-			'nodes', query, 0, PAGE_SIZE, fields,
+			'nodes', query, 0, PAGE_SIZE, fields, undefined,
 			resultsHandlerCreator(query, 1));
 
 		analytics.track('Searched', {
@@ -120,7 +120,17 @@ Template.searchResults.events({
 		var query = Template.instance().data.query;
 		SearchAPI.find(
 			'nodes', query, (pageNumber - 1)*PAGE_SIZE, PAGE_SIZE,
-			GraphAPI.nodeProperties.concat(['tags']), resultsHandlerCreator(query, pageNumber));
+			GraphAPI.nodeProperties.concat(['tags']), undefined,
+			resultsHandlerCreator(query, pageNumber));
 		state.set('currentPage', pageNumber);
 	}
 });
+
+Template.recentlyAdded.created = function () {
+	// loads search results template w/ recently added results
+	var fields = GraphAPI.nodeProperties.concat(['tags']);
+	SearchAPI.find(
+		'nodes', '', 0, PAGE_SIZE, fields, {createdAt: {order: 'desc'}},
+		resultsHandlerCreator('', 1));
+};
+

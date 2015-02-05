@@ -39,7 +39,8 @@ function elasticSearchParse(httpResponse) {
 
 Meteor.methods({
 	find: function (
-		collectionName, queryString, offset, pageSize, fields, resultsHandler) {
+		collectionName, queryString, offset, pageSize, fields, sortCriteria, 
+		resultsHandler) {
 		var url = searchHostUrl + '/' + collectionName + '/_search';
 		console.log('in find method');
 		console.log(this.userId);
@@ -79,7 +80,14 @@ Meteor.methods({
 				'require_field_match': true
 			}
 		};
+
+		if (sortCriteria) {
+			queryData['sort'] = sortCriteria;
+		}
+
 		console.log('meteor method searching... ');
+		console.log(JSON.stringify(sortCriteria));
+		console.log(JSON.stringify(queryData));
 		try {
 			var results = elasticSearchParse(HTTP.get(url, {'data': queryData}));
 		} catch (e) {

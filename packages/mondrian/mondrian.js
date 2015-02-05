@@ -91,8 +91,10 @@ Mondrian = {
 		var cellState = state.get(targetCellId);
 		if (isRootCell(cellState)) {
 			console.log('cannot collapse the root cell');
+			// be wary of the potentially circular dependency of mondrian
+			// and search-interface that is avoided since templates are global
 			Mondrian.setCellContent(
-				{templateName: 'text', context: {text: 'howdy'}});
+				{templateName: 'recentlyAdded', context: {}});
 			return false;
 		}
 		if (!isLeafCell(cellState)) {
@@ -261,7 +263,7 @@ Template.mondrian.rendered = function () {
 
 	state.set(cellId, {
 		parentId: null,
-		content: {templateName: 'text', context: {text: 'howdy'}},
+		content: {templateName: 'recentlyAdded', context: {}},
 		siblingId: null
 	});
 
@@ -339,5 +341,3 @@ Template.cell.isLeaf = function () {
 	}
 	return isLeafCell(cellState);
 };
-
-

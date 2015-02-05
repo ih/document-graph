@@ -4,10 +4,11 @@
 
 SearchAPI = {
 	find: function (
-		collectionName, queryString, offset, pageSize, fields, resultsHandler) {
+		collectionName, queryString, offset, pageSize, fields, sortCriteria, 
+		resultsHandler) {
 		Meteor.call(
 			'find', collectionName, queryString, offset, pageSize, fields,
-			resultsHandler);
+			 sortCriteria, resultsHandler);
 	},
 	index: function (collectionName, newDocument) {
 		// no callback to make this a synchronous
