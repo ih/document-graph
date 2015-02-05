@@ -9,9 +9,13 @@
 
 <template name="searchResults">
 	<div class="search-results">
+		{{#if query}}
+		<div class="results-query single-row">
+			<em>Searching for <strong>{{query}}</strong></em>
+		</div>
+		{{/if}}
 		<ol>
 			{{#each results}}
-			<!-- TODO make template for search result-->
 			<li>
 				{{> searchResult}}
 			</li>
@@ -19,7 +23,11 @@
 		</ol>
 	</div>
 	<div class="search-pagination">
-		{{> pagination}}
+		<ul class="pagination">
+			{{#each getPageRange}}
+			<li class="{{activeIfCurrentPage this}}"><a href="#" class="page">{{this}}</a></li>
+			{{/each}}
+		</ul>
 	</div>
 </template>
 
@@ -36,10 +44,6 @@
 </template>
 
 <template name="pagination">
-	<ul class="pagination">
-	{{#each getPageRange}}
-	<li class="{{activeIfCurrentPage this}}"><a href="#" class="page">{{this}}</a></li>
-	{{/each}}
-</ul>
+
 </template>
 
