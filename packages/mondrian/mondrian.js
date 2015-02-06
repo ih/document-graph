@@ -261,14 +261,27 @@ Template.mondrian.rendered = function () {
 	var cellId = _.uniqueId(cellIdPrefix);
 	state.set('focusedCellId', cellId);
 
-	state.set(cellId, {
-		parentId: null,
-		content: {templateName: 'recentlyAdded', context: {}},
-		siblingId: null
-	});
-
+	// this if else is a hack to deal with the case when search results come in
+	// after a direct url node loads preventing the user from going straight to
+	// their desired node
+	if (window.location.pathname === '/') {
+		state.set(cellId, {
+			parentId: null,
+			content: {templateName: 'recentlyAdded', context: {}},
+			siblingId: null
+		});
+	}
+	else {
+		state.set(cellId, {
+			parentId: null,
+			content: {templateName: 'text', context: {text: ''}},
+			siblingId: null
+		});
+	}
 	renderAndInsert(
 		{templateName: 'cell', context: {cellId: cellId}}, $mondrian);
+
+
 };
 
 Template.cell.rendered = function () {
