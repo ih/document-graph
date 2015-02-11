@@ -31,7 +31,7 @@
             allowDuplicates   : false,
             caseSensitive     : true,
             fieldName         : 'tags',
-            placeholderText   : null,   // Sets `placeholder` attr on input field.
+            placeholderText   : 'Add tags here',   // Sets `placeholder` attr on input field.
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
@@ -66,7 +66,7 @@
 
             // This is just used when preloading data from the field, and for
             // populating the field with delimited tags as the user adds them.
-            singleFieldDelimiter: ',',
+            singleFieldDelimiter: ' ',
 
             // Set this to an input DOM node to use an existing form field.
             // Any text in it will be erased on init. But it will be
@@ -588,4 +588,3 @@
 
     });
 })(jQuery);
-

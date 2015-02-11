@@ -4,14 +4,14 @@ Package.describe({
 
 Package.on_use(function (api, where) {
   api.use(
-	  ['templating', 'less', 'reactive-dict', 'reactive-var', 'search-api', 
-	   'graph-api', 'mondrian'], ['client']);
+          ['templating', 'less', 'reactive-dict', 'reactive-var', 'search-api',
+           'graph-api', 'mondrian', 'tags-interface'], ['client']);
 
   api.add_files(
-	  ['search-interface.html', 'search-interface.js', 'search-interface.less'],
-	  'client');
+          ['search-interface.html', 'search-interface.js',
+            'search-interface.less'], 'client');
 
   if (api.export) {
-	  api.export('SearchInterface');
+          api.export('SearchInterface');
   }
 });
