@@ -23,7 +23,7 @@ Meteor.startup(function () {
 
 function elasticSearchParse(httpResponse) {
   console.log('parsing response');
-  console.log(JSON.stringify(httpResponse));
+
   return {
     hits: _.map(httpResponse.data.hits.hits, function (hit) {
       return {

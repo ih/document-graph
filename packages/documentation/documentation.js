@@ -1,3 +1,4 @@
 Documentation = {
-	'howToLinkId': 'how-to-link'
+  howToLinkId: 'how-to-link',
+  welcome: 'welcome'
 };
