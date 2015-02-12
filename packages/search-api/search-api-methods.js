@@ -50,7 +50,7 @@ Meteor.methods({
     console.log(userActorIds);
     // remove date fields, TODO find a better way to do this
     // maybe make fields a dictionary keyed by field type
-    queryData.fields = _.without(queryData.fields, 'createdAt');
+    queryData.fields = _.without(queryData.fields, 'createdAt', 'editedAt');
     console.log(queryData.fields);
     var elasticSearchQuery = {
       'from': pagingData.offset,

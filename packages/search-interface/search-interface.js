@@ -1,5 +1,5 @@
 // results, currentPage
-var PAGE_SIZE = 15;
+var PAGE_SIZE = 10;
 var MAX_PAGES = 10;
 var HALF_MAX_PAGES = Math.floor(MAX_PAGES / 2);
 var state = new ReactiveDict();
@@ -175,6 +175,6 @@ Template.recentlyAdded.created = function () {
   };
 
   SearchAPI.find(
-    'nodes', queryData, pagingData, undefined, {createdAt: {order: 'desc'}},
+    'nodes', queryData, pagingData, undefined, {editedAt: {order: 'desc'}},
     resultsHandlerCreator('', 1));
 };
