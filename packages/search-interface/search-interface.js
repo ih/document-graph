@@ -175,6 +175,6 @@ Template.recentlyAdded.created = function () {
   };
 
   SearchAPI.find(
-    'nodes', queryData, pagingData, undefined, {editedAt: {order: 'desc'}},
+    'nodes', queryData, pagingData, undefined, {createdAt: {order: 'desc'}},
     resultsHandlerCreator('', 1));
 };

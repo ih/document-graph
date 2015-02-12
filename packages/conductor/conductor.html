@@ -1,72 +1,71 @@
 <template name="layout">
-	<!-- TODO make the navbar a component -->
-	<div class="navbar navbar-default">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Document Graph</a>
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+        <!-- TODO make the navbar a component -->
+        <div class="navbar navbar-default">
+                <div class="container-fluid">
+                        <div class="navbar-header">
+                                <a class="navbar-brand" href="#"><strong>Memograph</strong></a>
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-			</div>
-			<div class="collapse navbar-collapse">
-				{{> navbarSearchForm}}
-				<form class="navbar-form navbar-left">
-					<!--putting these in a form seems to prevent overflow of signin, but why? -->
-					<button class="toggle-selections btn btn-default">
-						{{#if isShowingSelections}}
-						<span class="glyphicon glyphicon-eye-open"></span>
-						{{else}}
-						<span class="glyphicon glyphicon-eye-close"></span>
-						{{/if}}
-					</button>
-					<!--  link mode -->
-					{{#if isLinkMode}}
-					<div class="form-group">
-						<input class="form-control" id="node-url" placeholder="node url" value="{{getFocusedCellUrl}}" readonly>
-					</div>
-					<button class="btn btn-primary link {{validCell}}">Link</button>
-					<button class="btn btn-primary cancel-link">Cancel</button>
-					{{else}}
+                        </div>
+                        <div class="collapse navbar-collapse">
+                                {{> navbarSearchForm}}
+                                <form class="navbar-form navbar-left">
+                                        <!--putting these in a form seems to prevent overflow of signin, but why? -->
+                                        <button class="toggle-selections btn btn-default">
+                                                {{#if isShowingSelections}}
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                                {{else}}
+                                                <span class="glyphicon glyphicon-eye-close"></span>
+                                                {{/if}}
+                                        </button>
+                                        <!--  link mode -->
+                                        {{#if isLinkMode}}
+                                        <div class="form-group">
+                                                <input class="form-control" id="node-url" placeholder="node url" value="{{getFocusedCellUrl}}" readonly>
+                                        </div>
+                                        <button class="btn btn-primary link {{validCell}}">Link</button>
+                                        <button class="btn btn-primary cancel-link">Cancel</button>
+                                        {{else}}
 
-					{{#if currentUser}}
-					<button class="btn btn-default create-node">Create Node</button>
-					{{#if isSelectionMade}}
-					<button class="btn btn-primary create-linked-node">Create Linked Node</button>
+                                        {{#if currentUser}}
+                                        <button class="btn btn-default create-node">Create Memo</button>
+                                        {{#if isSelectionMade}}
+                                        <button class="btn btn-primary create-linked-node">Create Linked Memo</button>
 
-					<button class="btn btn-primary link-existing-node">Link To Existing Node</button>
-					{{/if}}
-					{{/if}}
+                                        <button class="btn btn-primary link-existing-node">Link To Existing Memo</button>
+                                        {{/if}}
+                                        {{/if}}
 
-					{{/if}}
-				</form>
-				<form class="navbar-form navbar-left">
-					{{> navbarActiveLabels}}
-				</form>
+                                        {{/if}}
+                                </form>
+                                <form class="navbar-form navbar-left">
+                                        {{> navbarActiveLabels}}
+                                </form>
 
-				<ul class="nav navbar-nav navbar-right">
-					{{> loginButtons align="right"}}
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="container-fluid document-graph">
+                                <ul class="nav navbar-nav navbar-right">
+                                        {{> loginButtons align="right"}}
+                                </ul>
+                        </div>
+                </div>
+        </div>
+        <div class="container-fluid document-graph">
 
-		<div class="row">
-			<div class="pane {{panelWidth 'to'}}">
-				{{> nodeListPanel direction='to'}}
-			</div>
-			<div id="main-view" class="pane {{mainViewWidth}}">
-				{{> mondrian}}
-			</div>
-			<div class="pane {{panelWidth 'from'}}">
-				{{> nodeListPanel direction='from'}}
-			</div>
-		</div>
+                <div class="row">
+                        <div class="pane {{panelWidth 'to'}}">
+                                {{> nodeListPanel direction='to'}}
+                        </div>
+                        <div id="main-view" class="pane {{mainViewWidth}}">
+                                {{> mondrian}}
+                        </div>
+                        <div class="pane {{panelWidth 'from'}}">
+                                {{> nodeListPanel direction='from'}}
+                        </div>
+                </div>
 
-	</div>
+        </div>
 
 </template>
-

@@ -1,6 +1,6 @@
 {
-    "elasticSearchServer": "http://api.searchbox.io/api-key/ce2b03bb86b96565d31457f952ddbae3",
+    "elasticSearchServer": "https://bofur-us-east-1.searchly.com/api-key/58040cb8868793f88d4ec03ee1605ddd",
     "public": {
-	"segmentKey": "wIi3lEhTV05WadDN6OHA4rlr7oGcEjss"
+        "segmentKey": "uQ6ShtjTV01d0lp4JzsIUAKr2WsOslAv"
     }
 }
