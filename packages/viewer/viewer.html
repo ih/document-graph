@@ -1,53 +1,53 @@
 <template name="default">
-	howdy
+  howdy
 </template>
 
 <template name="viewer">
-	<div class="row viewer viewer-{{_id}}">
-		<div class="col-md-12">
-			<div class="single-row">
-				<h2 class="title">
-					{{title}} <small>{{date createdAt}}</small>
-				</h2>
-			</div>
-			<div class="content-viewer single-row">
-				{{#if isFocused}}
-				{{#if isShowingSelections}}
-				<pre class="content">{{{renderContent}}}</pre>
-				{{else}}
-				<pre class="content">{{{renderContent displayedNodeIds}}}</pre>
-				{{/if}}
-				{{else}}
-				{{#if focusedNodeId}}
-				<pre class="content">{{{renderContent focusedNodeId}}}</pre>
-				{{else}}
-				<pre class="content">{{{renderContent displayedNodeIds}}}</pre>
-				{{/if}}
-				{{/if}}
-			</div>
+  <div class="row viewer viewer-{{_id}}">
+    <div class="col-md-12">
+      <div class="single-row">
+        <h2 class="title">
+          {{title}} <small>{{date createdAt}}</small>
+        </h2>
+      </div>
+      <div class="content-viewer single-row">
+        {{#if isFocused}}
+        {{#if isShowingSelections}}
+        <pre class="content">{{{renderContent}}}</pre>
+        {{else}}
+        <pre class="content">{{{renderContent displayedNodeIds}}}</pre>
+        {{/if}}
+        {{else}}
+        {{#if focusedNodeId}}
+        <pre class="content">{{{renderContent focusedNodeId}}}</pre>
+        {{else}}
+        <pre class="content">{{{renderContent displayedNodeIds}}}</pre>
+        {{/if}}
+        {{/if}}
+      </div>
 
-			<div class="single-row">
-				{{#if can 'update'}}
-				<button class="btn btn-primary edit-node">Edit</button>
-				{{/if}}
+      <div class="single-row">
+        {{#if can 'update'}}
+        <button class="btn btn-primary edit-node">Edit</button>
+        {{/if}}
 
-				{{#if can 'delete'}}
-				<button class="btn btn-primary delete-node">Delete</button>
-				{{/if}}
-			</div>
+        {{#if can 'delete'}}
+        <button class="btn btn-primary delete-node">Delete</button>
+        {{/if}}
+      </div>
 
-			<div class="single-row">
-				{{> ratingsInterface objectId=_id}}
-				<span class="glyphicon glyphicon-link url-toggle"></span>
-				<span class="url-field {{showUrl}} well well-sm">
-					{{getNodeUrl}}
-					<span type="button" class="btn btn-danger btn-xs url-close" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></span>
-				</span>
+      <div class="single-row">
+        {{> ratingsInterface objectId=_id}}
+        <span class="glyphicon glyphicon-link url-toggle"></span>
+        <span class="url-field {{showUrl}} well well-sm">
+          {{getNodeUrl}}
+          <span type="button" class="btn btn-danger btn-xs url-close" aria-label="Close"><span class="glyphicon glyphicon-remove"></span></span>
+        </span>
 
-			</div>
-			<div class="single-row">
-				{{> labelsDisplay objectId=_id}}
-			</div>
-		</div>
-	</div>
+      </div>
+      <div class="single-row">
+        {{> labelsDisplay objectId=_id}}
+      </div>
+    </div>
+  </div>
 </template>

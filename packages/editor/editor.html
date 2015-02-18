@@ -1,49 +1,45 @@
 <template name="editor">
-	<div class="row editor">
-		<div class="{{editorWidth}} input">
-			<h2>
-				<div class="title-container single-row">
-					<input type="text" class="title input-lg" value="{{nodeTitle}}" placeholder="Put Title Here">
-						{{#if preview}}
-						<span class="pull-right preview-icon preview-off glyphicon glyphicon-zoom-out"></span>
-						{{else}}
-						<span class="pull-right preview-icon preview-on glyphicon glyphicon-zoom-in"></span>
-						{{/if}}
-				</div>
-			</h2>
-			<div class="content-container single-row">
-				<textarea class="content" placeholder="Content goes here">{{nodeContent}}</textarea>
-			</div>
+  <div class="row editor">
+    <div class="{{editorWidth}} input">
+      <h2>
+        <div class="title-container single-row">
+          <input type="text" class="title input-lg" value="{{nodeTitle}}" placeholder="Put Title Here">
+          {{#if preview}}
+          <span class="pull-right preview-icon preview-off glyphicon glyphicon-zoom-out"></span>
+          {{else}}
+          <span class="pull-right preview-icon preview-on glyphicon glyphicon-zoom-in"></span>
+          {{/if}}
+        </div>
+      </h2>
+      <div class="content-container single-row">
+        <textarea class="content" placeholder="Content goes here">{{nodeContent}}</textarea>
+      </div>
 
-			<div class="tag-editor-container single-row">
-				<ul id="myTags">
-					{{#each nodeTags}}
-					<li>{{this}}</li>
-					{{/each}}
-				</ul>
-			</div>
-			<!-- TODO: turn this back into its own template -->
-			<div class="privacy-editor-container single-row">
-				<input id="privacy-editor" type="checkbox" checked data-on-label="Public" data-off-label="Private" class="switch-large">
-			</div>
+      <div class="tag-editor-container single-row">
+        <ul id="myTags">
+          {{#each nodeTags}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      <!-- TODO: turn this back into its own template -->
+      <div class="privacy-editor-container single-row">
+        <input id="privacy-editor" type="checkbox" checked data-on-label="Public" data-off-label="Private" class="switch-large">
+      </div>
 
 
-			<div class="text-center single-row">
-				<button class="btn btn-primary save">Save</button>
-				<button class="btn btn-default cancel">Cancel</button>
-			</div>
-		</div>
-		<div class="{{previewWidth}} preview">
-			<div class="">
-				<h1>{{nodeTitle}}</h1>
-			</div>
-			<div class="">
-				<pre>{{{renderContent}}}</pre>
-			</div>
-		</div>
-	</div>
+      <div class="text-center single-row">
+        <button class="btn btn-primary save">Save</button>
+        <button class="btn btn-default cancel">Cancel</button>
+      </div>
+    </div>
+    <div class="{{previewWidth}} preview">
+      <div class="">
+        <h1>{{nodeTitle}}</h1>
+      </div>
+      <div class="">
+        <pre>{{{renderContent}}}</pre>
+      </div>
+    </div>
+  </div>
 </template>
-
-
-
-

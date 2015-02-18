@@ -1,22 +1,22 @@
 <template name="mondrian">
-	<div id="mondrian">
-	</div>
+  <div id="mondrian">
+  </div>
 </template>
 
 <template name="cell">
-	<div class="cell {{direction}} {{leaf}} {{focus}}" id="{{cellId}}">
-		{{#if isLeaf}}
-		<div class="cell-controls">
-			<button class="divide-horizontal btn btn-default"><span class="glyphicon glyphicon-resize-vertical"></span></button>
-			<button class="divide-vertical btn btn-default"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
-			<button class="collapse-cell btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-		</div>
-		{{/if}}
-		<div class="cell-content">
-		</div>
-	</div>
+  <div class="cell {{direction}} {{leaf}} {{focus}}" id="{{cellId}}">
+    {{#if isLeaf}}
+    <div class="cell-controls">
+      <button class="divide-horizontal btn btn-default"><span class="glyphicon glyphicon-resize-vertical"></span></button>
+      <button class="divide-vertical btn btn-default"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
+      <button class="collapse-cell btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+    </div>
+    {{/if}}
+    <div class="cell-content">
+    </div>
+  </div>
 </template>
 
 <template name="text">
-	{{text}}
+  {{text}}
 </template>

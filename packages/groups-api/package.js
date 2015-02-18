@@ -1,11 +1,11 @@
 Package.describe({
-	summary: "An interface for creating and performing operations on groups"
+  summary: "An interface for creating and performing operations on groups"
 });
 
 Package.on_use(function (api, where) {
-	api.use(['deps', 'records-api', 'groups', 'memberships', 'accounts-base'], ['client', 'server']);
-	api.add_files(['groups-api.js'], ['client', 'server']);
-	if (api.export) {
-		api.export('GroupsAPI');
-	}
+  api.use(['deps', 'records-api', 'groups', 'memberships', 'accounts-base'], ['client', 'server']);
+  api.add_files(['groups-api.js'], ['client', 'server']);
+  if (api.export) {
+    api.export('GroupsAPI');
+  }
 });

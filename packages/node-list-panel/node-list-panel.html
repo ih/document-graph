@@ -1,50 +1,50 @@
 <template name="nodeListPanel">
-        {{#if hasLinks}}
-        <div class="node-list-panel">
-                {{#if showCount}}
-                <div class="node-count">
-                        <span class="btn btn-warning btn-sm">{{count getLinkedNodes}}</span>
-                </div>
-                {{else}}
-                <div class="node-list-panel-controls form-inline single-row">
-                        <button class="btn btn-default btn-sm sort-direction">
-                                <span class="glyphicon {{sortDirection}}"></span>
-                        </button>
-                        <select class="form-control sort-property input-sm">
-                                <option value="occurence" {{selected 'occurrence'}}>Occurence</option>
-                                <option value="rating" {{selected 'rating'}}>Rating</option>
-                                <option value="createdAt" {{selected 'createdAt'}}>Link Time</option>
-                        </select>
-                        <div class="btn btn-danger btn-sm close-panel"> <span class="glyphicon glyphicon-remove"></span></div>
-                </div>
+  {{#if hasLinks}}
+  <div class="node-list-panel">
+    {{#if showCount}}
+    <div class="node-count">
+      <span class="btn btn-warning btn-sm">{{count getLinkedNodes}}</span>
+    </div>
+    {{else}}
+    <div class="node-list-panel-controls form-inline single-row">
+      <button class="btn btn-default btn-sm sort-direction">
+        <span class="glyphicon {{sortDirection}}"></span>
+      </button>
+      <select class="form-control sort-property input-sm">
+        <option value="occurence" {{selected 'occurrence'}}>Occurence</option>
+        <option value="rating" {{selected 'rating'}}>Rating</option>
+        <option value="createdAt" {{selected 'createdAt'}}>Link Time</option>
+      </select>
+      <div class="btn btn-danger btn-sm close-panel"> <span class="glyphicon glyphicon-remove"></span></div>
+    </div>
 
 
-                <div>
-                        <ol class="list-unstyled">
-                                {{#each getLinkedNodes}}
-                                <li>
-                                        {{> nodePreview this}}
-                                </li>
-                                {{/each}}
-                        </ol>
-                </div>
-                {{/if}}
-        </div>
-        {{/if}}
+    <div>
+      <ol class="list-unstyled">
+        {{#each getLinkedNodes}}
+        <li>
+          {{> nodePreview this}}
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+    {{/if}}
+  </div>
+  {{/if}}
 </template>
 
 <template name="nodePreview">
-        <div class="node-preview panel panel-default">
-                <div class="panel-heading">
-                        <h3 class="panel-title title"><a href="/node/{{_id}}">{{title}}</a></h3>
-                </div>
-                <div class="panel-body">
-                        {{content}}
-                </div>
-                <div class="panel-footer">
-                        {{#if canUnlink}}
-                        <button class="btn unlink">Unlink</button>
-                        {{/if}}
-                </div>
-        </div>
+  <div class="node-preview panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title title"><a href="/node/{{_id}}">{{title}}</a></h3>
+    </div>
+    <div class="panel-body">
+      {{content}}
+    </div>
+    <div class="panel-footer">
+      {{#if canUnlink}}
+      <button class="btn unlink">Unlink</button>
+      {{/if}}
+    </div>
+  </div>
 </template>
