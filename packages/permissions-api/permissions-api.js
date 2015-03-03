@@ -2,6 +2,10 @@ PermissionsAPI = {
   ALL: ['read', 'rate', 'multiple-rate', 'update', 'delete'],
   READ: ['read', 'rate'],
   permissionsProperties: ['actorId', 'actions', 'resourceId'],
+  privacyLevels: {
+    GLOBAL: 'global',
+    PRIVATE: 'private'
+  },
   createPermission: function (permissionData) {
     return Meteor.call(
       'createPermission', _.pick(
@@ -15,6 +19,20 @@ PermissionsAPI = {
       Meteor.subscribe('myGroupRolePermissions', resourceId);
     }
     return Permissions.find({resourceId: resourceId}).fetch() || [];
+  },
+  getPrivacyLevel: function (resourceId) {
+    var permissions = PermissionsAPI.getResourcePermissions(resourceId);
+    if (_.find(permissions, function (permission) {
+      var publicGroupMember = GroupsAPI.combineGroupRole(
+        'public', GroupsAPI.MEMBER);
+      return permission.actorId ===  publicGroupMember &&
+        _.contains(permission.actions, 'read');
+    })) {
+      return PermissionsAPI.privacyLevels.GLOBAL;
+    }
+    else {
+      return PermissionsAPI.privacyLevels.PRIVATE;
+    }
   },
   getUserActorIds: function (userId) {
     return Meteor.call('getUserActorIds', userId);

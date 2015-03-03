@@ -135,6 +135,16 @@ Template.viewer.helpers({
   getNodeUrl: function () {
     return GraphAPI.getNodeUrl(Template.instance().data._id);
   },
+  getPrivacyLevel: function () {
+    var privacyLevel = PermissionsAPI.getPrivacyLevel(
+      Template.instance().data._id);
+    if (privacyLevel === PermissionsAPI.privacyLevels.GLOBAL) {
+      return 'glyphicon-globe';
+    }
+    else {
+      return 'glyphicon-user';
+    }
+  },
   isFocused: function () {
     return Mondrian.getFocusedCellNodeId() === Template.instance().data._id;
   },

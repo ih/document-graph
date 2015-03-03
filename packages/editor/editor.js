@@ -217,29 +217,16 @@ Template.editor.rendered = function () {
 
   templateInstance.$('#myTags').tagit();
   Tracker.autorun(function (computation) {
-
-    templateInstance.data.reactiveNode.set('permissions', PermissionsAPI.getResourcePermissions(
-      templateInstance.data.reactiveNode.get('_id')));
-    console.log('got the permissions' + JSON.stringify(templateInstance.data.reactiveNode.get('permissions')));
-
-    if (!isPublic(templateInstance.data.reactiveNode.get('permissions'))) {
-      templateInstance.$('#privacy-editor').bootstrapSwitch('setState', false);
-    }
-    else {
+    var privacyLevel = PermissionsAPI.getPrivacyLevel(
+      templateInstance.data.reactiveNode.get('_id'));
+    if (privacyLevel === PermissionsAPI.privacyLevels.GLOBAL) {
       templateInstance.$('#privacy-editor').bootstrapSwitch('setState', true);
     }
-
+    else {
+      templateInstance.$('#privacy-editor').bootstrapSwitch('setState', false);
+    }
   });
 };
-
-function isPublic(permissions) {
-  return _.find(permissions, function (permission) {
-    var publicGroupMember = GroupsAPI.combineGroupRole(
-      'public', GroupsAPI.MEMBER);
-    return permission.actorId ===  publicGroupMember &&
-      _.contains(permission.actions, 'read');
-  });
-}
 
 function resetEditor(templateInstance) {
   // used for resetting the title input, would be nice if there was two-way
