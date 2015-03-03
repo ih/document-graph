@@ -207,6 +207,11 @@ Template.viewer.events({
     // TODO keep track if this is a to or from selection
     console.log('clicked on selection border');
     state.set('linkClickedEvent', Date.now().toString());
+    analytics.track('Clicked Link', {
+      nodeId: templateInstance.data._id,
+      selectionText: event.target.textContent,
+      selectionClasses: event.target.className
+    });
   },
   'click .url-toggle': function (event, templateInstance) {
     templateInstance.showUrl.set(!templateInstance.showUrl.get());

@@ -95,9 +95,15 @@ Template.nodePreview.events({
       var clickedNode = GraphAPI.getNode(template.data._id);
       if (clickedNode) {
         console.log('clicked on node ' + template.data.id + ':' + JSON.stringify(clickedNode));
+
         Mondrian.setCellContent({templateName: 'viewer', context: clickedNode});
 
         computation.stop();
+
+        analytics.track('Clicked Node Preview', {
+          nodeId: template.data.id,
+          title: clickedNode.title
+        });
       }
     });
   },
