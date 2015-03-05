@@ -90,7 +90,7 @@ GraphAPI = {
     return Nodes.findOne(nodeId);
   },
   getNodeUrl: function (nodeId) {
-    return window.location.protocol + document.domain + '/' + nodeId;
+    return window.location.protocol + '//' + document.domain + '/' + nodeId;
   },
   isIntersecting: function (border1, border2) {
     var earlierBorder = border1.open < border2.open ? border1 : border2;
