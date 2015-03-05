@@ -14,7 +14,9 @@ Meteor.startup(function () {
         email: user.emails[0].address
       });
       // TODO move to account creation
-      analytics.track("Logged In");
+      analytics.track('Logged In', {
+        landingPage: document.URL
+      });
     }
     else {
       console.log('setting up anonymous user');
@@ -29,7 +31,9 @@ Meteor.startup(function () {
         username: userId,
         email: userId + '@anon.com'
       });
-      analytics.track("Anonymous Visit");
+      analytics.track('Anonymous Visit', {
+        landingPage: document.URL
+      });
     }
   });
 });
