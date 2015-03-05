@@ -89,19 +89,38 @@ Template.nodeListPanel.events({
 });
 
 Template.nodePreview.events({
-  'click .node-preview .panel-title': function (event, template) {
+  'click .node-preview .panel-title, click .node-preview .open': function (
+    event, templateInstance) {
     event.preventDefault();
     Tracker.autorun(function (computation) {
-      var clickedNode = GraphAPI.getNode(template.data._id);
+      var clickedNode = GraphAPI.getNode(templateInstance.data._id);
       if (clickedNode) {
-        console.log('clicked on node ' + template.data.id + ':' + JSON.stringify(clickedNode));
+        console.log('clicked on node ' + templateInstance.data.id + ':' + JSON.stringify(clickedNode));
 
         Mondrian.setCellContent({templateName: 'viewer', context: clickedNode});
 
         computation.stop();
 
-        analytics.track('Clicked Node Preview', {
-          nodeId: template.data.id,
+        analytics.track('Open Preview in Existing Pane', {
+          nodeId: templateInstance.data.id,
+          title: clickedNode.title
+        });
+      }
+    });
+  },
+  'click .open-new-pane': function (event, templateInstance) {
+    Tracker.autorun(function (computation) {
+      var clickedNode = GraphAPI.getNode(templateInstance.data._id);
+      if (clickedNode) {
+
+        Mondrian.divideCell(
+          undefined, undefined, undefined,
+          {templateName: 'viewer', context: clickedNode});
+
+        computation.stop();
+
+        analytics.track('Open Preview in New Pane', {
+          nodeId: templateInstance.data.id,
           title: clickedNode.title
         });
       }
