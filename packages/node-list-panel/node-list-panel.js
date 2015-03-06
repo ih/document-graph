@@ -112,10 +112,18 @@ Template.nodePreview.events({
     Tracker.autorun(function (computation) {
       var clickedNode = GraphAPI.getNode(templateInstance.data._id);
       if (clickedNode) {
-
-        Mondrian.divideCell(
-          undefined, undefined, undefined,
-          {templateName: 'viewer', context: clickedNode});
+        //if it's the to node list panel open in the node in the right/bottom
+        //pane otherwise open in the left/top
+        if (Template.parentData(2).direction === 'from') {
+          Mondrian.divideCell(
+            undefined, undefined, undefined,
+            {templateName: 'viewer', context: clickedNode});
+        }
+        else {
+          Mondrian.divideCell(
+            undefined, undefined,
+            {templateName: 'viewer', context: clickedNode});
+        }
 
         computation.stop();
 
