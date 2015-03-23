@@ -284,11 +284,8 @@ Template.mondrian.rendered = function () {
       if (welcomeNode) {
         //there's actually a pontential bug w/ recentlyAdded since it fills in
         // the focused cell which may not be the desired one
-        Mondrian.divideCell(
-          'vertical', undefined,
-          {templateName: 'viewer', context: welcomeNode},
-          {templateName: 'recentlyAdded', context: {}}
-        );
+        Mondrian.setCellContent({templateName: 'viewer', context: welcomeNode});
+
         computation.stop();
       }
     });
