@@ -174,6 +174,26 @@ Template.layout.helpers({
 
 Template.layout.rendered = function () {
   // Editor.initialize('create');
+  var tour = new Tour({
+    storage: false,
+    steps: [
+      {
+        element: ".search-submit",
+        title: "Search for memos",
+        content: "You can find memos using this search field"
+      },
+      {
+        element: ".toggle-selections",
+        title: "Toggle the links",
+        content: "You can show/hide links by clicking this button"
+      }
+    ]});
+
+  // Initialize the tour
+  tour.init();
+
+  // Start the tour
+  tour.start();
 };
 
 console.log('in the conductor client ' + window.location.pathname);
