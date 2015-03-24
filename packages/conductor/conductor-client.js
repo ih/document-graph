@@ -174,20 +174,52 @@ Template.layout.helpers({
 
 Template.layout.rendered = function () {
   // Editor.initialize('create');
+  var tourSteps = [
+    {
+      element: ".search-submit",
+      title: "Search for memos",
+      content: "You can find publicly shared memos using this search box"
+    }, {
+      element: ".toggle-selections",
+      title: "Toggle the links",
+      content: "You can show/hide links by clicking this button"
+    }, {
+      element: ".divide-vertical",
+      title: "Manage windows",
+      content: "Create new windows or close existing ones using these buttons.  Hover over for specifics on each one.",
+      placement: 'bottom'
+    }, {
+      element: ".selection-border",
+      title: "Links",
+      content: "You can click these colored parts of the text to see previews of other memos that are related to this text. <b>Go ahead and click this one now.</b>",
+      placement: 'top'
+    }, {
+      element: ".node-preview",
+      title: "Memo Previews",
+      content: "This is a preview to another memo that relates to the text with the same color.",
+      placement: 'left'
+    },{
+      element: ".open-new-pane",
+      title: "Open memo",
+      content: "Click this button to open the memo in a new window. Otherwise click the other button to open the memo in the existing window.  <b>Go ahead and click one of them now.</b>",
+      placement: 'left'
+    }
+  ];
+  if (!Meteor.user()) {
+    tourSteps.push({
+      element: '#login-dropdown-list',
+      title: 'Create an account',
+      content: 'Make an account to create and share your own memos!',
+      placement: 'left'
+    });
+
+    // enable tooltips
+    //$('[data-toggle="tooltip"]').tooltip();
+  }
+
   var tour = new Tour({
     storage: false,
-    steps: [
-      {
-        element: ".search-submit",
-        title: "Search for memos",
-        content: "You can find memos using this search field"
-      },
-      {
-        element: ".toggle-selections",
-        title: "Toggle the links",
-        content: "You can show/hide links by clicking this button"
-      }
-    ]});
+    steps: tourSteps});
 
   // Initialize the tour
   tour.init();

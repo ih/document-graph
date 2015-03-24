@@ -7,9 +7,9 @@
   <div class="cell {{direction}} {{leaf}} {{focus}}" id="{{cellId}}">
     {{#if isLeaf}}
     <div class="cell-controls">
-      <button class="divide-horizontal btn btn-default"><span class="glyphicon glyphicon-resize-vertical"></span></button>
-      <button class="divide-vertical btn btn-default"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
-      <button class="collapse-cell btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+      <button class="divide-horizontal btn btn-default" data-toggle="tooltip" data-placement="top" title="Split into two windows horizontally"><span class="glyphicon glyphicon-resize-vertical"></span></button>
+      <button class="divide-vertical btn btn-default" data-toggle="tooltip" data-placement="top" title="Split into two windows vertically"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
+      <button class="collapse-cell btn btn-danger" data-toggle="tooltip" data-placement="top" title="Collapse this window"><span class="glyphicon glyphicon-remove"></span></button>
     </div>
     {{/if}}
     <div class="cell-content">
