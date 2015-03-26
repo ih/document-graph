@@ -7,7 +7,7 @@ Package.on_use(function (api, where) {
   api.use(['templating', 'less', 'editor', 'accounts-base', 'groups-api',
            'accounts-password', 'search-interface', 'iron:router',
            'viewer', 'graph-api', 'mondrian', 'node-list-panel',
-           'permissions-api', 'tags-api', 'documentation'],
+           'permissions-api', 'tags-api', 'documentation', 'product-tour'],
           ['client']);
   api.use(['viewer', 'editor','accounts-base', 'accounts-password','groups-api',
            'underscore', 'graph-api', 'search-api', 'permissions-api',

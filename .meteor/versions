@@ -65,6 +65,7 @@ ordered-dict@1.0.3
 percolatestudio:segment.io@1.1.1_1
 permissions@0.0.0
 permissions-api@0.0.0
+product-tour@0.0.0
 random@1.0.3
 ratings@0.0.0
 ratings-api@0.0.0
