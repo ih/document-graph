@@ -88,6 +88,10 @@ Template.layout.events({
         templateName: 'editor',
         context: {node: newNodeData, mode: 'create'}});
   },
+  'click .help': function (event, templateInstance) {
+    event.preventDefault();
+    templateInstance.tour.restart();
+  },
   'click .link-existing-node': function (event, templateInstance) {
     event.preventDefault();
     var selection = Viewer.state.get('selection');
@@ -174,8 +178,7 @@ Template.layout.helpers({
 
 Template.layout.rendered = function () {
   // Editor.initialize('create');
-  var tourSteps = [
-    {
+  var tourSteps = [{
       element: ".search-submit",
       title: "Search for memos",
       content: "You can find publicly shared memos using this search box"
@@ -203,6 +206,11 @@ Template.layout.rendered = function () {
       title: "Open memo",
       content: "Click this button to open the memo in a new window. Otherwise click the other button to open the memo in the existing window.  <b>Go ahead and click one of them now.</b>",
       placement: 'left'
+    }, {
+      element: ".glyphicon-arrow-left",
+      title: "Back to the previous memo",
+      content: "Click this button to view the memos that link to the current one.  You can use this to get back to the previous memo <b>Don't use the back button</b> since that will take you away from the site.",
+      placement: 'right'
     }
   ];
   if (!Meteor.user()) {
@@ -217,15 +225,15 @@ Template.layout.rendered = function () {
     //$('[data-toggle="tooltip"]').tooltip();
   }
 
-  var tour = new Tour({
-    storage: false,
-    steps: tourSteps});
+  this.tour = new Tour({
+    steps: tourSteps
+  });
 
   // Initialize the tour
-  tour.init();
+  this.tour.init();
 
   // Start the tour
-  tour.start();
+  this.tour.start();
 };
 
 console.log('in the conductor client ' + window.location.pathname);

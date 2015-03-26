@@ -38,6 +38,14 @@ Template.nodeListPanel.helpers({
       return linkedNode;
     });
   },
+  getPanelDirectionIcon: function () {
+    if (Template.instance().data.direction === 'to') {
+      return 'glyphicon-arrow-left';
+    }
+    else {
+      return 'glyphicon-arrow-right';
+    }
+  },
   hasLinks: function () {
     var direction = Template.instance().data.direction;
     var links = Viewer.filterLinks(
@@ -54,7 +62,7 @@ Template.nodeListPanel.helpers({
   selected: function (optionProperty) {
     return optionProperty === Template.instance().sortProperty.get() ? 'selected' : '';
   },
-  showCount: function () {
+  hidePanel: function () {
     return !NodeListPanel.openStates.get(Template.instance().data.direction);
   },
   sortDirection: function () {
@@ -78,7 +86,7 @@ Template.nodeListPanel.events({
     //  Viewer.hideSelections();
     // }
   },
-  'click .node-count': function (event, templateInstance) {
+  'click .open-panel': function (event, templateInstance) {
     NodeListPanel.openStates.set(templateInstance.data.direction, true);
     Viewer.showSelections();
   },
