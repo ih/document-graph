@@ -91,7 +91,10 @@ Template.layout.events({
   'click .help': function (event, templateInstance) {
     event.preventDefault();
     if (!Meteor.user()) {
-      ProductTour.restartAnonymousTour();
+      ProductTour.startAnonymousTour();
+    }
+    else {
+      ProductTour.startCompleteTour();
     }
   },
   'click .link-existing-node': function (event, templateInstance) {
@@ -179,9 +182,14 @@ Template.layout.helpers({
 });
 
 Template.layout.rendered = function () {
-  if (!Meteor.user()) {
-    ProductTour.startAnonymousTour();
-  }
+  Tracker.autorun(function () {
+    if (!Meteor.userId()) {
+      ProductTour.startAnonymousTour();
+    }
+    else {
+      ProductTour.startWriteTour();
+    }
+  });
 };
 
 console.log('in the conductor client ' + window.location.pathname);
