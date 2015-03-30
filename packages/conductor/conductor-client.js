@@ -91,10 +91,10 @@ Template.layout.events({
   'click .help': function (event, templateInstance) {
     event.preventDefault();
     if (!Meteor.user()) {
-      ProductTour.startAnonymousTour();
+      ProductTour.startTour(ProductTour.ANONYMOUS, true);
     }
     else {
-      ProductTour.startCompleteTour();
+      ProductTour.startTour(ProductTour.COMPLETE, true);
     }
   },
   'click .link-existing-node': function (event, templateInstance) {
@@ -184,10 +184,10 @@ Template.layout.helpers({
 Template.layout.rendered = function () {
   Tracker.autorun(function () {
     if (!Meteor.userId()) {
-      ProductTour.startAnonymousTour();
+      ProductTour.startTour(ProductTour.ANONYMOUS);
     }
     else {
-      ProductTour.startWriteTour();
+      ProductTour.startTour(ProductTour.WRITE);
     }
   });
 };
