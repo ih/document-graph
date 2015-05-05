@@ -91,29 +91,35 @@ Utility = {
     });
   },
   // based on http://davecardwell.co.uk/javascript/jquery/plugins/jquery-getpath/jquery-getpath.js
-  getSelector: function (targetElement, rootElement, path) {
-    if (typeof path == 'undefined') {
-      path = '';
-    }
-    // make this more robust
-    if (targetElement.tagName === rootElement.tagName &&
-        targetElement.className === rootElement.className) {
-      return path;
-    }
+  getSelector: function (targetElement, rootElement) {
+    var path = '';
+    while (!targetElement.isEqualNode(rootElement)) {
+      var tagName = targetElement.tagName.toLowerCase();
+      var id = targetElement.id;
+      var classes = targetElement.className;
 
-    var tagName = targetElement.tagName.toLowerCase();
-    var id = targetElement.id;
-    var classes = targetElement.className;
+      if (id != '') {
+        tagName += '#' + id;
+      }
 
-    if (id != '') {
-      tagName += '#' + id;
+      if (classes != '') {
+        tagName += '.' + classes.split(/[\s\n]+/).join('.');
+      }
+
+      // in the case of siblings
+      var parentElement = targetElement.parentElement;
+      // inspired by http://stackoverflow.com/a/5708130
+      var sameTagSiblings = $(parentElement).children(tagName);
+      if (sameTagSiblings.length > 1) {
+        var allSiblings = $(parentElement).children();
+        var index = allSiblings.index(targetElement);
+        if (index > 0) {
+          tagName += ':nth-child(' + (index+1) + ')';
+        }
+      }
+      targetElement = parentElement;
+      path = tagName + (path ? ' > ' + path : '');
     }
-
-    if (classes != '') {
-      tagName += '.' + classes.split(/[\s\n]+/).join('.');
-    }
-
-    return Utility.getSelector(
-      targetElement.parentElement, rootElement, ' > ' + tagName + path);
+    return path;
   }
 };

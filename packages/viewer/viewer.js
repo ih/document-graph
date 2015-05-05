@@ -151,13 +151,14 @@ Template.viewer.helpers({
   renderContent: function (linkedNodeIds) {
     var nodeId = Template.instance().data._id;
     var links = Viewer.filterLinks('from', nodeId, null, true, linkedNodeIds);
+    var htmlContent = marked(Template.instance().data.content);
     if (state.get('selection') && nodeId === state.get('selection').nodeId) {
       return SelectionRendering.addSelections(
-        Template.instance().data.content, links, state.get('selection'));
+        htmlContent, links, state.get('selection'));
     }
     else {
       return SelectionRendering.addSelections(
-        Template.instance().data.content, links);
+        htmlContent, links);
     }
   },
   showUrl: function () {
@@ -259,17 +260,26 @@ function getBorderAndSelectedContent(selection, templateInstance) {
   // since getting the html has to happen after inserting the selection
   // markers
   var $htmlCopy = templateInstance.$('.content-viewer pre').clone();
-  var selectionMarkers = insertSelectionMarkers(selection, $htmlCopy);
+  //var selectionMarkers = insertSelectionMarkers(selection, $htmlCopy);
 
   var nonAnnotatedMarkedContent = removeAnnotations($htmlCopy.html());
+  var startPath = Utility.getSelector(
+    selection.anchorNode.parentElement, $htmlCopy[0]);
+  var startNodeIndex = _.indexOf(
+    selection.anchorNode.parentElement.childNodes, selection.anchorNode);
+  var endNodeIndex = _.indexOf(
+    selection.extentNode.parentElement.childNodes, selection.extentNode);
+  var endPath = Utility.getSelector(
+    selection.extentNode.parentElement, $htmlCopy[0]);
   var border = {
-    'open': nonAnnotatedMarkedContent.indexOf(selectionMarkers.open),
-    'close': nonAnnotatedMarkedContent.indexOf(selectionMarkers.close) -
-      selectionMarkers.open.length
+    'open': {
+      path: startPath, nodeIndex: startNodeIndex, offset: selection.anchorOffset
+    },
+    'close': {
+      path: endPath, nodeIndex: endNodeIndex,offset: selection.extentOffset
+    }
   };
-  var selectedContent = nonAnnotatedMarkedContent.slice(
-    border.open+selectionMarkers.open.length,
-    border.close+selectionMarkers.open.length);
+  var selectedContent = selection.toString();
   console.log(border);
   console.log('selected content:'+selectedContent);
 
@@ -287,6 +297,7 @@ function getBorderAndSelectedContent(selection, templateInstance) {
   // selection.removeAllRanges();
   return {border: border, selectedContent: selectedContent};
 }
+
 
 /** Markers (special html tags) get inserted into the node content to
  indicate the location of the selection borders.
