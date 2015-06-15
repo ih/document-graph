@@ -30,7 +30,7 @@ SearchAPI = {
   findByUser: function (
     collection, queryData, pagingData, sortCriteria, resultsHandler) {
     Meteor.call(
-      'findByTags', collection, queryData,  pagingData,
+      'findByTags', collection, queryData, pagingData,
       sortCriteria, resultsHandler);
   },
   index: function (collectionName, newDocument) {

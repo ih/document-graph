@@ -14,7 +14,10 @@ Meteor.startup(function () {
   var mapping = {
     'node': {
       'properties': {
-        'privacySettings': {'type': 'string', 'index': 'not_analyzed'}
+        'privacySettings': {'type': 'string', 'index': 'not_analyzed'},
+        'content': {'type': 'string', 'analyzer': 'english'},
+        'title': {'type': 'string', 'analyzer': 'english'},
+        'tags': {'type': 'string', 'analyzer': 'not_analyzed'}
       }
     }
   };
