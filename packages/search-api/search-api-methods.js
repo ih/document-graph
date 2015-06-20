@@ -6,22 +6,7 @@ if (Meteor.settings.elasticSearchServer) {
 console.log('Searching with ' + searchHostUrl);
 
 Meteor.startup(function () {
-  // set the mapping for elasticsearch
-  console.log('setting up the elasticsearch mapping');
-  // create index
-  HTTP.put(searchHostUrl+'/nodes/node/0', {'data': {'node': 'start'}});
-  // add mapping
-  var mapping = {
-    'node': {
-      'properties': {
-        'privacySettings': {'type': 'string', 'index': 'not_analyzed'},
-        'content': {'type': 'string', 'analyzer': 'english'},
-        'title': {'type': 'string', 'analyzer': 'english'},
-        'tags': {'type': 'string', 'analyzer': 'not_analyzed'}
-      }
-    }
-  };
-  HTTP.put(searchHostUrl+'/nodes/node/_mapping', {'data': mapping});
+
 });
 
 function elasticSearchParse(httpResponse) {
